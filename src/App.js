@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
+import React from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import  {Protected } from './Protected';
 import './App.css';
+import Home from '../src/components/Home';
+import Projects from '../src/components/Projects';
+import ProjectsP from '../src/components/ProjectsP';
+import AuthSingUp from '../src/components/AuthSignUp';
+import AuthLogIn from '../src/components/AuthLogIn';
+import About from '../src/components/About';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+function App (props) { 
+
+    return (
+      <Router>
+          <div className="App">
+            <ul className="sideItems" style={{ listStyleType: "none", padding: 0 }}>
+              <li className="sideItem">
+                <Link className="linkColor" to="/">Home</Link>
+              </li>
+              <li className="sideItem">
+                <Link className="linkColor" to="/projects">Projects</Link>
+              </li>
+              <li className="sideItem">
+                <Link className="linkColor" to="/about">About</Link>
+              </li>
+            </ul>
+            <div className="container" >
+              <Route exact path="/" component={Home}/>
+              <Route exact path="/login" component={AuthLogIn} />
+              <Route exact path="/signup" component={AuthSingUp} />
+              <Route exact path="/about" component={About} />
+              <Route exact path="/projects" component={Projects} />
+              <Protected exact path="/projectsp" component={ProjectsP} />
+            </div>
+            
+          </div>
+      </Router>
+    )
 }
 
 export default App;
+
