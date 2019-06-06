@@ -1,0 +1,12 @@
+
+h1.header {
+    color: white;
+    position: absolute;
+    display: inline-block;
+    width: 500px;
+    top: 30%;
+    transform: translate3d(0, -50%, 0);
+    left: 2em;
+    font-size: 8em;
+    line-height: 1em;
+}
