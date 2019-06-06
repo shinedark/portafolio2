@@ -1,65 +1,125 @@
-// import ReactDOM from 'react-dom'
 import * as THREE from 'three'
-import React, { useState, useRef } from 'react'
-import { apply, Canvas, useRender } from 'react-three-fiber'
+import React, { useState, useRef, useEffect,} from 'react'
 import * as meshline from 'three.meshline'
 import './Home.css'
 
-apply(meshline)
 
-const numLines = 100
-const lines = new Array(numLines).fill()
-const colors = ['#2196f3', '#21f3c6', '#EE786E', '#EE786E']
+const Home = () => {
+  const mount = useRef(null)
+  const [isAnimating, setAnimating] = useState(true)
+  const controls = useRef(null)
+  
+  useEffect(() => {
+    let width = mount.current.clientWidth
+    let height = mount.current.clientHeight
+    let frameId
 
-function Fatline() {
-  const material = useRef()
-  const [color] = useState(() => colors[parseInt(colors.length * Math.random())])
-  const [ratio] = useState(() => 0.5 + 0.5 * Math.random())
-  const [width] = useState(() => Math.max(0.1, 0.3 * Math.random()))
-  // Calculate wiggly curve
-  const [curve] = useState(() => {
-    let pos = new THREE.Vector3(30 - 60 * Math.random(), -5, 10 - 20 * Math.random())
-    return new Array(30).fill().map(() => pos.add(new THREE.Vector3(2 - Math.random() * 4, 4 - Math.random() * 2, 5 - Math.random() * 10)).clone())
-  })
-  // Hook into the render loop and decrease the materials dash-offset
-  useRender(() => (material.current.uniforms.dashOffset.value -= 0.0005))
+    const scene = new THREE.Scene()
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
+    const renderer = new THREE.WebGLRenderer({ antialias: true })
+    const flakeCount = 9000
+    const flakeGeometry = new THREE.BoxGeometry( 0.3, 0.3, 0.3 );
+    const flakeMaterial =  new THREE.MeshBasicMaterial({ color: '#e4d661' })
+    const cube = new THREE.Group();
+
+    // const geometry = new THREE.BoxGeometry(1, 1, 1)
+    // const material = new THREE.MeshBasicMaterial({ color: '#e4d661' })
+    // const cube = new THREE.Mesh(geometry, material)
+    for (let i = 0; i < flakeCount; i++) {
+      var flakeMesh = new THREE.Mesh(flakeGeometry, flakeMaterial);
+      flakeMesh.position.set(
+        (Math.random() + 0.9) * 10,
+        (Math.random() - 0.6) * 100,
+        (Math.random() - 0.9) * 10
+      );
+      cube.add(flakeMesh);
+    }
+
+    const flakeArray = cube.children;
+
+    camera.position.z = 3
+    scene.add(cube)
+    renderer.setClearColor('#000000')
+    renderer.setSize(width, height)
+
+    const renderScene = () => {
+      renderer.render(scene, camera)
+    }
+
+    const handleResize = () => {
+      width = mount.current.clientWidth
+      height = mount.current.clientHeight
+      renderer.setSize(width, height)
+      camera.aspect = width / height
+      camera.updateProjectionMatrix()
+      renderScene()
+    }
+    
+    const animate = () => {
+      cube.rotation.x += 0.01
+      cube.rotation.y += 0.01
+
+      for (let i = flakeArray.length / 2; i < flakeArray.length; i++) {
+        flakeArray[i].rotation.y -= 0.02;
+        flakeArray[i].rotation.x -= 0.03;
+        flakeArray[i].rotation.z -= 0.02;
+        flakeArray[i].position.y -= 0.001;
+        if (flakeArray[i].position.y < -6) {
+          flakeArray[i].position.y += 0.35;
+        }
+
+        // cube.rotation.y -= 0.0000009;
+      }
+
+      renderScene()
+      frameId = window.requestAnimationFrame(animate)
+    }
+
+    const start = () => {
+      if (!frameId) {
+        frameId = requestAnimationFrame(animate)
+      }
+    }
+
+    const stop = () => {
+      cancelAnimationFrame(frameId)
+      frameId = null
+    }
+
+    mount.current.appendChild(renderer.domElement)
+    window.addEventListener('resize', handleResize)
+    start()
+
+    controls.current = { start, stop }
+    
+    return () => {
+      stop()
+      window.removeEventListener('resize', handleResize)
+      mount.current.removeChild(renderer.domElement)
+
+      scene.remove(cube)
+      flakeGeometry.dispose()
+      flakeMaterial.dispose()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isAnimating) {
+      controls.current.start()
+    } else {
+      controls.current.stop()
+    }
+  }, [isAnimating])
+  
   return (
-    <mesh>
-      {/** MeshLine and CMRCurve are a OOP factories, not scene objects, hence all the imperative code in here :-( */}
-      <meshLine onUpdate={self => (self.parent.geometry = self.geometry)}>
-        <geometry onUpdate={self => self.parent.setGeometry(self)}>
-          <catmullRomCurve3 args={[curve]} onUpdate={self => (self.parent.vertices = self.getPoints(500))} />
-        </geometry>
-      </meshLine>
-      {/** MeshLineMaterial on the other hand is a regular material, so we can just attach it */}
-      <meshLineMaterial attach="material" ref={material} transparent depthTest={false} lineWidth={width} color={color} dashArray={0.1} dashRatio={ratio} />
-    </mesh>
-  )
-}
-
-function Scene() {
-  let group = useRef()
-  let theta = 0
-  // Hook into the render loop and rotate the scene a bit
-  useRender(() => group.current.rotation.set(0, 5 * Math.sin(THREE.Math.degToRad((theta += 0.02))), 0))
-  return (
-    <group ref={group}>
-      {lines.map((_, index) => (
-        <Fatline key={index} />
-      ))}
-    </group>
-  )
-}
-
-function Home() {
-  return (
-    <div style={{marginLeft: '5vw', marginRight: '5vw', height: '75vh'}}>
-      <Canvas style={{ background: '#324444' }} camera={{ position: [0, 50, 10], fov: 75 }}>
-        <Scene />
-      </Canvas>
-      <h1 className="header"> Shine Dark</h1>
+    <div style={{marginLeft: '5vw', marginRight: '5vw', height: '75vh'}} ref={mount} onClick={() => setAnimating(!isAnimating)}>
+      <h1  className="header"> Shine Dark</h1>
     </div>
   )
+
 }
 
+
+
 export default Home;
+
