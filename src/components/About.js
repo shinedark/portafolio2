@@ -1,6 +1,5 @@
 import React from 'react';
 import '../App.css';
-import Vid from './assets/videos/remastered.mp4';
 import Resume from './assets/CamiloPinedaResume.pdf';
 
 
@@ -20,8 +19,10 @@ function About (props) {
 		    	  		<li>Node</li>
 		    	  		<li>JS</li>
 		    	  	</ul>
+		    	  	
 		    	  	<h3><a className="resume" href={Resume} download>Resume</a></h3>
-		    	  	<video controls={true} style={{height: '300px', width:"300px"}} src={Vid} />
+		    	  	<h3><a className="resume" href="https://github.com/shinedark" download>GitHub</a></h3>
+		    	  	<h3><a className="resume" href="https://blog.expo.io/expo-featured-developer-shine-dark-26ccaa63706a" >Blog Post</a></h3>
 		    		</div>
 		  	</div>
 	);

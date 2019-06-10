@@ -96,6 +96,32 @@ video {
     margin: 0;
 }
 
+li.mob {
+    padding: 30px;
+    margin: 30px;
+}
+
+li.wb {
+    padding: 30px;
+    margin: 30px;
+}
+
+li.ot {
+    padding: 30px;
+    margin: 30px;
+}
+
+ul.pro {
+    display: flex;
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+  
+  ul.pro {
+    display: inherit;
+    padding: 0;
+  }
 
 
+}
 

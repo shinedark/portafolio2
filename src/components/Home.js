@@ -3,12 +3,12 @@ import React, { useState, useRef, useEffect,} from 'react'
 import './Home.css'
 
 
+
 const Home = () => {
   const mount = useRef(null)
   const [isAnimating, setAnimating] = useState(true)
   const controls = useRef(null)
-  const colors = ['#e1f0fd', '#caffff', '#EE786E', '#f9aeae'];
-  const [color] = useState(() => colors[parseInt(colors.length * Math.random())]);
+  
   
 
   useEffect(() => {
@@ -16,16 +16,19 @@ const Home = () => {
     let height = mount.current.clientHeight
     let frameId
 
+
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
     const renderer = new THREE.WebGLRenderer({ antialias: true })
     const flakeCount = 9000
-    const flakeGeometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
-    const flakeMaterial =  new THREE.MeshBasicMaterial({ color: color })
+    const flakeCount2 = 3000
+    const flakeCount3 = 6000
+    const flakeGeometry = new THREE.TorusBufferGeometry( 0.010, 0.03, 0.016, 0.0100 );
+    const flakeMaterial =  new THREE.MeshBasicMaterial({ color: '#ffffff' })
     const flakeGeometry2 = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
-    const flakeMaterial2 =  new THREE.MeshBasicMaterial({ color: color })
-    const flakeGeometry3 = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
-    const flakeMaterial3 =  new THREE.MeshBasicMaterial({ color: color })
+    const flakeMaterial2 =  new THREE.MeshBasicMaterial({ color: '#c2dff9' })
+    const flakeGeometry3 = new THREE.TorusKnotBufferGeometry( 0.01, 0.03, 0.010, 0.016 );
+    const flakeMaterial3 =  new THREE.MeshBasicMaterial({ color: '#fd5454e8' })
     const cube = new THREE.Group();
     const cube2 = new THREE.Group();
     const cube3 = new THREE.Group();
@@ -40,17 +43,17 @@ const Home = () => {
       cube.add(flakeMesh);
     }
 
-    for (let i = 0; i < flakeCount; i++) {
+    for (let i = 0; i < flakeCount2; i++) {
       var flakeMesh2 = new THREE.Mesh(flakeGeometry2, flakeMaterial2);
       flakeMesh2.position.set(
-        (Math.random() + 0.1) * 100,
-        (Math.random() - 0.7) * 10,
+        (Math.random() + 0.1) * 10,
+        (Math.random() - 0.7) * 100,
         (Math.random() - 0.8) * 10
       );
       cube2.add(flakeMesh2);
     }
 
-    for (let i = 0; i < flakeCount; i++) {
+    for (let i = 0; i < flakeCount3; i++) {
       var flakeMesh3 = new THREE.Mesh(flakeGeometry3, flakeMaterial3);
       flakeMesh3.position.set(
         (Math.random() + 0.3) * 10,
@@ -61,8 +64,8 @@ const Home = () => {
     }
 
     const flakeArray = cube.children;
-    // const flakeArray2 = cube2.children;
-    // const flakeArray3 = cube3.children;
+    const flakeArray2 = cube2.children;
+    const flakeArray3 = cube3.children;
 
     camera.position.z = 3
     scene.add(cube, cube2, cube3)
@@ -90,13 +93,13 @@ const Home = () => {
       cube3.rotation.x += 0.001
       cube3.rotation.y += 0.001
 
-      for (let i = flakeArray.length / 6; i < flakeArray.length; i++) {
+      for (let i = flakeArray.length / 6; i < flakeArray2.length; i++) {
         flakeArray[i].rotation.y += 0.02;
         flakeArray[i].rotation.x -= 0.03;
         flakeArray[i].rotation.z -= 0.02;
         flakeArray[i].position.y -= 0.001;
-        if (flakeArray[i].position.y < 0.006) {
-          flakeArray[i].position.y += 0.003;
+        if (flakeArray3[i].position.y < 0.006) {
+          flakeArray2[i].position.y += 0.003;
         }
 
         
