@@ -77,5 +77,25 @@ li.sideItem2 {
     padding: 10px;
 }
 
+ul.ulAbout {
+    text-align: center;
+    padding: 0;
+}
+
+a.resume {
+    color: #444343;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+video {
+    height: 300px;
+    width: 300px;
+    padding: 0;
+    margin: 0;
+}
+
+
 
 
