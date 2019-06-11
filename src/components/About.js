@@ -4,6 +4,8 @@ import Resume from './assets/CamiloPinedaResume.pdf';
 
 
 function About (props) {
+
+
 	
 	return(
 			
@@ -17,6 +19,7 @@ function About (props) {
 		    	  		<li>GraphQl</li>
 		    	  		<li>React</li>
 		    	  		<li>Node</li>
+		    	  		<li>AWS</li>
 		    	  		<li>JS</li>
 		    	  	</ul>
 		    	  	
