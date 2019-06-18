@@ -28,7 +28,7 @@ const Home = () => {
     const flakeGeometry2 = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
     const flakeMaterial2 =  new THREE.MeshBasicMaterial({ color: '#c2dff9' })
     const flakeGeometry3 = new THREE.TorusKnotBufferGeometry( 0.01, 0.03, 0.010, 0.016 );
-    const flakeMaterial3 =  new THREE.MeshBasicMaterial({ color: '#fd5454e8' })
+    const flakeMaterial3 =  new THREE.MeshBasicMaterial({ color: '#fd5454' })
     const cube = new THREE.Group();
     const cube2 = new THREE.Group();
     const cube3 = new THREE.Group();

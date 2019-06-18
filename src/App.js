@@ -1,14 +1,16 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+// import  {Protected } from './Protected';
 import './App.css';
 import Home from '../src/components/Home';
-import Projects from '../src/components/Projects';
+// import Projects from '../src/components/Projects';
+import Projects from '../src/components/ProjectsP';
+// import AuthSingUp from '../src/components/AuthSignUp';
+// import AuthLogIn from '../src/components/AuthLogIn';
 import About from '../src/components/About';
 
 
 function App (props) { 
-
-  
 
     return (
       <Router>

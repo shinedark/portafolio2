@@ -115,6 +115,11 @@ ul.pro {
     display: flex;
 }
 
+a.link {
+    font-size: 30px;
+    text-decoration: none;
+}
+
 @media (min-width: 320px) and (max-width: 480px) {
   
   ul.pro {
