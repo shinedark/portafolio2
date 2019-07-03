@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-// import  {Protected } from './Protected';
 import './App.css';
 import Home from '../src/components/Home';
-// import Projects from '../src/components/Projects';
-import Projects from '../src/components/ProjectsP';
-// import AuthSingUp from '../src/components/AuthSignUp';
-// import AuthLogIn from '../src/components/AuthLogIn';
+import Projects from '../src/components/Projects';
+import ProjectsP from '../src/components/ProjectsP';
+import AuthSignUp from '../src/components/AuthSignUp';
+import AuthLogIn from '../src/components/AuthLogIn';
 import About from '../src/components/About';
+import firebase from './firebase'
 
 
-function App (props) { 
+function App () { 
 
-    return (
+  const [firebaseInitialized, setFirebaseInitialized] = useState(false)
+
+  useEffect(() => {
+      firebase.isInitialized().then(val => {
+          setFirebaseInitialized(val)
+      })
+  })
+
+    return firebaseInitialized !== false ? (
       <Router>
           <div className="App">
             <ul className="sideItems" style={{ listStyleType: "none", padding: 0 }}>
@@ -30,11 +38,14 @@ function App (props) {
               <Route exact path="/" component={Home}/>
               <Route exact path="/about" component={About} />
               <Route exact path="/projects" component={Projects} />
+              <Route exact path="/login" component={AuthLogIn} />
+              <Route exact path="/signup" component={AuthSignUp} />
+              <Route exact path="/projectsp" component={ProjectsP} />
             </div>
             
           </div>
       </Router>
-    )
+    ) : <div id="loader">Loading ...</div>
 }
 
 export default App;
