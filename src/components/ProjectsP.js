@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import firebase from '../firebase'
 import '../App.css';
 import appstore from './assets/images/appstore.svg';
 import nm from './assets/images/nm.png';
@@ -12,12 +13,26 @@ import sport from './assets/images/sport.png';
 import vids from './assets/images/vids.png';
 
 
-function Projects () {
+function ProjectsP (props) {
+
+  const checkForUser = () => {
+      if (!firebase.getCurrentUsername()) {
+          // not logged in
+          alert('Please login first')
+          props.history.replace('/login')
+          return null
+      }
+  }
+  checkForUser()
   
   return(
       
         <div className="App">
           <h1>Shine Dark Projects</h1>
+            <div>Hello { firebase.getCurrentUsername() }</div>
+            <button className="link" type="submit" onClick={logout}>
+              Logout
+            </button>
             <div className="proejcts">
               <ul className="pro">
                 <li className="mob">
@@ -110,8 +125,12 @@ function Projects () {
               </ul>
           </div>          
         </div>
-  );
+  )
+    async function logout() {
+        await firebase.logout()
+        props.history.push('/')
+    }
 }
 
 
-export default Projects;
+export default ProjectsP;

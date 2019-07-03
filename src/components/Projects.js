@@ -1,11 +1,25 @@
 import React from "react";
 import {  Link } from "react-router-dom";
+import firebase from '../firebase'
 import '../App.css';
 
 
 
-function ProjectsP (props) { 
+function Projects (props) { 
 
+    const checkForUser = () => {
+        if (!firebase.getCurrentUsername()) {
+            // not logged in
+            alert('Please login first')
+            props.history.replace('/login')
+            return null
+        }
+        else{
+          props.history.replace('/projectsp')
+        }
+    }
+    checkForUser()
+    
     return (
           <div className="auth">
             <h3>Log In or Sign Up to explore Projects</h3>
@@ -22,4 +36,4 @@ function ProjectsP (props) {
     )
 }
 
-export default ProjectsP;
+export default Projects;

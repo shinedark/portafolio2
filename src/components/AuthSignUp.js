@@ -1,54 +1,27 @@
 import React , { useState  } from "react";
-import firebase from 'firebase';
-import { auth } from '../fire';
-import {
-  Link,
-  Redirect,
-} from "react-router-dom";
+import { Link, withRouter } from 'react-router-dom'
+import firebase from '../firebase'
 import '../App.css';
 
-function AuthSignUp () {
+function AuthSignUp (props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [patient , setPatient] = useState('');
-  const [createdUser , setCreatedUser] = useState(null);
+  const [name , setName] = useState('');
 
-
-
-  const UserRef = (user , patient ) => {
-      auth.onAuthStateChanged(user => {
-        firebase.database().ref(`/users/${user.uid}/`)
-        .push({ user })
-    });
-  }
-
-  const handleSubmit = (event) =>  {
-      event.preventDefault();
-      if (validateForm()) {
-        auth.createUserWithEmailAndPassword(email, password)
-        .then(user => UserRef(user, patient) , setCreatedUser(true))
-        .catch((error) => {
-          console.log(error)
-        });
-      }
-  }
 
   const validateForm  = () => {
       return (
         email.length > 0 &&
-        patient.length > 0 &&
+        name.length > 0 &&
         password.length >= 6 
       );
   }  
 
 return (
     <div className="App">
-      {createdUser &&(
-        <Redirect to="/projectsp" />
-      )}
       <h2>Sign Up</h2>
       <div className="container">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={e => e.preventDefault() && false }>
           <input
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -62,17 +35,25 @@ return (
             placeholder="Password"
           />
           <input
-            value={patient}
-            onChange={e => setPatient(e.target.value)}
+            value={name}
+            onChange={e => setName(e.target.value)}
             type="text"
             placeholder="Name"
           />
-          <button type="submit">Submit</button>
+          <button onClick={onRegister} type="submit">Submit</button>
         </form>
       </div>
       <Link className="link" to="/login">Already have a account? plase log in </Link>
     </div>
-  );
+  )
+    async function onRegister() {
+    try {
+      await firebase.register(name, email, password)
+      props.history.replace('/projectsp')
+    } catch(error) {
+      alert(error.message)
+    }
+  }
 }
 
-export default AuthSignUp;
+export default withRouter(AuthSignUp);

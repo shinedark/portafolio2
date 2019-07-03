@@ -1,28 +1,12 @@
-import React , { useState , useEffect } from "react";
-import {Link, Redirect} from "react-router-dom";
-import { auth} from '../fire';
+import React , { useState  } from "react";
+import { Link, withRouter } from "react-router-dom";
+import firebase from '../firebase'
 import '../App.css';
 
 function AuthLogIn (props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [createdUser , setCreatedUser] = useState(null);
-
-  useEffect(() => {
-    // console.log(props)
-  })
-
-  const handleSubmit = (event) =>  {
-      event.preventDefault();
-      if (validateForm()) {
-        auth.signInWithEmailAndPassword(email, password)
-        .then(setCreatedUser(true))
-        .catch((error) => {
-          console.log(error)
-        });
-      }
-  }
-
+  
 
   const validateForm  = () => {
       return (
@@ -33,12 +17,9 @@ function AuthLogIn (props) {
 
 return (
     <div className="App">
-      {createdUser &&(
-        <Redirect to="/projectsp" />
-      )}
       <h2>Log In</h2>
       <div className="container">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={e => e.preventDefault() && false}>
           <input
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -51,11 +32,19 @@ return (
             type="password"
             placeholder="Password"
           />
-          <button type="submit">Submit</button>
+          <button onClick={login} type="submit">Submit</button>
         </form>
       </div>
       <Link className="link" to="/signup"> Don't have a account please Sing Up</Link>
     </div>
-  );
+  )
+    async function login() {
+      try {
+        await firebase.login(email, password)
+        props.history.replace('/projectsp')
+      } catch(error) {
+        alert(error.message)
+      }
+    }
 }
-export default AuthLogIn;
+export default  withRouter(AuthLogIn);
