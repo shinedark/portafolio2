@@ -1,5 +1,6 @@
 import React from 'react'
 import firebase from '../firebase'
+import Blog from './Blog';
 import '../App.css';
 import appstore from './assets/images/appstore.svg';
 import nm from './assets/images/nm.png';
@@ -13,12 +14,12 @@ import sport from './assets/images/sport.png';
 import vids from './assets/images/vids.png';
 
 
+
 function ProjectsP (props) {
 
   const checkForUser = () => {
       if (!firebase.getCurrentUsername()) {
           // not logged in
-          alert('Please login first')
           props.history.replace('/login')
           return null
       }
@@ -33,6 +34,7 @@ function ProjectsP (props) {
             <button className="link" type="submit" onClick={logout}>
               Logout
             </button>
+            <Blog/>
             <div className="proejcts">
               <ul className="pro">
                 <li className="mob">

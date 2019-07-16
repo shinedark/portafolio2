@@ -1,6 +1,6 @@
 import app from 'firebase/app'
 import 'firebase/auth'
-import 'firebase/firebase-firestore'
+import 'firebase/database'
 
 const firebaseConfig = {
   apiKey: "AIzaSyDpZOF2mRPlYAQJC0QGun7-ef6FI_vHN00",
@@ -16,6 +16,7 @@ class Firebase {
 	constructor() {
 		app.initializeApp(firebaseConfig)
 		this.auth = app.auth()
+		this.db = app.database()
 	}
 
 	login(email, password) {
@@ -43,6 +44,27 @@ class Firebase {
 		return this.auth.currentUser && this.auth.currentUser.displayName
 	}
 
-}
+	checkForWrite (){
+		return this.auth.currentUser.email === 'cam@me.com';
+	}
+	
+	addBlogPost(title , blogPost) {
+		return this.db.ref(`blog/post`).push({
+			title , blogPost
+		})
+	}
 
+	getBlogPost(){
+		const blogPosts = this.db.ref(`blog/post`);
+		return new Promise(resolve => {
+			blogPosts.on('value', function(snapshot) {
+				snapshot.forEach(function(childSnapshot) {
+				  var childData = childSnapshot.val();
+					return childData;
+				});
+			});
+		})
+	}
+
+}
 export default new Firebase()

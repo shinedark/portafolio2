@@ -10,8 +10,7 @@ function Projects (props) {
     const checkForUser = () => {
         if (!firebase.getCurrentUsername()) {
             // not logged in
-            alert('Please login first')
-            props.history.replace('/login')
+            // props.history.replace('/projects')
             return null
         }
         else{
