@@ -7,6 +7,7 @@ import ProjectsP from '../src/components/ProjectsP';
 import AuthSignUp from '../src/components/AuthSignUp';
 import AuthLogIn from '../src/components/AuthLogIn';
 import About from '../src/components/About';
+import Blog from '../src/components/Blog';
 import firebase from './firebase'
 
 
@@ -37,6 +38,7 @@ function App () {
             <div className="container" >
               <Route exact path="/" component={Home}/>
               <Route exact path="/about" component={About} />
+              <Route exact path="/blog" component={Blog} />
               <Route exact path="/projects" component={Projects} />
               <Route exact path="/login" component={AuthLogIn} />
               <Route exact path="/signup" component={AuthSignUp} />

@@ -6,13 +6,15 @@ function Blog(props) {
   const checkForUser = () => {
     if (!firebase.getCurrentUsername()) {
       // not logged in
-      props.history.replace("/projects");
+      props.history.replace("/login");
       return null;
     }
   };
   checkForUser();
   const [title, setTitle] = useState('');
   const [blogPost, setBlogPost] = useState('');
+  const [getBlogPostTitle, setGetBlogPostTitle] = useState('');
+  const [getBlogBody, setBlogBody] = useState('');
   const renderBlogPostCreate = () => {
     if (firebase.checkForWrite()) {
       console.log("bingo");
@@ -41,11 +43,13 @@ function Blog(props) {
   };
 
   useEffect(() => {
-    const blogPosts = firebase.db.ref(`blog/post`)
+    const blogPosts = firebase.db.ref(`blog/post`).limitToLast(1)
     blogPosts.once("value" , snapshot => { 
         snapshot.forEach((child) => {
-            const post = child.val();
-            console.log(post);
+            const post = child.val().blogPost;
+            const postTitle = child.val().title;
+            setGetBlogPostTitle(postTitle)
+            setBlogBody(post)
             return post 
         })
     })
@@ -56,13 +60,15 @@ function Blog(props) {
     return (
         <div>
             <h2>Posts</h2>
+            <h4>{getBlogPostTitle}</h4>
+            <p className="blogBody">{getBlogBody}</p>
         </div>
     )
   }
 
   return (
     <div className="App">
-      <h1>Blog</h1>
+      <h1>Thought's and Practice</h1>
       {renderBlogPostCreate() || renderBlogPosts()}
     </div>
   )

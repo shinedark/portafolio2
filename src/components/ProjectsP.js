@@ -1,6 +1,6 @@
 import React from 'react'
+import {  Link } from "react-router-dom";
 import firebase from '../firebase'
-import Blog from './Blog';
 import '../App.css';
 import appstore from './assets/images/appstore.svg';
 import nm from './assets/images/nm.png';
@@ -30,11 +30,11 @@ function ProjectsP (props) {
       
         <div className="App">
           <h1>Shine Dark Projects</h1>
+          <h2><Link className="linkColor" to="/blog">Blog</Link></h2>
             <div>Hello { firebase.getCurrentUsername() }</div>
             <button className="link" type="submit" onClick={logout}>
               Logout
             </button>
-            <Blog/>
             <div className="proejcts">
               <ul className="pro">
                 <li className="mob">

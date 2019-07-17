@@ -2,10 +2,12 @@
   text-align: center;
 }
 
-.sideItem:hover {
-   background-color: rgba(143, 229, 249, 0.5);
+.linkColor:hover {
+   color: rgba(143, 229, 249, 0.5);
 }
-
+a.resume:hover {
+    color: rgba(143, 229, 249, 0.5);
+}
 
 ul.sideItems {
     margin-left: 30px;
@@ -123,6 +125,13 @@ a.link {
 form.blog {
     width: 30vw;
     height: 23vh;
+}
+
+p.blogBody {
+    padding-left: 15vw;
+    padding-right: 15vw;
+    line-height: 30px;
+    text-align: left;
 }
 
 

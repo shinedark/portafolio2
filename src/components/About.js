@@ -26,6 +26,9 @@ function About (props) {
 		    	  	<h3><a className="resume" href={Resume} download>Resume</a></h3>
 		    	  	<h3><a className="resume" href="https://github.com/shinedark" download>GitHub</a></h3>
 		    	  	<h3><a className="resume" href="https://blog.expo.io/expo-featured-developer-shine-dark-26ccaa63706a" >Blog Post</a></h3>
+					<h3><a className="resume" href="https://twitter.com/ShineDarkmusic" >Twitter</a></h3>
+					<h3><a className="resume" href="https://www.instagram.com/shinedarkmusic/" >Instagram</a></h3>  
+
 		    		</div>
 		  	</div>
 	);
