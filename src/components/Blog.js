@@ -11,6 +11,8 @@ function Blog(props) {
     }
   };
   checkForUser();
+  const [searchPost, setSearchPost] = useState('intro')
+  const [postType, setPostType] = useState('');
   const [title, setTitle] = useState('');
   const [blogPost, setBlogPost] = useState('');
   const [getBlogPostTitle, setGetBlogPostTitle] = useState('');
@@ -21,6 +23,12 @@ function Blog(props) {
       return (
         <div>
           <form className="blog" onSubmit={e => e.preventDefault() && false}>
+          <input
+              value={postType}
+              onChange={e => setPostType(e.target.value)}
+              type="text"
+              placeholder="post type"
+            />
             <input
               value={title}
               onChange={e => setTitle(e.target.value)}
@@ -43,7 +51,7 @@ function Blog(props) {
   };
 
   useEffect(() => {
-    const blogPosts = firebase.db.ref(`blog/post`).limitToLast(1)
+    const blogPosts = firebase.db.ref(`blog/post/${searchPost}`).limitToLast(1)
     blogPosts.once("value" , snapshot => { 
         snapshot.forEach((child) => {
             const post = child.val().blogPost;
@@ -53,13 +61,18 @@ function Blog(props) {
             return post 
         })
     })
-},[])
+},[searchPost])
 
   const renderBlogPosts = () => {
    
     return (
         <div>
-            <h2>Posts</h2>
+            <h2>search post</h2>
+            <ol>
+            <div className="searchD" onClick={() => setSearchPost('intro')}>Intro</div>
+            <div className="searchD" onClick={() => setSearchPost('dev')}>Dev Articles</div>
+            <div className="searchD" onClick={() => setSearchPost('self')}>Thoughts Articles</div>
+            </ol>
             <h4>{getBlogPostTitle}</h4>
             <p className="blogBody">{getBlogBody}</p>
         </div>
@@ -74,10 +87,11 @@ function Blog(props) {
   )
   async function submitBlog() {
     try {
-      console.log('submited', title, blogPost)
-      await firebase.addBlogPost(title, blogPost)
+      console.log('submited', title, blogPost, postType)
+      await firebase.addBlogPost(title, blogPost, postType)
       await setTitle('') 
       await setBlogPost('')
+      await setPostType('')
     } catch(error) {
       alert(error.message)
     }

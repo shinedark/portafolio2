@@ -6,20 +6,12 @@ import '../App.css';
 function AuthLogIn (props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-
-  const validateForm  = () => {
-      return (
-        email.length > 0 &&
-        password.length >= 6 
-      )
-  }  
-
+   
 return (
     <div className="App">
       <h2>Log In</h2>
       <div className="container">
-        <form onSubmit={e => e.preventDefault() && false}>
+        <form  onSubmit={e => e.preventDefault() && false}>
           <input
             value={email}
             onChange={e => setEmail(e.target.value)}

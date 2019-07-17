@@ -7,16 +7,7 @@ function AuthSignUp (props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name , setName] = useState('');
-
-
-  const validateForm  = () => {
-      return (
-        email.length > 0 &&
-        name.length > 0 &&
-        password.length >= 6 
-      );
-  }  
-
+  
 return (
     <div className="App">
       <h2>Sign Up</h2>

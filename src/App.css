@@ -3,10 +3,10 @@
 }
 
 .linkColor:hover {
-   color: rgba(143, 229, 249, 0.5);
+   color: #1df1b9;
 }
 a.resume:hover {
-    color: rgba(143, 229, 249, 0.5);
+    color: #1df1b9;
 }
 
 ul.sideItems {
@@ -134,6 +134,17 @@ p.blogBody {
     text-align: left;
 }
 
+ol {
+    display: inline-flex;
+}
+
+.searchD {
+    padding: 10px;
+    font-size: 15px;
+}
+.searchD:hover {
+    color: #1df1b9;
+}
 
 @media (min-width: 320px) and (max-width: 480px) {
   

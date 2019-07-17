@@ -48,23 +48,10 @@ class Firebase {
 		return this.auth.currentUser.email === 'cam@me.com';
 	}
 	
-	addBlogPost(title , blogPost) {
-		return this.db.ref(`blog/post`).push({
+	addBlogPost(title , blogPost, postType) {
+		return this.db.ref(`blog/post/${postType}`).push({
 			title , blogPost
 		})
 	}
-
-	getBlogPost(){
-		const blogPosts = this.db.ref(`blog/post`);
-		return new Promise(resolve => {
-			blogPosts.on('value', function(snapshot) {
-				snapshot.forEach(function(childSnapshot) {
-				  var childData = childSnapshot.val();
-					return childData;
-				});
-			});
-		})
-	}
-
 }
 export default new Firebase()
