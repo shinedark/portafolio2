@@ -1,4 +1,5 @@
 import React , { useState , useEffect } from "react";
+import ReactHtmlParser from 'react-html-parser';
 import firebase from "../firebase";
 import "../App.css";
 
@@ -17,6 +18,7 @@ function Blog(props) {
   const [blogPost, setBlogPost] = useState('');
   const [getBlogPostTitle, setGetBlogPostTitle] = useState('');
   const [getBlogBody, setBlogBody] = useState('');
+  
   const renderBlogPostCreate = () => {
     if (firebase.checkForWrite()) {
       console.log("bingo");
@@ -74,7 +76,7 @@ function Blog(props) {
             <div className="searchD" onClick={() => setSearchPost('self')}>Thoughts Articles</div>
             </ol>
             <h4>{getBlogPostTitle}</h4>
-            <p className="blogBody">{getBlogBody}</p>
+            <p className="blogBody">{ReactHtmlParser(getBlogBody)}</p>
         </div>
     )
   }
