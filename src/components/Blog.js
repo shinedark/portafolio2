@@ -141,7 +141,7 @@ useEffect(() => {
       )
     }
   };
-
+  
   return (
     <div className="App">
       <h1>Thought's and Practice</h1>
