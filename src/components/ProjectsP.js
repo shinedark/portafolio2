@@ -22,6 +22,31 @@ function ProjectsP(props) {
   };
   checkForUser();
   const [showProject, setShowProject] = useState("mobile");
+  const [selected, setSelected] = useState({textDecoration: 'underline' })
+  const [selected2, setSelected2] = useState({textDecoration: 'none' })
+  const [selected3, setSelected3] = useState({textDecoration: 'none' })
+ 
+  const mobileSelect = () => {
+    setShowProject("mobile")
+    setSelected2({textDecoration: 'none'})
+    setSelected3({textDecoration: 'none'})
+    setSelected({textDecoration: 'underline'})
+  }
+
+  const webSelect = () => {
+    setShowProject("web")
+    setSelected({textDecoration: 'none'})
+    setSelected3({textDecoration: 'none'})
+    setSelected2({textDecoration: 'underline'})
+   
+  }
+
+  const otherSelect = () => {
+    setShowProject("other")
+    setSelected({textDecoration: 'none'})
+    setSelected2({textDecoration: 'none'})
+    setSelected3({textDecoration: 'underline'})
+  }
 
   const renderMobile = () => {
     if (showProject === "mobile") {
@@ -221,13 +246,13 @@ function ProjectsP(props) {
       </h2>
       <div>
         <ol className="dProjects">
-          <div className="searchD1" onClick={() => setShowProject("mobile")}>
+          <div className="searchD1" style={selected} onClick={() => mobileSelect()}>
             Mobile
           </div>
-          <div className="searchD1" onClick={() => setShowProject("web")}>
+          <div className="searchD1" style={selected2} onClick={() => webSelect()}>
             Web
           </div>
-          <div className="searchD1" onClick={() => setShowProject("other")}>
+          <div className="searchD1" style={selected3} onClick={() => otherSelect()}>
             Other
           </div>
         </ol>

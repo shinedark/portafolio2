@@ -20,6 +20,31 @@ function Blog(props) {
   const [blogPosts, setBlogPosts] = useState([]);
   const [getBlogPostTitle, setGetBlogPostTitle] = useState("");
   const [getBlogBody, setBlogBody] = useState("");
+  const [selected, setSelected] = useState({textDecoration: 'underline' })
+  const [selected2, setSelected2] = useState({textDecoration: 'none' })
+  const [selected3, setSelected3] = useState({textDecoration: 'none' })
+ 
+  const introleSelect = () => {
+    setSearchPost("intro")
+    setSelected2({textDecoration: 'none'})
+    setSelected3({textDecoration: 'none'})
+    setSelected({textDecoration: 'underline'})
+  }
+
+  const devSelect = () => {
+    setSearchPost("dev")
+    setSelected({textDecoration: 'none'})
+    setSelected3({textDecoration: 'none'})
+    setSelected2({textDecoration: 'underline'})
+   
+  }
+
+  const selfSelect = () => {
+    setSearchPost("self")
+    setSelected({textDecoration: 'none'})
+    setSelected2({textDecoration: 'none'})
+    setSelected3({textDecoration: 'underline'})
+  }
 
   const renderBlogPostCreate = () => {
     if (firebase.checkForWrite()) {
@@ -91,13 +116,13 @@ useEffect(() => {
         <div>
           <h2>search post</h2>
           <ol>
-            <div className="searchD" onClick={() => setSearchPost("intro")}>
+            <div className="searchD" style={selected} onClick={() => introleSelect()}>
               Intro
             </div>
-            <div className="searchD" onClick={() => setSearchPost("dev")}>
+            <div className="searchD" style={selected2} onClick={() => devSelect()}>
               Dev Articles
             </div>
-            <div className="searchD" onClick={() => setSearchPost("self")}>
+            <div className="searchD" style={selected3} onClick={() => selfSelect()}>
               Thoughts Articles
             </div>
           </ol>
@@ -122,13 +147,13 @@ useEffect(() => {
         <div>
           <h2>search post</h2>
           <ol>
-            <div className="searchD" onClick={() => setSearchPost("intro")}>
+            <div className="searchD" style={selected} onClick={() => introleSelect()}>
               Intro
             </div>
-            <div className="searchD" onClick={() => setSearchPost("dev")}>
+            <div className="searchD" style={selected2} onClick={() => devSelect()}>
               Dev Articles
             </div>
-            <div className="searchD" onClick={() => setSearchPost("self")}>
+            <div className="searchD" style={selected3} onClick={() => selfSelect()}>
               Thoughts Articles
             </div>
           </ol>
