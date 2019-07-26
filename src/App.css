@@ -3,156 +3,167 @@
 }
 
 .linkColor:hover {
-   color: #1df1b9;
+  color: #1df1b9;
 }
 a.resume:hover {
-    color: #1df1b9;
+  color: #1df1b9;
 }
 
 ul.sideItems {
-    margin-left: 30px;
-    display: flex;
+  margin-left: 30px;
+  display: flex;
 }
 
 a.linkColor {
-    color: black;
-    margin: 5px;
-    text-decoration: none;
+  color: black;
+  margin: 5px;
+  text-decoration: none;
 }
 
 li.sideItem {
-    padding: 8px;
+  padding: 8px;
 }
 
 li {
-    list-style: none;
+  list-style: none;
 }
 
 form {
-    padding: 30px;
-    margin: 10px;
-    display: inline-grid;
+  padding: 30px;
+  margin: 10px;
+  display: inline-grid;
 }
 
 input[type="email"] {
-    padding: 9px;
-    margin: 10px;
+  padding: 9px;
+  margin: 10px;
 }
 
 input[type="password"] {
-    padding: 9px;
-    margin: 10px;
+  padding: 9px;
+  margin: 10px;
 }
 input[type="text"] {
-    padding: 9px;
-    margin: 10px;
+  padding: 9px;
+  margin: 10px;
 }
 
 a.link {
-    color: grey;
-    padding: 12px;
-    margin: 30px;
-    text-decoration: none;
+  color: grey;
+  padding: 12px;
+  margin: 30px;
+  text-decoration: none;
 }
 
 a.link:hover {
-    background-color: #7cfddb;
+  background-color: #7cfddb;
 }
 
 h3.im {
-    padding: 30px;
-    font-size: 30px;
+  padding: 30px;
+  font-size: 30px;
 }
 
-button {
-    float: right;
-
+.logout {
+  float: right;
+  margin-right: 10vw;
 }
-
 
 .auth {
-    margin-left: 25vw;
-    margin-right: 25vw;
+  margin-left: 25vw;
+  margin-right: 25vw;
 }
 
 li.sideItem2 {
-    padding: 10px;
+  padding: 10px;
 }
 
 ul.ulAbout {
-    text-align: center;
-    padding: 0;
+  text-align: center;
+  padding: 0;
 }
 
 a.resume {
-    color: #444343;
-    text-align: center;
-    padding: 0;
-    margin: 0;
+  color: #444343;
+  text-align: center;
+  padding: 0;
+  margin: 0;
 }
 
 video {
-    height: 300px;
-    width: 300px;
-    padding: 0;
-    margin: 0;
+  height: 300px;
+  width: 300px;
+  padding: 0;
+  margin: 0;
 }
 
 li.mob {
-    padding: 30px;
-    margin: 30px;
+  padding: 30px;
+  margin: 30px;
 }
 
 li.wb {
-    padding: 30px;
-    margin: 30px;
+  padding: 30px;
+  margin: 30px;
 }
 
 li.ot {
-    padding: 30px;
-    margin: 30px;
+  padding: 30px;
+  margin: 30px;
 }
 
 ul.pro {
-    display: flex;
+  display: inline-flex;
 }
 
 a.link {
-    font-size: 30px;
-    text-decoration: none;
+  font-size: 30px;
+  text-decoration: none;
 }
 
 form.blog {
-    width: 30vw;
-    height: 23vh;
+  width: 30vw;
+  height: 23vh;
 }
 
 p.blogBody {
-    padding-left: 15vw;
-    padding-right: 15vw;
-    line-height: 30px;
-    text-align: left;
+  padding-left: 15vw;
+  padding-right: 15vw;
+  line-height: 30px;
+  text-align: left;
 }
 
 ol {
-    display: inline-flex;
+  display: inline-flex;
 }
 
 .searchD {
-    padding: 10px;
-    font-size: 15px;
+  padding: 10px;
+  font-size: 15px;
 }
 .searchD:hover {
-    color: #1df1b9;
+  color: #1df1b9;
+}
+
+ol.dProjects {
+  display: inline-flex;
+  padding: 30px;
+}
+
+h2.blog {
+  float: left;
+  margin-left: 10vw;
+}
+
+.searchD1 {
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 25px;
 }
 
 @media (min-width: 320px) and (max-width: 480px) {
-  
   ul.pro {
-    display: inherit;
+    display: block;
     padding: 0;
   }
-
-
 }
-

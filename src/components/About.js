@@ -1,11 +1,9 @@
-import React from 'react';
+import React from "react";
 import '../App.css';
 import Resume from './assets/CamiloPinedaResume.pdf';
 
 
-function About (props) {
-
-
+function About () {
 	
 	return(
 			

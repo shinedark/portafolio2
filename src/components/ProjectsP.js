@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import firebase from "../firebase";
 import "../App.css";
 import appstore from "./assets/images/appstore.svg";
 import nm from "./assets/images/nm.png";
-import clock from "./assets/images/clock.png";
 import alog from "./assets/images/alog.png";
 import icon from "./assets/images/icon.png";
 import drone from "./assets/images/drone.png";
@@ -22,152 +21,219 @@ function ProjectsP(props) {
     }
   };
   checkForUser();
+  const [showProject, setShowProject] = useState("mobile");
+
+  const renderMobile = () => {
+    if (showProject === "mobile") {
+      return (
+        <div>
+          <h2>Mobile Apps</h2>
+          <ul className="pro">
+            <li className="mob">
+              <div className="mobile">
+                <h3>Noise Machine Sampler</h3>
+                <img src={nm} alt={nm} width="250" height="250" />
+                <p>Music sampler done in Expo</p>
+                <h6>
+                  <a
+                    target="_blank"
+                    href="https://itunes.apple.com/us/app/noise-machine-sampler/id1325689054?mt=8"
+                    rel="noopener noreferrer"
+                  >
+                    <img src={appstore} alt={appstore} />
+                  </a>
+                </h6>
+              </div>
+            </li>
+            <li className="mob">
+              <div className="mobile">
+                <h3>Remastered</h3>
+                <img src={r} alt={r} width="250" height="250" />
+                <p> Ar experience done in Expo Kit</p>
+                <h6>
+                  <a
+                    target="_blank"
+                    href="https://itunes.apple.com/us/app/remastered/id1356588290?ls=1&mt=8"
+                    rel="noopener noreferrer"
+                  >
+                    <img src={appstore} alt={appstore} />
+                  </a>
+                </h6>
+              </div>
+            </li>
+            <li className="mob">
+              <div className="mobile">
+                <h3>Poke Search</h3>
+                <img src={icon} alt={icon} width="250" height="250" />
+                <p>Expo</p>
+                <h6>
+                  <a
+                    className="link"
+                    target="_blank"
+                    href="https://expo.io/@shinedark/pokesearch"
+                    rel="noopener noreferrer"
+                  >
+                    <span role="img" aria-label="Phone">
+                      📱
+                    </span>
+                  </a>
+                </h6>
+              </div>
+            </li>
+          </ul>
+        </div>
+      );
+    }
+  };
+
+  const renderWeb = () => {
+    if (showProject === "web") {
+      return (
+        <div>
+          <h2>Web Apps</h2>
+          <ul className="pro">
+            <li className="wb">
+              <div className="web">
+                <h3>Shine Dark Music</h3>
+                <img src={sdm} alt={sdm} width="250" height="250" />
+                <p>Record Label site</p>
+                <h6>
+                  <a
+                    className="link"
+                    target="_blank"
+                    href="https://shinedarkmusic.com/"
+                    rel="noopener noreferrer"
+                  >
+                    <span role="img" aria-label="wolrd">
+                      🌎
+                    </span>
+                  </a>
+                </h6>
+              </div>
+            </li>
+            <li className="wb">
+              <div className="web">
+                <h3>Sports</h3>
+                <img src={sport} alt={sport} width="250" height="250" />
+                <p>React exercie</p>
+                <h6>
+                  <a
+                    className="link"
+                    target="_blank"
+                    href="https://sports-87601.firebaseapp.com/"
+                    rel="noopener noreferrer"
+                  >
+                    <span role="img" aria-label="wolrd">
+                      🌎
+                    </span>
+                  </a>
+                </h6>
+              </div>
+            </li>
+            <li className="wb">
+              <div className="web">
+                <h3>Alog</h3>
+                <img src={alog} alt={alog} width="250" height="250" />
+                <p>Node App</p>
+                <h6>
+                  <a
+                    className="link"
+                    target="_blank"
+                    href="https://alog2.herokuapp.com/"
+                    rel="noopener noreferrer"
+                  >
+                    <span role="img" aria-label="wolrd">
+                      🌎
+                    </span>
+                  </a>
+                </h6>
+              </div>
+            </li>
+          </ul>
+        </div>
+      );
+    }
+  };
+
+  const renderOther = () => {
+    if (showProject === "other") {
+      return (
+        <div>
+          <h2>Other Apps</h2>
+          <ul className="pro">
+            <li className="ot">
+              <div className="other">
+                <h3>Drones</h3>
+                <img src={drone} alt={drone} width="250" height="250" />
+                <p>Experiment</p>
+                <h6>
+                  <a
+                    className="link"
+                    target="_blank"
+                    href="https://shinedark.github.io/drones/"
+                    rel="noopener noreferrer"
+                  >
+                    <span role="img" aria-label="wolrd">
+                      🌎
+                    </span>
+                  </a>
+                </h6>
+              </div>
+            </li>
+            <li className="ot">
+              <div className="other">
+                <h3>C-am Sampler</h3>
+                <img src={vids} alt={vids} width="250" height="250" />
+                <p>Css Experiment</p>
+                <h6>
+                  <a
+                    className="link"
+                    target="_blank"
+                    href="https://shinedark.github.io/vid/"
+                    rel="noopener noreferrer"
+                  >
+                    <span role="img" aria-label="wolrd">
+                      🌎
+                    </span>
+                  </a>
+                </h6>
+              </div>
+            </li>
+          </ul>
+        </div>
+      );
+    }
+  };
 
   return (
     <div className="App">
       <h1>Shine Dark Projects</h1>
-      <h2>
+      <div>Hello {firebase.getCurrentUsername()}</div>
+      <h2 className="blog">
         <Link className="linkColor" to="/blog">
           Blog
         </Link>
       </h2>
-      <div>Hello {firebase.getCurrentUsername()}</div>
-      <button className="link" type="submit" onClick={logout}>
-        Logout
-      </button>
+      <h2 className="logout">
+        <span className="linkColor" type="submit" onClick={logout}>
+          Logout
+        </span>
+      </h2>
+      <div>
+        <ol className="dProjects">
+          <div className="searchD1" onClick={() => setShowProject("mobile")}>
+            Mobile
+          </div>
+          <div className="searchD1" onClick={() => setShowProject("web")}>
+            Web
+          </div>
+          <div className="searchD1" onClick={() => setShowProject("other")}>
+            Other
+          </div>
+        </ol>
+      </div>
       <div className="proejcts">
-        <ul className="pro">
-          <li className="mob">
-            <h2>Mobile Apps</h2>
-            <div className="mobile">
-              <h3>Noise Machine Sampler</h3>
-              <img src={nm} alt={nm} width="250" height="250" />
-              <p>Music sampler done in Expo</p>
-              <h6>
-                <a
-                  target="_blank"
-                  href="https://itunes.apple.com/us/app/noise-machine-sampler/id1325689054?mt=8"
-                  rel="noopener noreferrer"
-                >
-                  <img src={appstore} alt={appstore} />
-                </a>
-              </h6>
-              <h3>Remastered</h3>
-              <img src={r} alt={r} width="250" height="250" />
-              <p> Ar experience done in Expo Kit</p>
-              <h6>
-                <a
-                  target="_blank"
-                  href="https://itunes.apple.com/us/app/remastered/id1356588290?ls=1&mt=8"
-                  rel="noopener noreferrer"
-                >
-                  <img src={appstore} alt={appstore} />
-                </a>
-              </h6>
-              <h3>Timer Work</h3>
-              <img src={clock} alt={clock} width="250" height="250" />
-              <p>Expo</p>
-              <h6>
-                <a
-                  className="link"
-                  target="_blank"
-                  href="hhttps://expo.io/@shinedark/timerWork"
-                  rel="noopener noreferrer"
-                >
-                  📱
-                </a>
-              </h6>
-              <h3>Poke Search</h3>
-              <img src={icon} alt={icon} width="250" height="250" />
-              <p>Expo</p>
-              <h6>
-                <a
-                  className="link"
-                  target="_blank"
-                  href="https://expo.io/@shinedark/pokesearch"
-                  rel="noopener noreferrer"
-                >
-                  📱
-                </a>
-              </h6>
-            </div>
-          </li>
-          <li className="wb">
-            <h2>Web Apps</h2>
-            <div className="web">
-              <h3>Shine Dark Music</h3>
-              <img src={sdm} alt={sdm} width="250" height="250" />
-              <p>Record Label site</p>
-              <h6>
-                <a
-                  className="link"
-                  target="_blank"
-                  href="https://shinedarkmusic.com/"
-                  rel="noopener noreferrer"
-                >
-                  🌎
-                </a>
-              </h6>
-              <h3>Sports</h3>
-              <img src={sport} alt={sport} width="250" height="250" />
-              <p>React exercie</p>
-              <h6>
-                <a
-                  className="link"
-                  target="_blank"
-                  href="https://sports-87601.firebaseapp.com/"
-                  rel="noopener noreferrer"
-                >
-                  🌎
-                </a>
-              </h6>
-              <h3>Alog</h3>
-              <img src={alog} alt={alog} width="250" height="250" />
-              <p>Node App</p>
-              <h6>
-                <a
-                  className="link"
-                  target="_blank"
-                  href="https://alog2.herokuapp.com/"
-                  rel="noopener noreferrer"
-                >
-                  🌎
-                </a>
-              </h6>
-            </div>
-          </li>
-          <li className="ot">
-            <h2>Other Apps</h2>
-            <div className="other">
-              <h3>Drones</h3>
-              <img src={drone} alt={drone} width="250" height="250" />
-              <p>Experiment</p>
-              <h6>
-                <a
-                  className="link"
-                  target="_blank"
-                  href="https://shinedark.github.io/drones/"
-                  rel="noopener noreferrer"
-                >
-                  🌎
-                </a>
-              </h6>
-              <h3>C-am Sampler</h3>
-              <img src={vids} alt={vids} width="250" height="250" />
-              <p>Css Experiment</p>
-              <h6>
-                <a
-                  className="link"
-                  target="_blank"
-                  href="https://shinedark.github.io/vid/"
-                  rel="noopener noreferrer"
-                >
-                  🌎
-                </a>
-              </h6>
-            </div>
-          </li>
-        </ul>
+        {renderMobile() || renderWeb() || renderOther()}
       </div>
     </div>
   );
