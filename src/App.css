@@ -90,7 +90,7 @@ ul.ulAbout {
 a.resume {
   color: #444343;
   text-align: center;
-  padding: 0;
+  padding: 20px;
   margin: 0;
 }
 
@@ -164,10 +164,17 @@ h2.blog {
   padding-right: 20px;
   font-size: 25px;
 }
+ol.olAbout {
+  padding: 0;
+}
 
 @media (min-width: 320px) and (max-width: 480px) {
   ul.pro {
     display: block;
+    padding: 0;
+  }
+  ol.olAbout {
+    display: inherit;
     padding: 0;
   }
 }

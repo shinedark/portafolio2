@@ -246,7 +246,7 @@ function ProjectsP(props) {
       </h2>
       <div>
         <ol className="dProjects">
-          <div className="searchD1" style={selected} onClick={() => mobileSelect()}>
+          <div className="searchD1" style={selected}  onClick={() => mobileSelect()}>
             Mobile
           </div>
           <div className="searchD1" style={selected2} onClick={() => webSelect()}>
