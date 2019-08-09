@@ -9,7 +9,7 @@ import icon from "./assets/images/icon.png";
 import drone from "./assets/images/drone.png";
 import r from "./assets/images/r.jpg";
 import sdm from "./assets/images/sdm.png";
-import sport from "./assets/images/sport.png";
+import ll from "./assets/images/ll.png";
 import vids from "./assets/images/vids.png";
 
 function ProjectsP(props) {
@@ -138,14 +138,14 @@ function ProjectsP(props) {
             </li>
             <li className="wb">
               <div className="web">
-                <h3>Sports</h3>
-                <img src={sport} alt={sport} width="250" height="250" />
-                <p>React exercie</p>
+                <h3>Lazy Leads</h3>
+                <img src={ll} alt={ll} width="250" height="250" />
+                <p>React App</p>
                 <h6>
                   <a
                     className="link"
                     target="_blank"
-                    href="https://sports-87601.firebaseapp.com/"
+                    href="https://pin-example.firebaseapp.com/"
                     rel="noopener noreferrer"
                   >
                     <span role="img" aria-label="wolrd">
