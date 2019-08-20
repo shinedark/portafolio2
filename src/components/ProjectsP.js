@@ -22,43 +22,40 @@ function ProjectsP(props) {
   };
   checkForUser();
   const [showProject, setShowProject] = useState("mobile");
-  const [selected, setSelected] = useState({textDecoration: 'underline' })
-  const [selected2, setSelected2] = useState({textDecoration: 'none' })
-  const [selected3, setSelected3] = useState({textDecoration: 'none' })
- 
+  const [selected, setSelected] = useState({ textDecoration: "underline" });
+  const [selected2, setSelected2] = useState({ textDecoration: "none" });
+  const [selected3, setSelected3] = useState({ textDecoration: "none" });
+
   const mobileSelect = () => {
-    setShowProject("mobile")
-    setSelected2({textDecoration: 'none'})
-    setSelected3({textDecoration: 'none'})
-    setSelected({textDecoration: 'underline'})
-  }
+    setShowProject("mobile");
+    setSelected2({ textDecoration: "none" });
+    setSelected3({ textDecoration: "none" });
+    setSelected({ textDecoration: "underline" });
+  };
 
   const webSelect = () => {
-    setShowProject("web")
-    setSelected({textDecoration: 'none'})
-    setSelected3({textDecoration: 'none'})
-    setSelected2({textDecoration: 'underline'})
-   
-  }
+    setShowProject("web");
+    setSelected({ textDecoration: "none" });
+    setSelected3({ textDecoration: "none" });
+    setSelected2({ textDecoration: "underline" });
+  };
 
   const otherSelect = () => {
-    setShowProject("other")
-    setSelected({textDecoration: 'none'})
-    setSelected2({textDecoration: 'none'})
-    setSelected3({textDecoration: 'underline'})
-  }
+    setShowProject("other");
+    setSelected({ textDecoration: "none" });
+    setSelected2({ textDecoration: "none" });
+    setSelected3({ textDecoration: "underline" });
+  };
 
   const renderMobile = () => {
     if (showProject === "mobile") {
       return (
         <div>
-          <h2>Mobile Apps</h2>
           <ul className="pro">
             <li className="mob">
               <div className="mobile">
                 <h3>Noise Machine Sampler</h3>
                 <img src={nm} alt={nm} width="250" height="250" />
-                <p>Music sampler done in Expo</p>
                 <h6>
                   <a
                     target="_blank"
@@ -68,13 +65,23 @@ function ProjectsP(props) {
                     <img src={appstore} alt={appstore} />
                   </a>
                 </h6>
+                <h3>Stack</h3>
+                <ol className="porjectAbout">
+                  <li className="projectLi">React Native</li>
+                  <li className="projectLi">Expo</li>
+                </ol>
+                <p className="pAbout">
+                  This App is IOS only and is on version 2, it's a sampler that
+                  has 9 slots with sound banks for each and 6 samples per bank.
+                  You can search with each bank indipendetly to set the sample
+                  you like.
+                </p>
               </div>
             </li>
             <li className="mob">
               <div className="mobile">
                 <h3>Remastered</h3>
                 <img src={r} alt={r} width="250" height="250" />
-                <p> Ar experience done in Expo Kit</p>
                 <h6>
                   <a
                     target="_blank"
@@ -84,13 +91,22 @@ function ProjectsP(props) {
                     <img src={appstore} alt={appstore} />
                   </a>
                 </h6>
+                <h3>Stack</h3>
+                <ol className="porjectAbout">
+                  <li className="projectLi">React Native</li>
+                  <li className="projectLi">Expo Kit</li>
+                  <li className="projectLi">AR</li>
+                </ol>
+                <p className="pAbout">
+                  Promotional App for the Remastered Album, is a Ar expirience
+                  with sounds and visuals.
+                </p>
               </div>
             </li>
             <li className="mob">
               <div className="mobile">
                 <h3>Poke Search</h3>
                 <img src={icon} alt={icon} width="250" height="250" />
-                <p>Expo</p>
                 <h6>
                   <a
                     className="link"
@@ -103,6 +119,15 @@ function ProjectsP(props) {
                     </span>
                   </a>
                 </h6>
+                <h3>Stack</h3>
+                <ol className="porjectAbout">
+                  <li className="projectLi">React Native</li>
+                  <li className="projectLi">Expo</li>
+                </ol>
+                <p className="pAbout">
+                  Pokedex App, you can search by name and number of pokemon and
+                  it will display all the information of the Pokemon.
+                </p>
               </div>
             </li>
           </ul>
@@ -121,7 +146,6 @@ function ProjectsP(props) {
               <div className="web">
                 <h3>Shine Dark Music</h3>
                 <img src={sdm} alt={sdm} width="250" height="250" />
-                <p>Record Label site</p>
                 <h6>
                   <a
                     className="link"
@@ -134,13 +158,22 @@ function ProjectsP(props) {
                     </span>
                   </a>
                 </h6>
+                <h3>Stack</h3>
+                <ol className="porjectAbout">
+                  <li className="projectLi">React</li>
+                  <li className="projectLi">React Router</li>
+                  <li className="projectLi">Fireabase</li>
+                </ol>
+                <p className="pAbout">
+                  Component based React App, Firestore is being used for the
+                  soundbank with search option based on tags.
+                </p>
               </div>
             </li>
             <li className="wb">
               <div className="web">
                 <h3>Lazy Leads</h3>
                 <img src={ll} alt={ll} width="250" height="250" />
-                <p>React App</p>
                 <h6>
                   <a
                     className="link"
@@ -153,13 +186,23 @@ function ProjectsP(props) {
                     </span>
                   </a>
                 </h6>
+                <h3>Stack</h3>
+                <ol className="porjectAbout">
+                  <li className="projectLi">React</li>
+                  <li className="projectLi">React Router</li>
+                  <li className="projectLi">Fireabase</li>
+                  <li className="projectLi">Google Spreadsheets</li>
+                </ol>
+                <p className="pAbout">
+                  React Hooks App. It has Auth via Firebase and is connected to
+                  a google spreadsheet to collect information.
+                </p>
               </div>
             </li>
             <li className="wb">
               <div className="web">
                 <h3>Alog</h3>
                 <img src={alog} alt={alog} width="250" height="250" />
-                <p>Node App</p>
                 <h6>
                   <a
                     className="link"
@@ -172,6 +215,18 @@ function ProjectsP(props) {
                     </span>
                   </a>
                 </h6>
+                <h3>Stack</h3>
+                <ol className="porjectAbout">
+                  <li className="projectLi">Node</li>
+                  <li className="projectLi">EJS Templets</li>
+                  <li className="projectLi">Youtube</li>
+                  <li className="projectLi">Cron Jobs</li>
+                </ol>
+                <p className="pAbout">
+                  This Node App is use for journaling for a person with a
+                  medical condition and emails each weeek the logs to the
+                  provider.
+                </p>
               </div>
             </li>
           </ul>
@@ -190,7 +245,6 @@ function ProjectsP(props) {
               <div className="other">
                 <h3>Drones</h3>
                 <img src={drone} alt={drone} width="250" height="250" />
-                <p>Experiment</p>
                 <h6>
                   <a
                     className="link"
@@ -203,13 +257,23 @@ function ProjectsP(props) {
                     </span>
                   </a>
                 </h6>
+                <h3>Stack</h3>
+                <ol className="porjectAbout">
+                  <li className="projectLi">Vanilla JS</li>
+                  <li className="projectLi">HTML</li>
+                  <li className="projectLi">JQuery</li>
+                  <li className="projectLi">Pizzicatto</li>
+                  <li className="projectLi">CSS</li>
+                </ol>
+                <p className="pAbout">
+                  This is a audio random frequency drone generator.
+                </p>
               </div>
             </li>
             <li className="ot">
               <div className="other">
                 <h3>C-am Sampler</h3>
                 <img src={vids} alt={vids} width="250" height="250" />
-                <p>Css Experiment</p>
                 <h6>
                   <a
                     className="link"
@@ -222,6 +286,16 @@ function ProjectsP(props) {
                     </span>
                   </a>
                 </h6>
+                <h3>Stack</h3>
+                <ol className="porjectAbout">
+                  <li className="projectLi">Vanilla JS</li>
+                  <li className="projectLi">HTML</li>
+                  <li className="projectLi">CSS</li>
+                </ol>
+                <p className="pAbout">
+                  This is a keyboard triggered music sampler with lots of CSS
+                  animations.
+                </p>
               </div>
             </li>
           </ul>
@@ -246,13 +320,25 @@ function ProjectsP(props) {
       </h2>
       <div>
         <ol className="dProjects">
-          <div className="searchD1" style={selected}  onClick={() => mobileSelect()}>
+          <div
+            className="searchD1"
+            style={selected}
+            onClick={() => mobileSelect()}
+          >
             Mobile
           </div>
-          <div className="searchD1" style={selected2} onClick={() => webSelect()}>
+          <div
+            className="searchD1"
+            style={selected2}
+            onClick={() => webSelect()}
+          >
             Web
           </div>
-          <div className="searchD1" style={selected3} onClick={() => otherSelect()}>
+          <div
+            className="searchD1"
+            style={selected3}
+            onClick={() => otherSelect()}
+          >
             Other
           </div>
         </ol>

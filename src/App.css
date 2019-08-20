@@ -103,21 +103,25 @@ video {
 
 li.mob {
   padding: 30px;
-  margin: 30px;
+  margin-left: 3vw;
+  margin-right: 5vw;
 }
 
 li.wb {
   padding: 30px;
-  margin: 30px;
+  margin-left: 3vw;
+  margin-right: 5vw;
 }
 
 li.ot {
   padding: 30px;
-  margin: 30px;
+  margin-left: 3vw;
+  margin-right: 5vw;
 }
 
 ul.pro {
   display: inline-flex;
+  padding: 0px;
 }
 
 a.link {
@@ -166,6 +170,21 @@ h2.blog {
 }
 ol.olAbout {
   padding: 0;
+}
+ol.porjectAbout {
+  padding: 0;
+  font-weight: bold;
+  color: #353333;
+}
+li.projectLi {
+  padding: 6px;
+  font-size: 12px;
+}
+
+p.pAbout {
+  line-height: 20px;
+  padding: 20px;
+  text-align: initial;
 }
 
 @media (min-width: 320px) and (max-width: 480px) {
