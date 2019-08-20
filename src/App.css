@@ -8,6 +8,30 @@
 a.resume:hover {
   color: #1df1b9;
 }
+.containerAuth {
+  display: inline-grid;
+  padding: 30px;
+  margin-left: 25vw;
+  margin-right: 25vw;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+  border: #9a9696;
+  border-width: 1px;
+  border-style: solid;
+  box-shadow: -1px 7px 13px 0px #00000096;
+}
+
+.containerAuth2{
+  padding: 30px;
+  margin-left: 25vw;
+  margin-right: 25vw;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+  border: #9a9696;
+  border-width: 1px;
+  border-style: solid;
+  box-shadow: -1px 7px 13px 0px #00000096;
+}
 
 ul.sideItems {
   margin-left: 30px;
@@ -48,15 +72,27 @@ input[type="text"] {
   margin: 10px;
 }
 
+button.btnAuth {
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  margin-top: 3vh;
+  background-color: #000000d9;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  color: #fffcfc;
+}
+
 a.link {
   color: grey;
   padding: 12px;
-  margin: 30px;
   text-decoration: none;
 }
 
-a.link:hover {
-  background-color: #7cfddb;
+strong:hover {
+  color: #7cfddb;
 }
 
 .searchD1:hover {
@@ -80,6 +116,10 @@ h3.im {
 
 li.sideItem2 {
   padding: 10px;
+  display: initial;
+  text-decoration: underline;
+  margin: 15px;
+  font-size: 20px;
 }
 
 ul.ulAbout {
@@ -124,10 +164,6 @@ ul.pro {
   padding: 0px;
 }
 
-a.link {
-  font-size: 30px;
-  text-decoration: none;
-}
 
 form.blog {
   width: 30vw;

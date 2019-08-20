@@ -1,18 +1,18 @@
-import React , { useState  } from "react";
-import { Link, withRouter } from 'react-router-dom'
-import firebase from '../firebase'
-import '../App.css';
+import React, { useState } from "react";
+import { Link, withRouter } from "react-router-dom";
+import firebase from "../firebase";
+import "../App.css";
 
-function AuthSignUp (props) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name , setName] = useState('');
-  
-return (
+function AuthSignUp(props) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+
+  return (
     <div className="App">
-      <h2>Sign Up</h2>
-      <div className="container">
-        <form onSubmit={e => e.preventDefault() && false }>
+      <div className="containerAuth">
+        <h2>Sign Up</h2>
+        <form onSubmit={e => e.preventDefault() && false}>
           <input
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -31,18 +31,22 @@ return (
             type="text"
             placeholder="Name"
           />
-          <button onClick={onRegister} type="submit">Submit</button>
+          <button className="btnAuth" onClick={onRegister} type="submit">
+            Submit
+          </button>
         </form>
+        <Link className="link" to="/login">
+          Already have a account? <strong>plase Log In</strong>
+        </Link>
       </div>
-      <Link className="link" to="/login">Already have a account? plase log in </Link>
     </div>
-  )
-    async function onRegister() {
+  );
+  async function onRegister() {
     try {
-      await firebase.register(name, email, password)
-      props.history.replace('/projectsp')
-    } catch(error) {
-      alert(error.message)
+      await firebase.register(name, email, password);
+      props.history.replace("/projectsp");
+    } catch (error) {
+      alert(error.message);
     }
   }
 }

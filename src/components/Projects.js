@@ -20,8 +20,8 @@ function Projects (props) {
     checkForUser()
     
     return (
-          <div className="auth">
-            <h3>Log In or Sign Up to explore Projects & Blog</h3>
+          <div className="containerAuth2">
+            <h3>Create an account to explore Projects & Blog</h3>
             <ul className="sideItems2" style={{ listStyleType: "none", padding: 0 }}>
               <li className="sideItem2">
                 <Link className="linkColor" to="/login">Log In</Link>

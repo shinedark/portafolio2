@@ -1,17 +1,17 @@
-import React , { useState  } from "react";
+import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
-import firebase from '../firebase'
-import '../App.css';
+import firebase from "../firebase";
+import "../App.css";
 
-function AuthLogIn (props) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-   
-return (
+function AuthLogIn(props) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  return (
     <div className="App">
-      <h2>Log In</h2>
-      <div className="container">
-        <form  onSubmit={e => e.preventDefault() && false}>
+      <div className="containerAuth">
+        <h2>Log In</h2>
+        <form onSubmit={e => e.preventDefault() && false}>
           <input
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -24,19 +24,24 @@ return (
             type="password"
             placeholder="Password"
           />
-          <button onClick={login} type="submit">Submit</button>
+          <button className="btnAuth" onClick={login} type="submit">
+            Submit
+          </button>
         </form>
+        <Link className="link" to="/signup">
+          {" "}
+          Don't have a account please <strong>Sign Up</strong>
+        </Link>
       </div>
-      <Link className="link" to="/signup"> Don't have a account please Sing Up</Link>
     </div>
-  )
-    async function login() {
-      try {
-        await firebase.login(email, password)
-        props.history.replace('/projectsp')
-      } catch(error) {
-        alert(error.message)
-      }
+  );
+  async function login() {
+    try {
+      await firebase.login(email, password);
+      props.history.replace("/projectsp");
+    } catch (error) {
+      alert(error.message);
     }
+  }
 }
-export default  withRouter(AuthLogIn);
+export default withRouter(AuthLogIn);
