@@ -11,6 +11,10 @@ import r from "./assets/images/r.jpg";
 import sdm from "./assets/images/sdm.png";
 import ll from "./assets/images/ll.png";
 import vids from "./assets/images/vids.png";
+import { Icon } from 'react-icons-kit';
+import {u1F30E} from 'react-icons-kit/noto_emoji_regular/u1F30E';
+import {u1F3B9} from 'react-icons-kit/noto_emoji_regular/u1F3B9';
+import {u1F4F1} from 'react-icons-kit/noto_emoji_regular/u1F4F1';
 
 function ProjectsP(props) {
   const checkForUser = () => {
@@ -109,14 +113,12 @@ function ProjectsP(props) {
                 <img src={icon} alt={icon} width="250" height="250" />
                 <h6>
                   <a
-                    className="link"
+                    className="resume"
                     target="_blank"
                     href="https://expo.io/@shinedark/pokesearch"
                     rel="noopener noreferrer"
                   >
-                    <span role="img" aria-label="Phone">
-                      📱
-                    </span>
+                    <Icon size={51} icon={u1F4F1}/>
                   </a>
                 </h6>
                 <h3>Stack</h3>
@@ -148,14 +150,12 @@ function ProjectsP(props) {
                 <img src={sdm} alt={sdm} width="250" height="250" />
                 <h6>
                   <a
-                    className="link"
+                    className="resume"
                     target="_blank"
                     href="https://shinedarkmusic.com/"
                     rel="noopener noreferrer"
                   >
-                    <span role="img" aria-label="wolrd">
-                      🌎
-                    </span>
+                  <Icon size={51} icon={u1F30E}/>
                   </a>
                 </h6>
                 <h3>Stack</h3>
@@ -176,14 +176,12 @@ function ProjectsP(props) {
                 <img src={ll} alt={ll} width="250" height="250" />
                 <h6>
                   <a
-                    className="link"
+                    className="resume"
                     target="_blank"
                     href="https://pin-example.firebaseapp.com/"
                     rel="noopener noreferrer"
                   >
-                    <span role="img" aria-label="wolrd">
-                      🌎
-                    </span>
+                   <Icon size={51} icon={u1F30E}/>
                   </a>
                 </h6>
                 <h3>Stack</h3>
@@ -205,14 +203,12 @@ function ProjectsP(props) {
                 <img src={alog} alt={alog} width="250" height="250" />
                 <h6>
                   <a
-                    className="link"
+                    className="resume"
                     target="_blank"
                     href="https://alog2.herokuapp.com/"
                     rel="noopener noreferrer"
                   >
-                    <span role="img" aria-label="wolrd">
-                      🌎
-                    </span>
+                    <Icon size={51} icon={u1F30E}/>
                   </a>
                 </h6>
                 <h3>Stack</h3>
@@ -247,14 +243,12 @@ function ProjectsP(props) {
                 <img src={drone} alt={drone} width="250" height="250" />
                 <h6>
                   <a
-                    className="link"
+                    className="resume"
                     target="_blank"
                     href="https://shinedark.github.io/drones/"
                     rel="noopener noreferrer"
                   >
-                    <span role="img" aria-label="wolrd">
-                      🌎
-                    </span>
+                    <Icon size={51} icon={u1F3B9}/>
                   </a>
                 </h6>
                 <h3>Stack</h3>
@@ -276,14 +270,12 @@ function ProjectsP(props) {
                 <img src={vids} alt={vids} width="250" height="250" />
                 <h6>
                   <a
-                    className="link"
+                    className="resume"
                     target="_blank"
                     href="https://shinedark.github.io/vid/"
                     rel="noopener noreferrer"
                   >
-                    <span role="img" aria-label="wolrd">
-                      🌎
-                    </span>
+                    <Icon size={51} icon={u1F3B9}/>
                   </a>
                 </h6>
                 <h3>Stack</h3>
