@@ -21,7 +21,7 @@ a.resume:hover {
   box-shadow: -1px 7px 13px 0px #00000096;
 }
 
-.containerAuth2{
+.containerAuth2 {
   padding: 30px;
   margin-left: 25vw;
   margin-right: 25vw;
@@ -164,7 +164,6 @@ ul.pro {
   padding: 0px;
 }
 
-
 form.blog {
   width: 30vw;
   height: 23vh;
@@ -231,5 +230,13 @@ p.pAbout {
   ol.olAbout {
     display: inherit;
     padding: 0;
+  }
+  .containerAuth {
+    margin-left: 2vw;
+    margin-right: 2vw;
+  }
+  .containerAuth2 {
+    margin-left: 2vw;
+    margin-right: 2vw;
   }
 }
