@@ -8,18 +8,7 @@
 a.resume:hover {
   color: #1df1b9;
 }
-.containerAuth {
-  display: inline-grid;
-  padding: 30px;
-  margin-left: 25vw;
-  margin-right: 25vw;
-  margin-top: 10vh;
-  margin-bottom: 10vh;
-  border: #9a9696;
-  border-width: 1px;
-  border-style: solid;
-  box-shadow: -1px 7px 13px 0px #00000096;
-}
+
 
 .containerAuth2 {
   padding: 30px;
@@ -230,10 +219,6 @@ p.pAbout {
   ol.olAbout {
     display: inherit;
     padding: 0;
-  }
-  .containerAuth {
-    margin-left: 2vw;
-    margin-right: 2vw;
   }
   .containerAuth2 {
     margin-left: 2vw;

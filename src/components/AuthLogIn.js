@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import firebase from "../firebase";
 import "../App.css";
 
@@ -9,7 +9,7 @@ function AuthLogIn(props) {
 
   return (
     <div className="App">
-      <div className="containerAuth">
+      <div>
         <h2>Log In</h2>
         <form onSubmit={e => e.preventDefault() && false}>
           <input
@@ -28,10 +28,6 @@ function AuthLogIn(props) {
             Submit
           </button>
         </form>
-        <Link className="link" to="/signup">
-          {" "}
-          Don't have a account please <strong>Sign Up</strong>
-        </Link>
       </div>
     </div>
   );
