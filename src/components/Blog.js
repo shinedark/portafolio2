@@ -7,7 +7,7 @@ function Blog(props) {
   const checkForUser = () => {
     if (!firebase.getCurrentUsername()) {
       // not logged in
-      props.history.replace("/login");
+      props.history.replace("/projects");
       return null;
     }
   };
