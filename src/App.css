@@ -9,7 +9,6 @@ a.resume:hover {
   color: #1df1b9;
 }
 
-
 .containerAuth2 {
   padding: 30px;
   margin-left: 25vw;
@@ -93,11 +92,6 @@ h3.im {
   font-size: 30px;
 }
 
-.logout {
-  float: right;
-  margin-right: 10vw;
-}
-
 .auth {
   margin-left: 25vw;
   margin-right: 25vw;
@@ -167,6 +161,7 @@ p.blogBody {
 
 ol {
   display: inline-flex;
+  padding-left: 0;
 }
 
 .searchD {
@@ -183,8 +178,7 @@ ol.dProjects {
 }
 
 h2.blog {
-  float: left;
-  margin-left: 10vw;
+  display: contents;
 }
 
 .searchD1 {
