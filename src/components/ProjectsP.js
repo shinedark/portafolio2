@@ -41,7 +41,7 @@ function ProjectsP(props) {
 
   return (
     <>
-    <h3>Create an account to explore Projects & Blog</h3>
+    <h3>Create an account to explore Blog</h3>
     <div className="containerAuth2">
       {renderAuth()}
     </div>
