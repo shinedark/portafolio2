@@ -45,10 +45,10 @@ function About() {
         <ul className="ulAbout">
           <li>React Native</li>
           <li>FireBase</li>
-          {/* <li>GraphQl</li> */}
+          <li>GraphQl</li>
           <li>React</li>
           <li>Node</li>
-          {/* <li>AWS</li> */}
+          <li>AWS</li>
           <li>JS</li>
         </ul>
         <ol className="olAbout">

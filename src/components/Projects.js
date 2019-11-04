@@ -184,8 +184,8 @@ function ProjectsP(props) {
                   <li className="projectLi">Google Spreadsheets</li>
                 </ol>
                 <p className="pAbout">
-                  React Hooks App. It has Auth via Firebase and is connected to
-                  a google spreadsheet to collect information.
+                React Hooks App. It has Auth via Firebase and file upload. It is also connected to a google
+spreadsheet to display information to a 3rd party.
                 </p>
               </div>
             </li>
