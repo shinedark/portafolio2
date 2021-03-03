@@ -147,10 +147,10 @@ function ProjectsP(props) {
 								</h6>
 								<h3>Stack</h3>
 								<ol className="porjectAbout">
-									<li className="projectLi">Shopify</li>
+									<li className="projectLi">Html, Css</li>
 									<li className="projectLi">Design</li>
 								</ol>
-								<p className="pAbout">Shopify Store.</p>
+								<p className="pAbout">Record Label Site.</p>
 							</div>
 						</li>
 						<li className="wb">
