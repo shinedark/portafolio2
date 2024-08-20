@@ -28,8 +28,8 @@ const projects = [
     image: planetariaRadioImage // Use the imported image
   },
   {
-    title: "Project 2",
-    description: "A brief description of project 2",
+    title: "SHINE DARK MUSIC LABEL SITE",
+    description: "CSS AND DESIGN FUN",
     features: [
       "FUN FUN FUN"
     ],
