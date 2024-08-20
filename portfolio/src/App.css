@@ -1,0 +1,123 @@
+@import './fonts.css';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Major Mono Display', monospace;
+  line-height: 1.6;
+  background-color: #fff;
+  color: black;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  padding: 1rem;
+  position: relative;
+  height: 10vh; /* Adjust as needed */
+}
+
+.ascii-container {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+}
+
+.main {
+  flex-grow: 1;
+  padding: 2rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: 150px; /* Smaller height for mobile */
+  }
+
+  .ascii-container {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.projects-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+.project-cube {
+  width: 300px;
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.cube-container {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.project-info {
+  font-family: 'Major Mono Display', monospace;
+}
+
+.project-info h3 {
+  margin-bottom: 0.5rem;
+}
+
+.project-info p {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.project-info h4 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.project-info ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.project-info li {
+  font-size: 0.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.project-info a {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #61dafb;
+  color: #282c34;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.project-info a:hover {
+  background-color: #21a1c4;
+}
