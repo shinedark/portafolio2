@@ -123,6 +123,11 @@ function App() {
       </main>
       <footer className="footer">
         <p>© 2024 SHINE DARK. All rights reserved.</p>
+        <p>
+          <a href="https://x.com/ShineDarkmusic" target="_blank" rel="noopener noreferrer">
+            Contact us on X (Twitter)
+          </a>
+        </p>
       </footer>
     </div>
   );
