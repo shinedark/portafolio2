@@ -121,3 +121,7 @@ body {
 .project-info a:hover {
   background-color: #21a1c4;
 }
+
+a {
+  color: #61dafb;
+}
