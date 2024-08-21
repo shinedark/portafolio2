@@ -1,53 +1,40 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './ProjectCube.css';
 
 const ProjectCube = ({ project }) => {
   const cubeRef = useRef(null);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const animationRef = useRef(null);
+  const rotateYRef = useRef(0);
 
   useEffect(() => {
     const cube = cubeRef.current;
-    let mouseX = 0;
-    let mouseY = 0;
-    let isRotating = false;
-    let rotateX = 0;
-    let rotateY = 0;
 
-    const handleMouseDown = (e) => {
-      isRotating = true;
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+    const spin = () => {
+      rotateYRef.current += 2;
+      cube.style.transform = `rotateY(${rotateYRef.current}deg)`;
+      animationRef.current = requestAnimationFrame(spin);
     };
 
-    const handleMouseUp = () => {
-      isRotating = false;
-    };
-
-    const handleMouseMove = (e) => {
-      if (!isRotating) return;
-      const deltaX = e.clientX - mouseX;
-      const deltaY = e.clientY - mouseY;
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      rotateY += deltaX * 0.5;
-      rotateX -= deltaY * 0.5;
-      cube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    };
-
-    cube.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mouseup', handleMouseUp);
-    document.addEventListener('mousemove', handleMouseMove);
+    if (isSpinning) {
+      spin();
+    } else {
+      cancelAnimationFrame(animationRef.current);
+    }
 
     return () => {
-      cube.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationRef.current);
     };
-  }, []);
+  }, [isSpinning]);
+
+  const handleClick = () => {
+    setIsSpinning(!isSpinning);
+  };
 
   return (
     <div className="project-cube">
       <div className="scene">
-        <div className="cube" ref={cubeRef}>
+        <div className="cube" ref={cubeRef} onClick={handleClick}>
           <div className="cube__face cube__face--front" style={{backgroundImage: `url(${project.image})`}}></div>
           <div className="cube__face cube__face--back" style={{backgroundImage: `url(${project.image})`}}></div>
           <div className="cube__face cube__face--right" style={{backgroundImage: `url(${project.image})`}}></div>
