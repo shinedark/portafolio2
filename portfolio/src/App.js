@@ -4,6 +4,7 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import AsciiArtComponent from './AsciiArtComponent';
 import ProjectCube from './ProjectCube';
+import TechStack from './TechStack';
 import planetariaRadioImage from './pictures/pr.png'; 
 import sdm from './pictures/sdm.png';
 import './App.css';
@@ -115,6 +116,7 @@ function App() {
       </header>
       <main className="main">
         <h1>Portfolio</h1>
+        <TechStack />
         <div className="projects-container">
           {projects.map((project, index) => (
             <ProjectCube key={index} project={project} />

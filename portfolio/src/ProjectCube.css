@@ -37,19 +37,22 @@
 
 .project-info {
   margin-top: 1rem;
-}
-
-.project-info h3 {
+  font-family: "Rubik Mono One", monospace;
+  font-weight: 400;
+  font-style: normal;
   margin-bottom: 0.5rem;
 }
 
+
 .project-info p {
   margin-bottom: 1rem;
+  font-family: "Rubik Mono One", monospace;
 }
 
 .project-info ul {
   padding-left: 1.5rem;
   margin-bottom: 1rem;
+  
 }
 
 .project-info a {
