@@ -1,0 +1,26 @@
+.tech-stack {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+  }
+  
+  .tech-item {
+    font-size: 0.8rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    color: #333;
+    font-family: "Rubik Mono One", monospace;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .animate-bounce {
+    animation: bounce 0.5s ease;
+  }

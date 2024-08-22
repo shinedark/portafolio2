@@ -6,6 +6,7 @@
   padding: 0;
 }
 
+
 body {
   font-family: 'Major Mono Display', monospace;
   line-height: 1.6;
@@ -124,4 +125,32 @@ body {
 
 a {
   color: #61dafb;
+  font-family: "Rubik Mono One", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.tech-stack {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.tech-item {
+  color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.tech-item:hover {
+  background-color: #333;
+  color: #f0f0f0;
 }

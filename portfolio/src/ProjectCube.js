@@ -4,6 +4,7 @@ import './ProjectCube.css';
 const ProjectCube = ({ project }) => {
   const cubeRef = useRef(null);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const animationRef = useRef(null);
   const rotateYRef = useRef(0);
 
@@ -29,11 +30,12 @@ const ProjectCube = ({ project }) => {
 
   const handleClick = () => {
     setIsSpinning(!isSpinning);
+    setIsExpanded(!isExpanded);
   };
 
   return (
     <div className="project-cube">
-      <div className="scene">
+      <div className="scene" style={{ marginBottom: '15px' }}>
         <div className="cube" ref={cubeRef} onClick={handleClick}>
           <div className="cube__face cube__face--front" style={{backgroundImage: `url(${project.image})`}}></div>
           <div className="cube__face cube__face--back" style={{backgroundImage: `url(${project.image})`}}></div>
@@ -43,23 +45,25 @@ const ProjectCube = ({ project }) => {
           <div className="cube__face cube__face--bottom" style={{backgroundImage: `url(${project.image})`}}></div>
         </div>
       </div>
-      <div className="project-info">
-        <h3>{project.title}</h3>
-        <p>{project.description}</p>
-        <h4>Key Features:</h4>
-        <ul>
-          {project.features.map((feature, index) => (
-            <li key={index}>{feature}</li>
-          ))}
-        </ul>
-        <h4>Tech Stack:</h4>
-        <ul>
-          {project.stack.map((tech, index) => (
-            <li key={index}>{tech}</li>
-          ))}
-        </ul>
-        <a href={project.link} target="_blank" rel="noopener noreferrer">View Project</a>
-      </div>
+      <h3 className="project-title" style={{ marginTop: '15px', marginBottom: '20px' }}>{project.title}</h3>
+      {isExpanded && (
+        <div className="project-info" style={{ marginTop: '20px' }}>
+          <p>{project.description}</p>
+          <h4>Key Features:</h4>
+          <ul>
+            {project.features.map((feature, index) => (
+              <li key={index}>{feature}</li>
+            ))}
+          </ul>
+          <h4>Tech Stack:</h4>
+          <ul>
+            {project.stack.map((tech, index) => (
+              <li key={index}>{tech}</li>
+            ))}
+          </ul>
+          <a href={project.link} target="_blank" rel="noopener noreferrer">View Project</a>
+        </div>
+      )}
     </div>
   );
 };
