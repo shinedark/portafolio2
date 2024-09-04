@@ -7,6 +7,7 @@ import ProjectCube from './ProjectCube';
 import TechStack from './TechStack';
 import planetariaRadioImage from './pictures/pr.png'; 
 import sdm from './pictures/sdm.png';
+import mmt from './pictures/mmt.png';
 import './App.css';
 
 // Sample project data
@@ -37,6 +38,16 @@ const projects = [
     stack: ["Next.js"],
     link: "https://www.shinedarkmusic.com/",
     image: sdm
+  },
+  {
+    title: "MY MED HISTORY ",
+    description: "Creates history to be shared with new doctors or anyone who want's to comprehend more about my health treatment.",
+    features: [
+      "Log medications, supplements, history, informations, share with doctors or family, protected by blockchain technology."
+    ],
+    stack: ["Reatc, Graphql, Web3, "],
+    link: "https://tribe-made-frontend.onrender.com/",
+    image: mmt
   },
   // Add more projects as needed
 ];
