@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import backgroundVideo from './pictures/golf.mov'; // Update this path
+import backgroundVideo from './pictures/golf_compressed.mp4'; // Update this path
 
 const asciiArt = `
                                    ,::::                                        
