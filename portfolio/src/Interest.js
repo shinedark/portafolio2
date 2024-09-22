@@ -48,7 +48,7 @@ const Interest = () => {
       <h2>Interests</h2>
       <div className="interest-grid">
         {paragraphs.map((paragraph, index) => (
-          <div key={index} className="interest-column">
+          <div key={index} className="interest-item">
             <p>{isTypingComplete ? paragraph : typedParagraphs[index]}</p>
             {!isTypingComplete && <span className="cursor">|</span>}
           </div>

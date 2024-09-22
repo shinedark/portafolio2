@@ -1,34 +1,36 @@
 .interest-section {
-    padding: 20px;
+    padding: 2rem;
   }
   
   .interest-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
   }
   
-  .interest-column {
+  .interest-item {
     background-color: #f0f0f0;
-    padding: 15px;
-    border-radius: 5px;
-    min-height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (max-width: 768px) {
+    .interest-section {
+      padding: 1rem;
+    }
+
+    .interest-grid {
+      grid-template-columns: 1fr;
+    }
   }
   
   .cursor {
-    display: inline-block;
-    width: 2px;
-    height: 1em;
-    background-color: #000;
     animation: blink 0.7s infinite;
-    margin-left: 2px;
   }
   
   @keyframes blink {
-    0%, 100% { opacity: 0; }
+    0% { opacity: 0; }
     50% { opacity: 1; }
+    100% { opacity: 0; }
   }
