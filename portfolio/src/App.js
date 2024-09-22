@@ -5,6 +5,7 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import AsciiArtComponent from './AsciiArtComponent';
 import ProjectCube from './ProjectCube';
 import TechStack from './TechStack';
+import Interest from './Interest';
 import planetariaRadioImage from './pictures/pr.png'; 
 import sdm from './pictures/sdm.png';
 import mmt from './pictures/mmt.png';
@@ -133,6 +134,7 @@ function App() {
             <ProjectCube key={index} project={project} />
           ))}
         </div>
+        <Interest />
       </main>
       <footer className="footer">
         <p>© 2024 SHINE DARK. All rights reserved.</p>

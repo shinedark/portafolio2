@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import backgroundImage from './pictures/sd.png'; // Update this path
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import backgroundVideo from './pictures/golf.mov'; // Update this path
 
 const asciiArt = `
                                    ,::::                                        
@@ -43,7 +43,7 @@ XXXXXXXItYi;;;;;;;;;;;;;=;===+==+=+i==iii;;;;;;::;=;:::::;:=VVVitIVVYi=::;;
 YVXXVVIiYVt;;;;;;=;::::;=;=+++==+=+t++Iti+;;:::::;;+=;:;:::+VXVitYVVYI=;:::;    
 YVVVYYitXRt;:::;+itt+=:::;;=iIItt;=+=+Vttti+;::::==ii+=::::iY:=;+tYYYI=:,::::   
 IYVVYIi=IX+:::;;;;+=+====+++itItIIIIIYVIIYIYIIIIIIIYIIItIIIYY ;==+IIIt=:,,,::   
-tYYYIt+;==:::+XRBBMWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWMMMBMMMX  ;=+ittti+;;:,:;   
+tYYYIt+;==:::+XRBBMWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWMMMBMMMX  ;=+ittti+;;:,:;   
 iIIIti+;;     RBMBMWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWMMBBMMB   ;++iii==;;:,:    
 +tttii+=      RRBMMWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWMMMRMMB    ===;==;;;:::    
 =++++==+      RRBMBWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWMBMRBMB      ,::::::;:     
@@ -54,6 +54,7 @@ const AsciiArtComponent = () => {
   const [dynamicAsciiArt, setDynamicAsciiArt] = useState(asciiArt);
   const [backgroundColor, setBackgroundColor] = useState('rgba(0, 0, 0, 0.5)');
   const [isHovering, setIsHovering] = useState(false);
+  const videoRef = useRef(null);
 
   const getShade = (char) => {
     const asciiValue = char.charCodeAt(0);
@@ -98,6 +99,11 @@ const AsciiArtComponent = () => {
     const asciiInterval = setInterval(updateAsciiArt, 3000); // Update ASCII art every 3 seconds
     const backgroundInterval = setInterval(() => setBackgroundColor(getRandomBackgroundColor()), 1000); // Update background every 10 seconds
 
+    // Ensure the video loops
+    if (videoRef.current) {
+      videoRef.current.loop = true;
+    }
+
     return () => {
       clearInterval(asciiInterval);
       clearInterval(backgroundInterval);
@@ -111,14 +117,27 @@ const AsciiArtComponent = () => {
         height: '100%',
         position: 'relative',
         overflow: 'hidden',
-        backgroundImage: isHovering ? `url(${backgroundImage})` : 'none',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        transition: 'background-image 0.5s ease-in-out'
       }}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
+      <video
+        ref={videoRef}
+        src={backgroundVideo}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity: isHovering ? 1 : 0,
+          transition: 'opacity 0.5s ease-in-out',
+        }}
+        muted
+        playsInline
+        autoPlay
+      />
       <div
         style={{
           position: 'absolute',

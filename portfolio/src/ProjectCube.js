@@ -46,8 +46,17 @@ const ProjectCube = ({ project }) => {
         </div>
       </div>
       <h3 className="project-title" style={{ marginTop: '15px', marginBottom: '20px' }}>{project.title}</h3>
-      {isExpanded && (
-        <div className="project-info" style={{ marginTop: '20px' }}>
+      <div className="project-info-container" style={{ 
+        height: isExpanded ? '300px' : '0',
+        overflow: 'hidden',
+        transition: 'height 0.3s ease-in-out'
+      }}>
+        <div className="project-info" style={{ 
+          overflowY: 'auto',
+          maxHeight: '100%',
+          padding: '20px',
+          boxSizing: 'border-box'
+        }}>
           <p>{project.description}</p>
           <h4>Key Features:</h4>
           <ul>
@@ -63,7 +72,7 @@ const ProjectCube = ({ project }) => {
           </ul>
           <a href={project.link} target="_blank" rel="noopener noreferrer">View Project</a>
         </div>
-      )}
+      </div>
     </div>
   );
 };
