@@ -25,7 +25,7 @@ const styles = {
     // borderRadius: '8px',
     margin: '10px',
     padding: '10px',
-    width: '45%', // Adjust width for responsiveness
+    width: '90vw', // Adjust width for responsiveness
     cursor: 'pointer',
   },
 };
