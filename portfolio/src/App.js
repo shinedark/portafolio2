@@ -5,6 +5,7 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import AsciiArtComponent from './AsciiArtComponent';
 import ProjectCube from './ProjectCube';
 import TechStack from './TechStack';
+import SmartContractComparison from './SmartContractComparison';
 import Interest from './Interest';
 import planetariaRadioImage from './pictures/pr.png'; 
 import sdm from './pictures/sdm.png';
@@ -135,6 +136,7 @@ function App() {
           ))}
         </div>
         <Interest />
+        <SmartContractComparison />
       </main>
       <footer className="footer">
         <p>© 2024 SHINE DARK. All rights reserved.</p>
