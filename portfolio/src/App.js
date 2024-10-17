@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 import AsciiArtComponent from './AsciiArtComponent'
 import ProjectCube from './ProjectCube'
 import TechStack from './TechStack'
-import SmartContractComparison from './SmartContractComparison'
 import Interest from './Interest'
+import SmileyOverlay from './components/SmileyOverlay' // Import the new component
 import planetariaRadioImage from './pictures/pr.png'
 import sdm from './pictures/sdm.png'
 import mmt from './pictures/mmt.png'
@@ -63,6 +63,7 @@ const projects = [
 
 function App() {
   const headerRef = useRef(null)
+  const [showOverlay, setShowOverlay] = useState(true) // New state for overlay
 
   useEffect(() => {
     if (headerRef.current) {
@@ -141,6 +142,8 @@ function App() {
 
   return (
     <div className="app">
+      {showOverlay && <SmileyOverlay onClose={() => setShowOverlay(false)} />}
+
       <header ref={headerRef} className="header">
         <div className="ascii-container">
           <AsciiArtComponent />
@@ -155,7 +158,6 @@ function App() {
           ))}
         </div>
         <Interest />
-        {/* <SmartContractComparison /> */}
       </main>
       <footer className="footer">
         <p>© 2024 SHINE DARK. All rights reserved.</p>
