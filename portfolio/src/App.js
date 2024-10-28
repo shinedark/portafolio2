@@ -10,6 +10,7 @@ import SmileyOverlay from './components/SmileyOverlay' // Import the new compone
 import planetariaRadioImage from './pictures/pr.png'
 import sdm from './pictures/sdm.png'
 import mmt from './pictures/mmt.png'
+import repo from './pictures/repo.png'
 import './App.css'
 
 // Sample project data
@@ -58,7 +59,20 @@ const projects = [
     link: 'https://tribe-made-frontend.onrender.com/',
     image: mmt,
   },
-  // Add more projects as needed
+  {
+    title: 'REPO ANALYZER',
+    description: `This project serves two main objectives:
+Study Tool: A structured approach to analyze and understand code repositories
+Analysis Framework: A tool for conducting systematic code repository reviews
+`,
+    features: [
+      'Study Tool',
+      'Analysis Framework, Gas Price per file calculator, Github Api',
+    ],
+    stack: ['React', 'Cursor'],
+    link: 'https://repo-analyzer.onrender.com/',
+    image: repo,
+  },
 ]
 
 function App() {
