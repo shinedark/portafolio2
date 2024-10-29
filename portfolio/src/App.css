@@ -211,7 +211,7 @@ a {
   justify-content: space-around;
   max-height: 133px;
   margin-bottom: 2rem;  
-  margin-top: 12rem;
+  margin-top: 6rem;
 }
 
 .project-cube-container {
@@ -267,29 +267,50 @@ a {
 @media (max-width: 768px) {
   /* Header styles */
   .header {
-    height: 150px;
+    height: auto;
+    min-height: 80px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
   }
 
   .header-container {
     flex-direction: column;
     align-items: flex-start;
-    padding: 1rem;
-    margin-top: 6rem;
+    padding: 0.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    max-height: none;
   }
 
   /* ASCII container */
   .ascii-container {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
+    top: 0.5rem;
+    right: 0.5rem;
   }
 
   /* Projects styles */
-  .mobile-projects {
+  .main {
     padding: 1rem;
+    margin-top: 1rem;
+    overflow-y: auto;
   }
 
-  .project-container {
-    width: 100%;
+  .projects-container {
     margin-top: 1rem;
+  }
+
+  .mobile-projects {
+    padding: 0.5rem;
+  }
+
+  .project-cube {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .tech-stack {
+    display: none;
   }
 }
