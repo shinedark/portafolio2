@@ -24,3 +24,60 @@
   .animate-bounce {
     animation: bounce 0.5s ease;
   }
+
+  .tech-stack-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 0.1fr);
+    gap: 1px;
+  }
+
+  .grid-item {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+  }
+
+  .empty-item {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    background: -webkit-radial-gradient(100% 150%, circle, #ccc 24%, #fff 25%, #fff 28%, #ccc 29%, #ccc 36%, #fff 36%, #fff 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%), 
+                -webkit-radial-gradient(0 150%, circle, #ccc 24%, #fff 25%, #fff 28%, #ccc 29%, #ccc 36%, #fff 36%, #fff 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%), 
+                -webkit-radial-gradient(50% 100%, circle, #fff 10%, #ccc 11%, #ccc 23%, #fff 24%, #fff 30%, #ccc 31%, #ccc 43%, #fff 44%, #fff 50%, #ccc 51%, #ccc 63%, #fff 64%, #fff 71%, rgba(0,0,0,0) 71%, rgba(0,0,0,0) 100%), 
+                -webkit-radial-gradient(100% 50%, circle, #fff 5%, #ccc 6%, #ccc 15%, #fff 16%, #fff 20%, #ccc 21%, #ccc 30%, #fff 31%, #fff 35%, #ccc 36%, #ccc 45%, #fff 46%, #fff 49%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), 
+                -webkit-radial-gradient(0 50%, circle, #fff 5%, #ccc 6%, #ccc 15%, #fff 16%, #fff 20%, #ccc 21%, #ccc 30%, #fff 31%, #fff 35%, #ccc 36%, #ccc 45%, #fff 46%, #fff 49%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), 
+                #ccc;
+    background: -moz-radial-gradient(100% 150%, circle, #ccc 24%, #fff 25%, #fff 28%, #ccc 29%, #ccc 36%, #fff 36%, #fff 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%), 
+                -moz-radial-gradient(0 150%, circle, #ccc 24%, #fff 25%, #fff 28%, #ccc 29%, #ccc 36%, #fff 36%, #fff 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%), 
+                -moz-radial-gradient(50% 100%, circle, #fff 10%, #ccc 11%, #ccc 23%, #fff 24%, #fff 30%, #ccc 31%, #ccc 43%, #fff 44%, #fff 50%, #ccc 51%, #ccc 63%, #fff 64%, #fff 71%, rgba(0,0,0,0) 71%, rgba(0,0,0,0) 100%), 
+                -moz-radial-gradient(100% 50%, circle, #fff 5%, #ccc 6%, #ccc 15%, #fff 16%, #fff 20%, #ccc 21%, #ccc 30%, #fff 31%, #fff 35%, #ccc 36%, #ccc 45%, #fff 46%, #fff 49%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), 
+                -moz-radial-gradient(0 50%, circle, #fff 5%, #ccc 6%, #ccc 15%, #fff 16%, #fff 20%, #ccc 21%, #ccc 30%, #fff 31%, #fff 35%, #ccc 36%, #ccc 45%, #fff 46%, #fff 49%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), 
+                #ccc;
+    background: radial-gradient(circle at 100% 150%, #ccc 24%, #fff 25%, #fff 28%, #ccc 29%, #ccc 36%, #fff 36%, #fff 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%), 
+                radial-gradient(circle at 0 150%, #ccc 24%, #fff 25%, #fff 28%, #ccc 29%, #ccc 36%, #fff 36%, #fff 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%), 
+                radial-gradient(circle at 50% 100%, #fff 10%, #ccc 11%, #ccc 23%, #fff 24%, #fff 30%, #ccc 31%, #ccc 43%, #fff 44%, #fff 50%, #ccc 51%, #ccc 63%, #fff 64%, #fff 71%, rgba(0,0,0,0) 71%, rgba(0,0,0,0) 100%), 
+                radial-gradient(circle at 100% 50%, #fff 5%, #ccc 6%, #ccc 15%, #fff 16%, #fff 20%, #ccc 21%, #ccc 30%, #fff 31%, #fff 35%, #ccc 36%, #ccc 45%, #fff 46%, #fff 49%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), 
+                radial-gradient(circle at 0 50%, #fff 5%, #ccc 6%, #ccc 15%, #fff 16%, #fff 20%, #ccc 21%, #ccc 30%, #fff 31%, #fff 35%, #ccc 36%, #ccc 45%, #fff 46%, #fff 49%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), 
+                #ccc;
+    -webkit-background-origin: padding-box;
+    background-origin: padding-box;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    -webkit-background-size: 100px 50px;
+    background-size: 9px 6px;
+    animation: anit 303ms infinite;
+    animation-play-state: infinite;
+  }
+
+  
+  @keyframes anit {
+      from {background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;}
+      to {background-position: 10 0, 30 0, 90px 10px, 30px 110px, 10 0, 20px 30px;}
+  }

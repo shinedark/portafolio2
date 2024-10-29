@@ -1,27 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import './TechStack.css';
+import React, { useEffect, useState } from 'react'
+import './TechStack.css'
 
-const TechStack = () => {
-  const technologies = ['JS', 'TS', 'GRAPHQL', 'SOLIDITY', 'NODE', 'MOBILE', 'WEB'];
-  const [animatedTechs, setAnimatedTechs] = useState([]);
+const TechStack = ({ isAnimating, selectedTech, onTechSelect }) => {
+  const [shuffledTech, setShuffledTech] = useState([
+    'JS',
+    'TS',
+    'GRAPHQL',
+    'SOLIDITY',
+    'NODE',
+    'MOBILE',
+    'WEB',
+    null,
+    null,
+  ])
 
-  useEffect(() => {
-    const animationDelay = 200; // milliseconds between each word animation
-
-    technologies.forEach((tech, index) => {
-      setTimeout(() => {
-        setAnimatedTechs(technologies.slice(0, index + 1));
-      }, index * animationDelay);
-    });
-  }, []);
+  const shuffleArray = () => {
+    const techCopy = [...shuffledTech]
+    for (let i = techCopy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[techCopy[i], techCopy[j]] = [techCopy[j], techCopy[i]]
+    }
+    setShuffledTech(techCopy)
+  }
 
   return (
-    <div className="tech-stack">
-      {animatedTechs.map((tech, index) => (
-        <span key={index} className="tech-item animate-bounce">{tech}</span>
+    <div className={`tech-stack ${isAnimating ? 'animating' : ''}`}>
+      {shuffledTech.map((tech, index) => (
+        <div
+          key={tech || `empty-${index}`}
+          className={`grid-item animate-bounce ${
+            tech ? 'tech-item' : 'empty-item'
+          }`}
+          onClick={() => {
+            shuffleArray()
+            if (!tech) {
+              onTechSelect(null)
+            } else {
+              onTechSelect(tech)
+            }
+          }}
+        >
+          {tech}
+        </div>
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default TechStack;
+export default TechStack

@@ -69,7 +69,7 @@ Analysis Framework: A tool for conducting systematic code repository reviews
       'Study Tool',
       'Analysis Framework, Gas Price per file calculator, Github Api',
     ],
-    stack: ['React', 'Cursor'],
+    stack: ['React', 'Cursor', 'React Flow'],
     link: 'https://repo-analyzer.onrender.com/',
     image: repo,
   },
@@ -77,7 +77,35 @@ Analysis Framework: A tool for conducting systematic code repository reviews
 
 function App() {
   const headerRef = useRef(null)
-  const [showOverlay, setShowOverlay] = useState(true) // New state for overlay
+  const [showOverlay, setShowOverlay] = useState(true)
+  const [selectedTech, setSelectedTech] = useState(null)
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(0)
+  const [isAnimating, setIsAnimating] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+
+  const handleProjectClick = () => {
+    setIsAnimating(true)
+    setTimeout(() => setIsAnimating(false), 2000)
+  }
+
+  const selectedProjects = projects // Display all projects without filtering
+
+  const handleNextProject = () => {
+    setIsAnimating(true)
+    setTimeout(() => setIsAnimating(false), 2000)
+    setCurrentProjectIndex(
+      (prevIndex) => (prevIndex + 1) % selectedProjects.length,
+    )
+  }
+
+  const handlePreviousProject = () => {
+    setIsAnimating(true)
+    setTimeout(() => setIsAnimating(false), 2000)
+    setCurrentProjectIndex(
+      (prevIndex) =>
+        (prevIndex - 1 + selectedProjects.length) % selectedProjects.length,
+    )
+  }
 
   useEffect(() => {
     if (headerRef.current) {
@@ -149,9 +177,20 @@ function App() {
 
       return () => {
         window.removeEventListener('resize', handleResize)
-        headerRef.current.removeChild(renderer.domElement)
+        if (headerRef.current) {
+          headerRef.current.removeChild(renderer.domElement)
+        }
       }
     }
+  }, [])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   return (
@@ -164,12 +203,40 @@ function App() {
         </div>
       </header>
       <main className="main">
-        <h1>Portfolio</h1>
-        <TechStack />
-        <div className="projects-container">
-          {projects.map((project, index) => (
-            <ProjectCube key={index} project={project} />
-          ))}
+        <div className="header-container">
+          {isMobile ? (
+            // Display all projects in a list for mobile
+            <div className="mobile-projects">
+              {selectedProjects.map((project, index) => (
+                <ProjectCube
+                  key={index}
+                  project={project}
+                  onProjectClick={handleProjectClick}
+                />
+              ))}
+            </div>
+          ) : // Existing desktop view
+          selectedTech ? (
+            <div>
+              <ProjectCube
+                project={selectedProjects[currentProjectIndex]}
+                onProjectClick={handleProjectClick}
+              />
+              <div className="navigation-buttons">
+                <button onClick={handlePreviousProject}>{`<`}</button>
+                <button onClick={handleNextProject}>{`>`}</button>
+              </div>
+            </div>
+          ) : (
+            <div className="projects-h1">
+              <h1>Projects</h1>
+            </div>
+          )}
+          <TechStack
+            isAnimating={isAnimating}
+            selectedTech={selectedTech}
+            onTechSelect={setSelectedTech}
+          />
         </div>
         <Interest />
       </main>

@@ -4,6 +4,7 @@
   perspective: 200px;
   margin: 0 auto;
   font-family: monospace;
+  margin-bottom: 15px;
 }
 
 .cube {
@@ -35,14 +36,33 @@
   margin-bottom: 2rem;
 }
 
+.project-title {
+  margin-top: 25px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.project-info-container {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
+}
+
+.project-info-container.expanded {
+  height: 300px;
+}
+
 .project-info {
+  overflow-y: auto;
+  max-height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
   margin-top: 1rem;
   font-family: "Rubik Mono One", monospace;
   font-weight: 400;
   font-style: normal;
   margin-bottom: 0.5rem;
 }
-
 
 .project-info p {
   margin-bottom: 1rem;

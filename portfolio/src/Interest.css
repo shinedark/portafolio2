@@ -1,5 +1,6 @@
 .interest-section {
     padding: 2rem;
+    margin-top: 10em
   }
   
   .interest-grid {
@@ -18,6 +19,7 @@
   @media (max-width: 768px) {
     .interest-section {
       padding: 1rem;
+      margin-top: 55em;
     }
 
     .interest-grid {

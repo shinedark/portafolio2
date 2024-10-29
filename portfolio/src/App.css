@@ -38,6 +38,7 @@ body {
 .main {
   flex-grow: 1;
   padding: 2rem;
+  margin-top: 2rem;
 }
 
 .footer {
@@ -131,8 +132,67 @@ a {
 }
 
 .tech-stack {
-  margin-bottom: 2rem;
-  text-align: center;
+  position: relative;
+  overflow: hidden;
+  max-width: 420px
+}
+
+.tech-stack.animating {
+  animation: paintBounce 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  /* background-color: black; */
+  background: -webkit-radial-gradient(100% 150%, circle, #000 24%, #fff 25%, #fff 28%, #000 29%, #000 36%, #fff 36%, #fff 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%), 
+                -webkit-radial-gradient(0 150%, circle, #000 24%, #fff 25%, #fff 28%, #000 29%, #000 36%, #fff 36%, #fff 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%), 
+                -webkit-radial-gradient(50% 100%, circle, #fff 10%, #000 11%, #000 23%, #fff 24%, #fff 30%, #000 31%, #000 43%, #fff 44%, #fff 50%, #000 51%, #000 63%, #fff 64%, #fff 71%, rgba(0,0,0,0) 71%, rgba(0,0,0,0) 100%), 
+                -webkit-radial-gradient(100% 50%, circle, #fff 5%, #000 6%, #000 15%, #fff 16%, #fff 20%, #000 21%, #000 30%, #fff 31%, #fff 35%, #000 36%, #000 45%, #fff 46%, #fff 49%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), 
+                -webkit-radial-gradient(0 50%, circle, #fff 5%, #000 6%, #000 15%, #fff 16%, #fff 20%, #000 21%, #000 30%, #fff 31%, #fff 35%, #000 36%, #000 45%, #fff 46%, #fff 49%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), 
+                #000;
+    background: -moz-radial-gradient(100% 150%, circle, #000 24%, #fff 25%, #fff 28%, #000 29%, #000 36%, #fff 36%, #fff 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%), 
+                -moz-radial-gradient(0 150%, circle, #000 24%, #fff 25%, #fff 28%, #000 29%, #000 36%, #fff 36%, #fff 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%), 
+                -moz-radial-gradient(50% 100%, circle, #fff 10%, #000 11%, #000 23%, #fff 24%, #fff 30%, #000 31%, #000 43%, #fff 44%, #fff 50%, #000 51%, #000 63%, #fff 64%, #fff 71%, rgba(0,0,0,0) 71%, rgba(0,0,0,0) 100%), 
+                -moz-radial-gradient(100% 50%, circle, #fff 5%, #000 6%, #000 15%, #fff 16%, #fff 20%, #000 21%, #000 30%, #fff 31%, #fff 35%, #000 36%, #000 45%, #fff 46%, #fff 49%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), 
+                -moz-radial-gradient(0 50%, circle, #fff 5%, #000 6%, #000 15%, #fff 16%, #fff 20%, #000 21%, #000 30%, #fff 31%, #fff 35%, #000 36%, #000 45%, #fff 46%, #fff 49%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), 
+                #000;
+    background: radial-gradient(circle at 100% 150%, #000 24%, #fff 25%, #fff 28%, #000 29%, #000 36%, #fff 36%, #fff 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%), 
+                radial-gradient(circle at 0 150%, #000 24%, #fff 25%, #fff 28%, #000 29%, #000 36%, #fff 36%, #fff 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 100%), 
+                radial-gradient(circle at 50% 100%, #fff 10%, #000 11%, #000 23%, #fff 24%, #fff 30%, #000 31%, #000 43%, #fff 44%, #fff 50%, #000 51%, #000 63%, #fff 64%, #fff 71%, rgba(0,0,0,0) 71%, rgba(0,0,0,0) 100%), 
+                radial-gradient(circle at 100% 50%, #fff 5%, #000 6%, #000 15%, #fff 16%, #fff 20%, #000 21%, #000 30%, #fff 31%, #fff 35%, #000 36%, #000 45%, #fff 46%, #fff 49%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), 
+                radial-gradient(circle at 0 50%, #fff 5%, #000 6%, #000 15%, #fff 16%, #fff 20%, #000 21%, #000 30%, #fff 31%, #fff 35%, #000 36%, #000 45%, #fff 46%, #fff 49%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 100%), 
+                #000;
+    -webkit-background-origin: padding-box;
+    background-origin: padding-box;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    -webkit-background-size: 100px 50px;
+    background-size: 93px 3px;
+    animation: anit 303ms infinite;
+    animation-play-state: infinite;
+}
+
+
+@keyframes anit {
+  from {background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;}
+  to {background-position: 10 0, 30 0, 90px 10px, 30px 110px, 10 0, 20px 30px;}
+}
+
+@keyframes paintBounce {
+  0% {
+    transform: scaleY(0);
+  }
+  50% {
+    transform: scaleY(1.1);
+  }
+  70% {
+    transform: scaleY(0.9);
+  }
+  100% {
+    transform: scaleY(0);
+  }
+}
+
+/* Make sure tech items stay visible during animation */
+.tech-stack * {
+  position: relative;
+  z-index: 2;
 }
 
 .tech-list {
@@ -153,4 +213,76 @@ a {
 .tech-item:hover {
   background-color: #333;
   color: #f0f0f0;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  max-height: 133px;
+  margin-bottom: 2rem;  
+  margin-top: 12rem;
+}
+
+@media (max-width: 680px) {
+  .header-container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+}
+
+.project-cube-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navigation-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.navigation-buttons button {
+  padding: 8px 16px;
+  background-color: black;
+  color: white;
+  border: 1px solid #333;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.navigation-buttons button:hover {
+  background-color: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navigation-buttons button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.projects-h1 {
+  width: 100%;
+}
+
+.mobile-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .mobile-projects {
+    padding: 1rem;
+  }
 }
