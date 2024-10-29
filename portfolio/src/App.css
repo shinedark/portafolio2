@@ -23,7 +23,8 @@ body {
 .header {
   padding: 1rem;
   position: relative;
-  height: 10vh; /* Adjust as needed */
+  height: 10vh;
+  margin-bottom: 2rem; /* Adjust as needed */
 }
 
 .ascii-container {
