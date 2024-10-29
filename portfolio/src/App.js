@@ -208,11 +208,13 @@ function App() {
             // Display all projects in a list for mobile
             <div className="mobile-projects">
               {selectedProjects.map((project, index) => (
-                <ProjectCube
-                  key={index}
-                  project={project}
-                  onProjectClick={handleProjectClick}
-                />
+                <div className="project-container">
+                  <ProjectCube
+                    key={index}
+                    project={project}
+                    onProjectClick={handleProjectClick}
+                  />
+                </div>
               ))}
             </div>
           ) : // Existing desktop view
