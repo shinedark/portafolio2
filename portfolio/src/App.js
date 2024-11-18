@@ -11,6 +11,9 @@ import planetariaRadioImage from './pictures/pr.png'
 import sdm from './pictures/sdm.png'
 import mmt from './pictures/mmt.png'
 import repo from './pictures/repo.png'
+import nms from './pictures/nms.png'
+import vid from './pictures/vid.png'
+import guide from './pictures/guide.png'
 import './App.css'
 
 // Sample project data
@@ -72,6 +75,36 @@ Analysis Framework: A tool for conducting systematic code repository reviews
     stack: ['React', 'Cursor', 'React Flow'],
     link: 'https://repo-analyzer.onrender.com/',
     image: repo,
+  },
+  {
+    title: 'NOISE MACHINE SAMPLER',
+    description: 'Toy Mobile App',
+    features: [
+      `Noise Machine Sampler There are 12 slots available to loaded. Each slot has 6 sounds to pick from.
+
+To Load slots click on Search Samples then press each slot you want to load.
+As you press each slot samples will play, if you like what you hear press Set samples.
+Make Noise !!!`,
+    ],
+    stack: ['React Native, Expo'],
+    link: 'https://github.com/shinedark/NoiseMachineSampler',
+    image: nms,
+  },
+  {
+    title: 'VID',
+    description: 'Keyboard music sampler and css exercise',
+    features: ['Animations and css'],
+    stack: ['Html,Css, Js'],
+    link: 'https://shinedark.github.io/vid/',
+    image: vid,
+  },
+  {
+    title: 'Guide',
+    description: 'SHINE DARK mental health recovery guide',
+    features: ['Media and creative'],
+    stack: ['Html, Css, Js'],
+    link: 'https://shinedark.github.io/guide/',
+    image: guide,
   },
 ]
 
