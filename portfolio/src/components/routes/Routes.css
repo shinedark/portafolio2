@@ -25,8 +25,9 @@
 .route-section {
   margin-bottom: 2rem;
 }
-p {
+p, ol, ul, li ,div{
     font-family: "Rubik Mono One", monospace;
+    list-style: none;
 }
 .route-section h3 {
   font-family: 'Major Mono Display', monospace;

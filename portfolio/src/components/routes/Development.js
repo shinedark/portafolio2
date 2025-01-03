@@ -6,6 +6,11 @@ const Development = () => {
     <div className="route-page">
       <div className="route-section">
         <h3>Our Approach</h3>
+        <h4>
+          <a href="https://www.twitch.tv/shinedarkmusic">
+            Stream Daily on Twitch
+          </a>
+        </h4>
         <p>
           Born from personal health challenges and a journey of self-discovery,
           our development process focuses on creating sustainable,
