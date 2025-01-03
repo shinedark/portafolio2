@@ -14,6 +14,13 @@ import repo from './pictures/repo.png'
 import nms from './pictures/nms.png'
 import vid from './pictures/vid.png'
 import guide from './pictures/guide.png'
+import PrototypeShowcase from './components/PrototypeShowcase'
+import RouteContainer from './components/RouteContainer'
+import SDProject from './components/routes/SDProject'
+import BusinessPlan from './components/routes/BusinessPlan'
+import Timeline from './components/routes/Timeline'
+import Development from './components/routes/Development'
+import Invest from './components/routes/Invest'
 import './App.css'
 
 // Sample project data
@@ -115,6 +122,7 @@ function App() {
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+  const [activeRoute, setActiveRoute] = useState('projects')
 
   const handleProjectClick = () => {
     setIsAnimating(true)
@@ -236,44 +244,67 @@ function App() {
         </div>
       </header>
       <main className="main">
-        <div className="header-container">
-          {isMobile ? (
-            // Display all projects in a list for mobile
-            <div className="mobile-projects">
-              {selectedProjects.map((project, index) => (
-                <div className="project-container">
-                  <ProjectCube
-                    key={index}
-                    project={project}
-                    onProjectClick={handleProjectClick}
-                  />
+        <PrototypeShowcase />
+        <div className="content-wrapper">
+          <RouteContainer
+            activeRoute={activeRoute}
+            onRouteChange={setActiveRoute}
+          >
+            {activeRoute === 'projects' && <SDProject />}
+            {activeRoute === 'business-plan' && <BusinessPlan />}
+            {activeRoute === 'timeline' && <Timeline />}
+            {activeRoute === 'development' && <Development />}
+            {activeRoute === 'invest' && <Invest />}
+          </RouteContainer>
+          <>
+            <div className="header-container">
+              {isMobile ? (
+                <div className="mobile-projects">
+                  {selectedProjects.map((project, index) => (
+                    <div className="project-container" key={index}>
+                      <ProjectCube
+                        project={project}
+                        onProjectClick={handleProjectClick}
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))}
+              ) : (
+                <>
+                  {selectedTech ? (
+                    <div className="project-cube-wrapper">
+                      <ProjectCube
+                        project={selectedProjects[currentProjectIndex]}
+                        onProjectClick={handleProjectClick}
+                      />
+                      <div className="navigation-buttons">
+                        <button onClick={handlePreviousProject}>{`<`}</button>
+                        <button onClick={handleNextProject}>{`>`}</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="projects-h1">
+                      <h1>LegacyProjects</h1>
+                    </div>
+                  )}
+                  <TechStack
+                    isAnimating={isAnimating}
+                    selectedTech={selectedTech}
+                    onTechSelect={setSelectedTech}
+                  />
+                </>
+              )}
             </div>
-          ) : // Existing desktop view
-          selectedTech ? (
-            <div>
-              <ProjectCube
-                project={selectedProjects[currentProjectIndex]}
-                onProjectClick={handleProjectClick}
-              />
-              <div className="navigation-buttons">
-                <button onClick={handlePreviousProject}>{`<`}</button>
-                <button onClick={handleNextProject}>{`>`}</button>
-              </div>
-            </div>
-          ) : (
-            <div className="projects-h1">
-              <h1>Projects</h1>
-            </div>
+          </>
+          {isMobile && activeRoute === 'projects' && (
+            <TechStack
+              isAnimating={isAnimating}
+              selectedTech={selectedTech}
+              onTechSelect={setSelectedTech}
+            />
           )}
-          <TechStack
-            isAnimating={isAnimating}
-            selectedTech={selectedTech}
-            onTechSelect={setSelectedTech}
-          />
+          <Interest />
         </div>
-        <Interest />
       </main>
       <footer className="footer">
         <p>© 2024 SHINE DARK. All rights reserved.</p>

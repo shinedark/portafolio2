@@ -1,0 +1,110 @@
+.prototype-showcase {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.showcase-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+
+.showcase-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.showcase-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+.showcase-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  color: white;
+}
+
+.showcase-info h2 {
+  font-family: 'Major Mono Display', monospace;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.showcase-info p {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.showcase-controls {
+  position: absolute;
+  bottom: 1rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.showcase-controls button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.showcase-controls button:hover {
+  transform: scale(1.1);
+}
+
+.showcase-dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+  .prototype-showcase {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .showcase-info h2 {
+    font-size: 1.2rem;
+  }
+
+  .showcase-info p {
+    font-size: 0.9rem;
+  }
+} 
