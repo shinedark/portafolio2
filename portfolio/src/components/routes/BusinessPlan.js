@@ -1,4 +1,5 @@
 import React from 'react'
+import ProjectCostCalculator from '../ProjectCostCalculator'
 import './Routes.css'
 
 const BusinessPlan = () => {
@@ -13,6 +14,7 @@ const BusinessPlan = () => {
           America's production of goods.
         </p>
       </div>
+
       <div className="route-section">
         <h3>Goals</h3>
         <ul>
@@ -23,14 +25,7 @@ const BusinessPlan = () => {
           <li>Foster self-sufficiency culture</li>
         </ul>
       </div>
-      <div className="route-section">
-        <h3>Strategy</h3>
-        <p>
-          The idea is to show the cost, process, and development over the next 5
-          years, and generate a process and culture for farmers and builders to
-          make a new "Made in America" possible and affordable.
-        </p>
-      </div>
+      <ProjectCostCalculator />
     </div>
   )
 }

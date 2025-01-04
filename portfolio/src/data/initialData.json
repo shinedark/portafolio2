@@ -1,0 +1,41 @@
+{
+  "costs": {
+    "equipment": {
+      "name": "Equipment",
+      "items": [
+        {
+          "name": "MacBook Pro",
+          "cost": 4199,
+          "isEssential": true,
+          "isNeeded": true,
+          "link": "https://www.apple.com/shop/buy-mac/macbook-pro",
+          "description": "Current 2013 Mac Pro is outdated and unable to run modern development tools like React Native"
+        }
+      ]
+    },
+    "subscriptions": {
+      "name": "Subscriptions",
+      "items": [
+        {
+          "name": "ChatGPT",
+          "cost": 200,
+          "isEssential": true,
+          "isMonthly": true,
+          "isNeeded": true,
+          "link": "https://chat.openai.com/",
+          "description": "AI-powered assistance and productivity"
+        }
+      ]
+    }
+  },
+  "revenue": {
+    "services": {
+      "name": "Services",
+      "items": []
+    },
+    "products": {
+      "name": "Products",
+      "items": []
+    }
+  }
+} 

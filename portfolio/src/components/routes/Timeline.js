@@ -1,9 +1,17 @@
 import React from 'react'
+import ContributionGrid from '../ContributionGrid'
 import './Routes.css'
 
 const Timeline = () => {
   return (
     <div className="route-page">
+      <div className="timeline-header">
+        <h2>5 Year Progress</h2>
+        <p>Track daily contributions and milestones towards our goals</p>
+      </div>
+
+      <ContributionGrid />
+
       <div className="timeline">
         <div className="timeline-item">
           <div className="timeline-date">2025</div>
