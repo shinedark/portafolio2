@@ -2,11 +2,20 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
-import AsciiArtComponent from './AsciiArtComponent'
-import ProjectCube from './ProjectCube'
-import TechStack from './TechStack'
-import Interest from './Interest'
-import SmileyOverlay from './components/SmileyOverlay' // Import the new component
+import AsciiArtComponent from './components/random/AsciiArtComponent'
+import ProjectCube from './components/random/ProjectCube'
+import TechStack from './components/random/TechStack'
+import Interest from './components/random/Interest'
+import SmileyOverlay from './components/random/SmileyOverlay'
+import PrototypeShowcase from './components/random/PrototypeShowcase'
+import RouteContainer from './components/Navigation/RouteContainer'
+import SDProject from './components/routes/SDProject'
+import BusinessPlan from './components/routes/BusinessPlan'
+import Timeline from './components/routes/Timeline'
+import Development from './components/routes/Development'
+import Invest from './components/routes/Invest'
+import AdminRoute from './components/routes/AdminRoute'
+import { AuthProvider } from './components/auth/AuthContext'
 import planetariaRadioImage from './pictures/pr.png'
 import sdm from './pictures/sdm.png'
 import mmt from './pictures/mmt.png'
@@ -14,14 +23,8 @@ import repo from './pictures/repo.png'
 import nms from './pictures/nms.png'
 import vid from './pictures/vid.png'
 import guide from './pictures/guide.png'
-import PrototypeShowcase from './components/PrototypeShowcase'
-import RouteContainer from './components/RouteContainer'
-import SDProject from './components/routes/SDProject'
-import BusinessPlan from './components/routes/BusinessPlan'
-import Timeline from './components/routes/Timeline'
-import Development from './components/routes/Development'
-import Invest from './components/routes/Invest'
 import './App.css'
+import { BrowserRouter } from 'react-router-dom'
 
 // Sample project data
 const projects = [
@@ -123,6 +126,7 @@ function App() {
   const [isAnimating, setIsAnimating] = useState(false)
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
   const [activeRoute, setActiveRoute] = useState('projects')
+  const [isAdmin, setIsAdmin] = useState(false)
 
   const handleProjectClick = () => {
     setIsAnimating(true)
@@ -148,8 +152,13 @@ function App() {
     )
   }
 
+  const handleLogin = (adminStatus) => {
+    setIsAdmin(adminStatus)
+  }
+
   useEffect(() => {
-    if (headerRef.current) {
+    const headerElement = headerRef.current // Store ref value
+    if (headerElement) {
       const scene = new THREE.Scene()
       const camera = new THREE.PerspectiveCamera(
         75,
@@ -218,8 +227,9 @@ function App() {
 
       return () => {
         window.removeEventListener('resize', handleResize)
-        if (headerRef.current) {
-          headerRef.current.removeChild(renderer.domElement)
+        if (headerElement) {
+          // Use stored reference
+          headerElement.removeChild(renderer.domElement)
         }
       }
     }
@@ -235,90 +245,104 @@ function App() {
   }, [])
 
   return (
-    <div className="app">
-      {showOverlay && <SmileyOverlay onClose={() => setShowOverlay(false)} />}
+    <BrowserRouter>
+      <AuthProvider>
+        <div className="app">
+          {showOverlay && (
+            <SmileyOverlay onClose={() => setShowOverlay(false)} />
+          )}
 
-      <header ref={headerRef} className="header">
-        <div className="ascii-container">
-          <AsciiArtComponent />
-        </div>
-      </header>
-      <main className="main">
-        <PrototypeShowcase />
-        <div className="content-wrapper">
-          <RouteContainer
-            activeRoute={activeRoute}
-            onRouteChange={setActiveRoute}
-          >
-            {activeRoute === 'projects' && <SDProject />}
-            {activeRoute === 'business-plan' && <BusinessPlan />}
-            {activeRoute === 'timeline' && <Timeline />}
-            {activeRoute === 'development' && <Development />}
-            {activeRoute === 'invest' && <Invest />}
-          </RouteContainer>
-          <>
-            <div className="header-container">
-              {isMobile ? (
-                <div className="mobile-projects">
-                  {selectedProjects.map((project, index) => (
-                    <div className="project-container" key={index}>
-                      <ProjectCube
-                        project={project}
-                        onProjectClick={handleProjectClick}
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <>
-                  {selectedTech ? (
-                    <div className="project-cube-wrapper">
-                      <ProjectCube
-                        project={selectedProjects[currentProjectIndex]}
-                        onProjectClick={handleProjectClick}
-                      />
-                      <div className="navigation-buttons">
-                        <button onClick={handlePreviousProject}>{`<`}</button>
-                        <button onClick={handleNextProject}>{`>`}</button>
-                      </div>
+          <header ref={headerRef} className="header">
+            <div className="ascii-container">
+              <AsciiArtComponent />
+            </div>
+          </header>
+          <main className="main">
+            <PrototypeShowcase />
+
+            <div className="content-wrapper">
+              <RouteContainer
+                activeRoute={activeRoute}
+                onRouteChange={setActiveRoute}
+              >
+                {activeRoute === 'projects' && <SDProject />}
+                {activeRoute === 'business-plan' && <BusinessPlan />}
+                {activeRoute === 'timeline' && <Timeline />}
+                {activeRoute === 'development' && <Development />}
+                {activeRoute === 'invest' && <Invest />}
+                {activeRoute === 'admin' && (
+                  <AdminRoute isAdmin={isAdmin} onLogin={handleLogin} />
+                )}
+              </RouteContainer>
+              <br />
+              <Interest />
+              <br />
+              <>
+                <div className="header-container">
+                  {isMobile ? (
+                    <div className="mobile-projects">
+                      {selectedProjects.map((project, index) => (
+                        <div className="project-container" key={index}>
+                          <ProjectCube
+                            project={project}
+                            onProjectClick={handleProjectClick}
+                          />
+                        </div>
+                      ))}
                     </div>
                   ) : (
-                    <div className="projects-h1">
-                      <h1>LegacyProjects</h1>
-                    </div>
+                    <>
+                      {selectedTech ? (
+                        <div className="project-cube-wrapper">
+                          <ProjectCube
+                            project={selectedProjects[currentProjectIndex]}
+                            onProjectClick={handleProjectClick}
+                          />
+                          <div className="navigation-buttons">
+                            <button
+                              onClick={handlePreviousProject}
+                            >{`<`}</button>
+                            <button onClick={handleNextProject}>{`>`}</button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="projects-h1">
+                          <h1>LegacyProjects</h1>
+                        </div>
+                      )}
+                      <TechStack
+                        isAnimating={isAnimating}
+                        selectedTech={selectedTech}
+                        onTechSelect={setSelectedTech}
+                      />
+                    </>
                   )}
-                  <TechStack
-                    isAnimating={isAnimating}
-                    selectedTech={selectedTech}
-                    onTechSelect={setSelectedTech}
-                  />
-                </>
+                </div>
+              </>
+              {isMobile && activeRoute === 'projects' && (
+                <TechStack
+                  isAnimating={isAnimating}
+                  selectedTech={selectedTech}
+                  onTechSelect={setSelectedTech}
+                />
               )}
             </div>
-          </>
-          {isMobile && activeRoute === 'projects' && (
-            <TechStack
-              isAnimating={isAnimating}
-              selectedTech={selectedTech}
-              onTechSelect={setSelectedTech}
-            />
-          )}
-          <Interest />
+          </main>
+          <footer className="footer">
+            <p>© 2024 SHINE DARK. All rights reserved.</p>
+            <p>
+              <a
+                href="https://x.com/ShineDarkmusic"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Contact us on X (Twitter)
+              </a>
+            </p>
+          </footer>
         </div>
-      </main>
-      <footer className="footer">
-        <p>© 2024 SHINE DARK. All rights reserved.</p>
-        <p>
-          <a
-            href="https://x.com/ShineDarkmusic"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Contact us on X (Twitter)
-          </a>
-        </p>
-      </footer>
-    </div>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 

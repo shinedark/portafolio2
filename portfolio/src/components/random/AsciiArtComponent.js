@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import backgroundVideo from './pictures/golf_compressed.mp4'; // Update this path
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import backgroundVideo from '../../pictures/golf_compressed.mp4' // Update this path
 
 const asciiArt = `
                                    ,::::                                        
@@ -48,28 +48,28 @@ iIIIti+;;     RBMBMWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWMMBBMMB   ;++iii==;;:,:
 +tttii+=      RRBMMWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWMMMRMMB    ===;==;;;:::    
 =++++==+      RRBMBWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWMBMRBMB      ,::::::;:     
 
-`;
+`
 
 const AsciiArtComponent = () => {
-  const [dynamicAsciiArt, setDynamicAsciiArt] = useState(asciiArt);
-  const [backgroundColor, setBackgroundColor] = useState('rgba(0, 0, 0, 0.5)');
-  const [isHovering, setIsHovering] = useState(false);
-  const videoRef = useRef(null);
+  const [dynamicAsciiArt, setDynamicAsciiArt] = useState(asciiArt)
+  const [backgroundColor, setBackgroundColor] = useState('rgba(0, 0, 0, 0.5)')
+  const [isHovering, setIsHovering] = useState(false)
+  const videoRef = useRef(null)
 
   const getShade = (char) => {
-    const asciiValue = char.charCodeAt(0);
-    if (asciiValue === 32) return 'transparent'; // space
-    if (asciiValue < 33) return '#FFFFFF'; // very light
-    if (asciiValue < 65) return '#CCCCCC'; // light
-    if (asciiValue < 97) return '#999999'; // medium
-    if (asciiValue < 126) return '#666666'; // dark
-    return '#333333'; // very dark
-  };
+    const asciiValue = char.charCodeAt(0)
+    if (asciiValue === 32) return 'transparent' // space
+    if (asciiValue < 33) return '#FFFFFF' // very light
+    if (asciiValue < 65) return '#CCCCCC' // light
+    if (asciiValue < 97) return '#999999' // medium
+    if (asciiValue < 126) return '#666666' // dark
+    return '#333333' // very dark
+  }
 
   const getRandomChar = () => {
-    const chars = '.:;+=itIYVXRBMW#';
-    return chars[Math.floor(Math.random() * chars.length)];
-  };
+    const chars = '.:;+=itIYVXRBMW#'
+    return chars[Math.floor(Math.random() * chars.length)]
+  }
 
   const getRandomBackgroundColor = () => {
     const colors = [
@@ -77,42 +77,46 @@ const AsciiArtComponent = () => {
       'rgba(255, 0, 0, 0.5)',
       'rgba(255, 255, 255, 0.5)',
       'rgba(128, 128, 128, 0.5)',
-      'rgba(0, 0, 0, 0.5)'
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
+      'rgba(0, 0, 0, 0.5)',
+    ]
+    return colors[Math.floor(Math.random() * colors.length)]
+  }
 
   const updateAsciiArt = useCallback(() => {
-    setDynamicAsciiArt(prevArt => {
-      const artArray = prevArt.split('');
-      for (let i = 0; i < 100; i++) { // Change 100 random characters
-        const randomIndex = Math.floor(Math.random() * artArray.length);
+    setDynamicAsciiArt((prevArt) => {
+      const artArray = prevArt.split('')
+      for (let i = 0; i < 100; i++) {
+        // Change 100 random characters
+        const randomIndex = Math.floor(Math.random() * artArray.length)
         if (artArray[randomIndex] !== '\n' && artArray[randomIndex] !== ' ') {
-          artArray[randomIndex] = getRandomChar();
+          artArray[randomIndex] = getRandomChar()
         }
       }
-      return artArray.join('');
-    });
-  }, []);
+      return artArray.join('')
+    })
+  }, [])
 
   useEffect(() => {
-    const asciiInterval = setInterval(updateAsciiArt, 3000); // Update ASCII art every 3 seconds
-    const backgroundInterval = setInterval(() => setBackgroundColor(getRandomBackgroundColor()), 1000); // Update background every 10 seconds
+    const asciiInterval = setInterval(updateAsciiArt, 3000) // Update ASCII art every 3 seconds
+    const backgroundInterval = setInterval(
+      () => setBackgroundColor(getRandomBackgroundColor()),
+      1000,
+    ) // Update background every 10 seconds
 
     // Ensure the video loops
     if (videoRef.current) {
-      videoRef.current.loop = true;
+      videoRef.current.loop = true
     }
 
     return () => {
-      clearInterval(asciiInterval);
-      clearInterval(backgroundInterval);
-    };
-  }, [updateAsciiArt]);
+      clearInterval(asciiInterval)
+      clearInterval(backgroundInterval)
+    }
+  }, [updateAsciiArt])
 
   return (
-    <div 
-      style={{ 
+    <div
+      style={{
         width: '100%',
         height: '100%',
         position: 'relative',
@@ -147,31 +151,38 @@ const AsciiArtComponent = () => {
           bottom: 0,
           backgroundColor: backgroundColor,
           opacity: isHovering ? 0 : 1,
-          transition: 'opacity 0.5s ease-in-out, background-color 3s ease-in-out'
+          transition:
+            'opacity 0.5s ease-in-out, background-color 3s ease-in-out',
         }}
       />
-      <div 
-        style={{ 
+      <div
+        style={{
           position: 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%) scale(0.15)', // Adjust scale as needed
           transformOrigin: 'center center',
-          fontFamily: 'monospace', 
+          fontFamily: 'monospace',
           fontSize: '10px',
           lineHeight: '1em',
           whiteSpace: 'pre',
           opacity: isHovering ? 0 : 1,
-          transition: 'opacity 0.5s ease-in-out'
+          transition: 'opacity 0.5s ease-in-out',
         }}
       >
         {dynamicAsciiArt.split('\n').map((line, index) => (
           <div key={index}>
             {line.split('').map((char, i) => (
-              <span key={i} style={{ 
-                color: getShade(char),
-                backgroundColor: getShade(char) === 'transparent' ? 'transparent' : 'rgba(0, 0, 0, 0.5)'
-              }}>
+              <span
+                key={i}
+                style={{
+                  color: getShade(char),
+                  backgroundColor:
+                    getShade(char) === 'transparent'
+                      ? 'transparent'
+                      : 'rgba(0, 0, 0, 0.5)',
+                }}
+              >
                 {char === ' ' ? '\u00A0' : char}
               </span>
             ))}
@@ -179,7 +190,7 @@ const AsciiArtComponent = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AsciiArtComponent;
+export default AsciiArtComponent

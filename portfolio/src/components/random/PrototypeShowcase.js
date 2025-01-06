@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import './PrototypeShowcase.css'
-import t1 from '../pictures/t1.jpg'
-import t2 from '../pictures/t2.png'
-import t3 from '../pictures/t3.jpg'
-import t4 from '../pictures/t4.jpg'
+import t1 from '../../pictures/t1.jpg'
+import t2 from '../../pictures/t2.png'
+import t3 from '../../pictures/t3.jpg'
+import t4 from '../../pictures/t4.jpg'
 const prototypes = [
   {
     id: 1,

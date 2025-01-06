@@ -8,6 +8,7 @@ const ProjectNavigation = ({ activeRoute, onRouteChange }) => {
     { id: 'timeline', label: 'Timeline' },
     { id: 'development', label: 'Development' },
     { id: 'invest', label: 'Invest & Support' },
+    { id: 'admin', label: 'Admin' },
   ]
 
   return (

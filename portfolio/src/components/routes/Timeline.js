@@ -1,5 +1,5 @@
 import React from 'react'
-import ContributionGrid from '../ContributionGrid'
+import ContributionGrid from '../random/ContributionGrid'
 import './Routes.css'
 
 const Timeline = () => {

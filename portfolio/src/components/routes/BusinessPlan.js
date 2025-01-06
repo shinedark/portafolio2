@@ -1,5 +1,5 @@
 import React from 'react'
-import ProjectCostCalculator from '../ProjectCostCalculator'
+import ProjectCostCalculator from '../calculators/ProjectCostCalculator'
 import './Routes.css'
 
 const BusinessPlan = () => {

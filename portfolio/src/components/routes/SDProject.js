@@ -4,16 +4,16 @@ import './Routes.css'
 const SDProject = () => {
   return (
     <div className="route-page max-w-4xl mx-auto p-6">
-      <h3>Vision</h3>
-      <p>Awakening Human Being Via Technology & Art</p>
-      <p>
+      <h3 className="text-2xl font-bold mb-6">SHINE DARK MUSIC</h3>
+      <p className="text-lg mb-4">Awakening Human Being Via Technology & Art</p>
+      <p className="text-lg mb-4">
         We are on a mission to be an inspiration for anyone who wants to learn,
         grow, and create. As a record label and artist, I'm setting out to
         change and remind people of what an artist can do.
       </p>
       <div className="route-section">
-        <h3>Purpose</h3>
-        <p>
+        <h4 className="text-2xl font-bold mb-6">Purpose</h4>
+        <p className="text-lg mb-4">
           Our motto at the label has been "Awakening Human Beings via Technology
           & Art" and that's exactly what we are going to do. Our purpose is to
           inspire and cultivate minds in this time of change.

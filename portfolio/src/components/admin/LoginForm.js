@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useAuth } from './AuthContext'
-import './Auth.css'
+import { useAuth } from '../auth/AuthContext'
+import '../auth/Auth.css'
 
 const LoginForm = () => {
   const [email, setEmail] = useState('')

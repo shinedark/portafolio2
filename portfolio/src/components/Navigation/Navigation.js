@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useAuth } from './auth/AuthContext'
+import { useAuth } from '../auth/AuthContext'
 import './Navigation.css'
 
 const Navigation = () => {

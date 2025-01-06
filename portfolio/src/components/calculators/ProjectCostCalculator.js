@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './ProjectCostCalculator.css'
-import CostCalculator from './calculators/CostCalculator'
-import RevenueCalculator from './calculators/RevenueCalculator'
+import CostCalculator from './CostCalculator'
+import RevenueCalculator from './RevenueCalculator'
 
 const initialCategories = {
   equipment: {
