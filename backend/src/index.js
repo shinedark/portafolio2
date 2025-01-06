@@ -3,6 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
+import cookieParser from 'cookie-parser'
 import { connectDB } from './config/database.js'
 import { errorHandler } from './middleware/errorHandler.js'
 import authRoutes from './routes/auth.js'
@@ -21,6 +22,7 @@ app.use(
   }),
 )
 app.use(express.json())
+app.use(cookieParser())
 
 // Rate limiting
 const limiter = rateLimit({

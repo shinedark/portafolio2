@@ -175,4 +175,22 @@
     width: 95%;
     padding: 15px;
   }
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #ff6b6b;
+}
+
+.contribution-details {
+  margin: 1rem 0;
+}
+
+.contribution-details p {
+  margin: 0.5rem 0;
 } 

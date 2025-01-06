@@ -1,30 +1,56 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './ContributionGrid.css'
 
 const ContributionGrid = () => {
-  const initializeEmptyData = () => {
-    const data = {}
-    const startDate = new Date(2024, 0, 1)
-    const endDate = new Date(2029, 11, 31)
-    let currentDate = new Date(startDate)
-
-    while (currentDate <= endDate) {
-      const dateStr = currentDate.toISOString().split('T')[0]
-      data[dateStr] = {
-        severity: 0,
-        description: '',
-      }
-      currentDate.setDate(currentDate.getDate() + 1)
-    }
-    return data
-  }
-
-  const [contributions, setContributions] = useState(initializeEmptyData())
+  const [contributions, setContributions] = useState({})
   const [selectedDate, setSelectedDate] = useState(null)
-  const [formData, setFormData] = useState({
-    severity: 0,
-    description: '',
-  })
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  // Fetch contributions from the API
+  useEffect(() => {
+    const fetchContributions = async () => {
+      try {
+        const response = await fetch('/api/contributions', {
+          credentials: 'include',
+        })
+
+        console.log('Raw response:', response)
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch contributions: ${response.status} ${response.statusText}`,
+          )
+        }
+
+        const data = await response.json()
+
+        // Add check for empty data
+        if (!data || data.length === 0) {
+          setError('No contribution data available')
+          return
+        }
+
+        // Convert array to object with dates as keys
+        const contributionsMap = {}
+        data.forEach((contribution) => {
+          contributionsMap[contribution.date] = {
+            severity: contribution.severity,
+            description: contribution.description,
+          }
+        })
+
+        setContributions(contributionsMap)
+      } catch (err) {
+        console.error('Fetch error:', err)
+        setError(err.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchContributions()
+  }, [])
 
   const getContributionLevel = (severity) => {
     if (severity === 0) return 'none'
@@ -32,32 +58,6 @@ const ContributionGrid = () => {
     if (severity === 2) return 'medium'
     if (severity === 3) return 'high'
     return 'very-high'
-  }
-
-  const handleSquareClick = (date) => {
-    setSelectedDate(date)
-    setFormData(contributions[date] || { severity: 0, description: '' })
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (!selectedDate) return
-
-    setContributions((prev) => ({
-      ...prev,
-      [selectedDate]: {
-        ...formData,
-        severity: parseInt(formData.severity),
-      },
-    }))
-
-    setSelectedDate(null)
-    setFormData({ severity: 0, description: '' })
-  }
-
-  const handleCancel = () => {
-    setSelectedDate(null)
-    setFormData({ severity: 0, description: '' })
   }
 
   const renderGrid = () => {
@@ -101,59 +101,63 @@ const ContributionGrid = () => {
     return years
   }
 
+  const handleSquareClick = (date) => {
+    setSelectedDate(date)
+  }
+
+  const handleCancel = () => {
+    setSelectedDate(null)
+  }
+
+  if (isLoading) {
+    return <div className="loading">Loading contributions...</div>
+  }
+
+  if (error) {
+    return <div className="error">Error: {error}</div>
+  }
+
   return (
     <div className="contribution-container">
-      <div className="contributions-wrapper">{renderGrid()}</div>
-      <div className="contribution-legend">
-        <span>Less</span>
-        <div className="legend-squares">
-          <div className="contribution-square none" />
-          <div className="contribution-square low" />
-          <div className="contribution-square medium" />
-          <div className="contribution-square high" />
-          <div className="contribution-square very-high" />
-        </div>
-        <span>More</span>
-      </div>
+      {Object.keys(contributions).length === 0 && !isLoading && !error ? (
+        <div className="no-data">No contribution data available</div>
+      ) : (
+        <>
+          <div className="contributions-wrapper">{renderGrid()}</div>
+          <div className="contribution-legend">
+            <span>Less</span>
+            <div className="legend-squares">
+              <div className="contribution-square none" />
+              <div className="contribution-square low" />
+              <div className="contribution-square medium" />
+              <div className="contribution-square high" />
+              <div className="contribution-square very-high" />
+            </div>
+            <span>More</span>
+          </div>
+        </>
+      )}
 
-      {selectedDate && (
+      {selectedDate && contributions[selectedDate] && (
         <div className="contribution-modal">
           <div className="modal-content">
-            <h3>Add Contribution for {selectedDate}</h3>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Severity:</label>
-                <select
-                  value={formData.severity}
-                  onChange={(e) =>
-                    setFormData({ ...formData, severity: e.target.value })
-                  }
-                >
-                  <option value="0">None</option>
-                  <option value="1">Low</option>
-                  <option value="2">Medium</option>
-                  <option value="3">High</option>
-                  <option value="4">Very High</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Description:</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  placeholder="What did you accomplish?"
-                  rows="4"
-                />
-              </div>
-              <div className="form-actions">
-                <button type="button" onClick={handleCancel}>
-                  Cancel
-                </button>
-                <button type="submit">Save</button>
-              </div>
-            </form>
+            <h3>Contribution for {selectedDate}</h3>
+            <div className="contribution-details">
+              <p>
+                <strong>Severity:</strong>{' '}
+                {getContributionLevel(contributions[selectedDate].severity)}
+              </p>
+              <p>
+                <strong>Description:</strong>{' '}
+                {contributions[selectedDate].description ||
+                  'No description provided'}
+              </p>
+            </div>
+            <div className="form-actions">
+              <button type="button" onClick={handleCancel}>
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

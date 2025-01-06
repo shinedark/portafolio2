@@ -15,7 +15,7 @@ import Timeline from './components/routes/Timeline'
 import Development from './components/routes/Development'
 import Invest from './components/routes/Invest'
 import AdminRoute from './components/routes/AdminRoute'
-import { AuthProvider } from './components/auth/AuthContext'
+import { AuthProvider, useAuth } from './components/auth/AuthContext'
 import planetariaRadioImage from './pictures/pr.png'
 import sdm from './pictures/sdm.png'
 import mmt from './pictures/mmt.png'
@@ -126,7 +126,7 @@ function App() {
   const [isAnimating, setIsAnimating] = useState(false)
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
   const [activeRoute, setActiveRoute] = useState('projects')
-  const [isAdmin, setIsAdmin] = useState(false)
+  // const { isAdmin } = useAuth()
 
   const handleProjectClick = () => {
     setIsAnimating(true)
@@ -150,10 +150,6 @@ function App() {
       (prevIndex) =>
         (prevIndex - 1 + selectedProjects.length) % selectedProjects.length,
     )
-  }
-
-  const handleLogin = (adminStatus) => {
-    setIsAdmin(adminStatus)
   }
 
   useEffect(() => {
@@ -270,9 +266,7 @@ function App() {
                 {activeRoute === 'timeline' && <Timeline />}
                 {activeRoute === 'development' && <Development />}
                 {activeRoute === 'invest' && <Invest />}
-                {activeRoute === 'admin' && (
-                  <AdminRoute isAdmin={isAdmin} onLogin={handleLogin} />
-                )}
+                {activeRoute === 'admin' && <AdminRoute />}
               </RouteContainer>
               <br />
               <Interest />

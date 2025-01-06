@@ -1,82 +1,97 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 const AuthContext = createContext(null)
 
-const API_URL = process.env.REACT_APP_API_URL
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const navigate = useNavigate()
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [activeRoute, setActiveRoute] = useState('projects')
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    checkAuth()
+    const checkAuthStatus = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/auth/me`,
+          {
+            credentials: 'include',
+          },
+        )
+        if (response.ok) {
+          const data = await response.json()
+          setUser(data.user)
+          setIsAdmin(data.user.isAdmin)
+        }
+      } catch (error) {
+        console.error('Failed to check auth status:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    checkAuthStatus()
   }, [])
 
-  const checkAuth = async () => {
-    try {
-      const token = localStorage.getItem('token')
-      if (!token) {
-        setLoading(false)
-        return
-      }
-
-      const response = await fetch(`${API_URL}/api/auth/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setUser(data.data)
-      } else {
-        localStorage.removeItem('token')
-      }
-    } catch (error) {
-      console.error('Auth check failed:', error)
-    } finally {
-      setLoading(false)
-    }
+  const showAdminPanel = () => {
+    setActiveRoute('admin')
   }
 
   const login = async (email, password) => {
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/auth/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({ email, password }),
         },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await response.json()
+      )
 
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed')
+        throw new Error('Invalid credentials')
       }
 
-      localStorage.setItem('token', data.data.token)
-      setUser(data.data.user)
-      navigate('/business-plan')
+      const data = await response.json()
+      await Promise.all([
+        setUser(data.user),
+        setIsAdmin(true),
+        setActiveRoute('admin'),
+      ])
+
+      console.log('Login successful:', {
+        user: data.user,
+        isAdmin: true,
+        activeRoute: 'admin',
+      })
+
+      return data
     } catch (error) {
+      console.error('Login failed:', error)
       throw error
     }
   }
 
   const logout = () => {
-    localStorage.removeItem('token')
     setUser(null)
-    navigate('/')
-  }
-
-  if (loading) {
-    return <div>Loading...</div>
+    setIsAdmin(false)
+    setActiveRoute('projects')
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAdmin,
+        activeRoute,
+        setActiveRoute,
+        showAdminPanel,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )
