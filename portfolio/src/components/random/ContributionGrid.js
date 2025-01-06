@@ -1,46 +1,101 @@
 import React, { useState, useEffect } from 'react'
 import './ContributionGrid.css'
 
+// Add mock data
+const MOCK_DATA = {
+  data: [
+    {
+      date: '2024-03-01',
+      commits: [
+        { type: 'code', message: 'Implemented user authentication' },
+        { type: 'test', message: 'Added tests for auth flow' },
+      ],
+    },
+    {
+      date: '2024-03-02',
+      commits: [{ type: 'code', message: 'Fixed navigation bug' }],
+    },
+    {
+      date: '2024-03-05',
+      commits: [
+        { type: 'design', message: 'Updated button styles' },
+        { type: 'code', message: 'Implemented new header' },
+        { type: 'docs', message: 'Updated README' },
+      ],
+    },
+    // Add more mock data as needed
+  ],
+  pagination: {
+    total: 3,
+    page: 1,
+    pages: 1,
+    hasMore: false,
+  },
+}
+
 const ContributionGrid = () => {
   const [contributions, setContributions] = useState({})
-  const [selectedDate, setSelectedDate] = useState(null)
+  const [pagination, setPagination] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [selectedDate, setSelectedDate] = useState(null)
 
-  // Fetch contributions from the API
+  // Add caching with localStorage
+  const CACHE_KEY = 'contributionGridData'
+  const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
+
+  const getCachedData = () => {
+    const cached = localStorage.getItem(CACHE_KEY)
+    if (cached) {
+      const { data, timestamp } = JSON.parse(cached)
+      if (Date.now() - timestamp < CACHE_DURATION) {
+        return data
+      }
+    }
+    return null
+  }
+
+  const setCachedData = (data) => {
+    localStorage.setItem(
+      CACHE_KEY,
+      JSON.stringify({
+        data,
+        timestamp: Date.now(),
+      }),
+    )
+  }
+
   useEffect(() => {
     const fetchContributions = async () => {
       try {
-        const response = await fetch('/api/contributions', {
-          credentials: 'include',
-        })
+        setIsLoading(true)
+        setError(null)
 
-        console.log('Raw response:', response)
+        // Simulate API delay
+        await new Promise((resolve) => setTimeout(resolve, 1000))
 
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch contributions: ${response.status} ${response.statusText}`,
-          )
-        }
+        // Use mock data instead of API call
+        const { data, pagination } = MOCK_DATA
 
-        const data = await response.json()
-
-        // Add check for empty data
         if (!data || data.length === 0) {
           setError('No contribution data available')
           return
         }
 
-        // Convert array to object with dates as keys
+        // Transform the mock data
         const contributionsMap = {}
         data.forEach((contribution) => {
           contributionsMap[contribution.date] = {
-            severity: contribution.severity,
-            description: contribution.description,
+            severity: contribution.commits.length,
+            description: contribution.commits
+              .map((commit) => `${commit.type}: ${commit.message}`)
+              .join('\n'),
           }
         })
 
         setContributions(contributionsMap)
+        setPagination(pagination)
       } catch (err) {
         console.error('Fetch error:', err)
         setError(err.message)
@@ -50,7 +105,14 @@ const ContributionGrid = () => {
     }
 
     fetchContributions()
-  }, [])
+  }, [currentPage])
+
+  // Add load more function
+  const handleLoadMore = () => {
+    if (pagination && pagination.hasMore) {
+      setCurrentPage((prev) => prev + 1)
+    }
+  }
 
   const getContributionLevel = (severity) => {
     if (severity === 0) return 'none'
@@ -62,7 +124,7 @@ const ContributionGrid = () => {
 
   const renderGrid = () => {
     const years = []
-    for (let year = 2024; year <= 2029; year++) {
+    for (let year = 2025; year <= 2029; year++) {
       const months = []
       for (let month = 0; month < 12; month++) {
         const days = []
@@ -119,6 +181,8 @@ const ContributionGrid = () => {
 
   return (
     <div className="contribution-container">
+      {error && <div className="error-message">{error}</div>}
+
       {Object.keys(contributions).length === 0 && !isLoading && !error ? (
         <div className="no-data">No contribution data available</div>
       ) : (
@@ -135,6 +199,16 @@ const ContributionGrid = () => {
             </div>
             <span>More</span>
           </div>
+
+          {pagination && pagination.hasMore && (
+            <button
+              onClick={handleLoadMore}
+              disabled={isLoading}
+              className="load-more-button"
+            >
+              {isLoading ? 'Loading...' : 'Load More'}
+            </button>
+          )}
         </>
       )}
 

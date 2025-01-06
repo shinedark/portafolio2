@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '../auth/AuthContext'
 
 const getPosts = async () => {
-  const response = await fetch('/api/posts')
+  const response = await fetch('/api/contributions')
   if (!response.ok) throw new Error('Failed to fetch posts')
   return response.json()
 }

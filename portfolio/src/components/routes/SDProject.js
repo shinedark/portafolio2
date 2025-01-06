@@ -30,8 +30,9 @@ const SDProject = () => {
               <span className="font-medium">Music Releases</span>
               <ul className="ml-6">
                 <li>
-                  Re-release of 47 SDM Tracks: Strategically releasing previous
-                  works to maximize their value and reach new audiences.
+                  Re-release of 47 SDM Releases: Strategically releasing
+                  previous works to maximize their value and reach new
+                  audiences. Over 186 records.
                 </li>
               </ul>
             </li>
