@@ -21,6 +21,14 @@ export const config = {
   },
 }
 
+// Ensure MongoDB URI has required parameters
+if (
+  process.env.MONGODB_URI &&
+  !process.env.MONGODB_URI.includes('retryWrites=true')
+) {
+  console.warn('Warning: MongoDB URI should include retryWrites=true')
+}
+
 // Validate required environment variables
 const requiredEnvVars = [
   'MONGODB_URI',
