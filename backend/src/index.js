@@ -15,13 +15,15 @@ const app = express()
 
 // CORS configuration
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV === 'development'
-      ? ['http://localhost:3000'] // Frontend URL in development
-      : ['https://shinedark.dev'], // Production URLs
+  origin: [
+    'https://shinedark.dev',
+    'http://localhost:3000',
+    'https://portafolio2-backned.onrender.com',
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  exposedHeaders: ['Set-Cookie'],
 }
 
 // Security middleware
@@ -39,6 +41,9 @@ if (process.env.NODE_ENV === 'development') {
     next()
   })
 }
+
+// Add CORS pre-flight
+app.options('*', cors(corsOptions))
 
 // Rate limiting
 const limiter = rateLimit({
