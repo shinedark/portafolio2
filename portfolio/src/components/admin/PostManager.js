@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '../auth/AuthContext'
 
 const API_URL =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : ''
+  process.env.NODE_ENV === 'https://portafolio2-backned.onrender.com'
+    ? 'http://localhost:5000'
+    : ''
 
 const getPosts = async () => {
   const response = await fetch(`${API_URL}/api/contributions`, {
