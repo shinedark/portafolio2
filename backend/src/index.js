@@ -18,7 +18,7 @@ const corsOptions = {
   origin:
     process.env.NODE_ENV === 'development'
       ? ['http://localhost:3000'] // Frontend URL in development
-      : ['https://your-production-domain.com'], // Production URLs
+      : ['https://shinedark.dev/'], // Production URLs
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
