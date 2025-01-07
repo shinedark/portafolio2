@@ -130,51 +130,51 @@ function App() {
 
   const handleProjectClick = () => {
     setIsAnimating(true)
-    setTimeout(() => setIsAnimating(false), 2000)
+    const timeoutId = window.setTimeout(() => setIsAnimating(false), 2000)
+    return () => window.clearTimeout(timeoutId)
   }
 
   const selectedProjects = projects // Display all projects without filtering
 
   const handleNextProject = () => {
     setIsAnimating(true)
-    setTimeout(() => setIsAnimating(false), 2000)
+    const timeoutId = window.setTimeout(() => setIsAnimating(false), 2000)
     setCurrentProjectIndex(
       (prevIndex) => (prevIndex + 1) % selectedProjects.length,
     )
+    return () => window.clearTimeout(timeoutId)
   }
 
   const handlePreviousProject = () => {
     setIsAnimating(true)
-    setTimeout(() => setIsAnimating(false), 2000)
+    const timeoutId = window.setTimeout(() => setIsAnimating(false), 2000)
     setCurrentProjectIndex(
       (prevIndex) =>
         (prevIndex - 1 + selectedProjects.length) % selectedProjects.length,
     )
+    return () => window.clearTimeout(timeoutId)
   }
 
   useEffect(() => {
-    const headerElement = headerRef.current // Store ref value
+    const headerElement = headerRef.current
     if (headerElement) {
       const scene = new THREE.Scene()
       const camera = new THREE.PerspectiveCamera(
         75,
-        headerRef.current.clientWidth / headerRef.current.clientHeight,
+        headerElement.clientWidth / headerElement.clientHeight,
         0.1,
         1000,
       )
       const renderer = new THREE.WebGLRenderer({ alpha: true })
-      renderer.setSize(
-        headerRef.current.clientWidth,
-        headerRef.current.clientHeight,
-      )
-      headerRef.current.appendChild(renderer.domElement)
+      renderer.setSize(headerElement.clientWidth, headerElement.clientHeight)
+      headerElement.appendChild(renderer.domElement)
 
       const loader = new FontLoader()
       loader.load('/fonts/helvetiker_regular.typeface.json', (font) => {
         const textGeometry = new TextGeometry('SHINE DARK', {
           font: font,
           size: 0.5,
-          height: 0.1,
+          depth: 0.1,
           curveSegments: 12,
           bevelEnabled: true,
           bevelThickness: 0.03,
@@ -191,40 +191,42 @@ function App() {
         const textMesh = new THREE.Mesh(textGeometry, textMaterial)
         scene.add(textMesh)
 
-        // Add lights to the scene
         const pointLight = new THREE.PointLight(0xffffff, 1, 100)
         pointLight.position.set(0, 0, 10)
         scene.add(pointLight)
 
-        const ambientLight = new THREE.AmbientLight(0x404040) // soft white light
+        const ambientLight = new THREE.AmbientLight(0x404040)
         scene.add(ambientLight)
 
         camera.position.z = 2
 
+        let animationFrameId
+
         const animate = () => {
-          requestAnimationFrame(animate)
+          animationFrameId = requestAnimationFrame(animate)
           textMesh.rotation.y += 0.01
           renderer.render(scene, camera)
         }
         animate()
+
+        // Cleanup animation frame
+        return () => {
+          if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId)
+          }
+        }
       })
 
-      // Handle window resize
       const handleResize = () => {
-        camera.aspect =
-          headerRef.current.clientWidth / headerRef.current.clientHeight
+        camera.aspect = headerElement.clientWidth / headerElement.clientHeight
         camera.updateProjectionMatrix()
-        renderer.setSize(
-          headerRef.current.clientWidth,
-          headerRef.current.clientHeight,
-        )
+        renderer.setSize(headerElement.clientWidth, headerElement.clientHeight)
       }
       window.addEventListener('resize', handleResize)
 
       return () => {
         window.removeEventListener('resize', handleResize)
         if (headerElement) {
-          // Use stored reference
           headerElement.removeChild(renderer.domElement)
         }
       }

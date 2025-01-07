@@ -1,33 +1,38 @@
 import express from 'express'
-import { protect } from '../middleware/auth.js'
+import { protect, requireAdmin } from '../middleware/auth.js'
 import { validateRequest } from '../middleware/validateRequest.js'
 import {
   getContributions,
   addContribution,
   updateContribution,
+  deleteContribution,
 } from '../controllers/contribution.js'
 import {
   addContributionSchema,
-  getContributionsSchema,
   updateContributionSchema,
 } from '../schemas/contribution.js'
 
 const router = express.Router()
 
-router.use(protect) // All contribution routes require authentication
+// Public routes
+router.get('/', getContributions)
 
-router.get(
+// Admin only routes
+router.post(
   '/',
-  validateRequest(getContributionsSchema, 'query'),
-  getContributions,
+  protect,
+  requireAdmin,
+  validateRequest(addContributionSchema),
+  addContribution,
 )
 
-router.post('/', validateRequest(addContributionSchema), addContribution)
-
 router.put(
-  '/:date',
+  '/:id',
+  protect,
+  requireAdmin,
   validateRequest(updateContributionSchema),
   updateContribution,
 )
+router.delete('/:id', protect, requireAdmin, deleteContribution)
 
 export default router

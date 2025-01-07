@@ -25,12 +25,13 @@ export const login = async (req, res) => {
       { expiresIn: '1d' },
     )
 
-    // Set HTTP-only cookie
-    res.cookie('token', token, {
+    // Set HTTP-only cookie with the name 'jwt' instead of 'token'
+    res.cookie('jwt', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: 'lax', // Changed from 'strict' to 'lax' for better compatibility
       maxAge: 24 * 60 * 60 * 1000, // 1 day
+      path: '/',
     })
 
     // Return user data (excluding sensitive information)

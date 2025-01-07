@@ -1,19 +1,13 @@
 import { AppError } from '../utils/AppError.js'
 
 export const validateRequest = (schema) => {
-  return async (req, res, next) => {
+  return (req, res, next) => {
     try {
-      if (!schema || typeof schema.validate !== 'function') {
+      if (!schema || typeof schema.parse !== 'function') {
         throw new Error('Invalid schema provided to validation middleware')
       }
 
-      const { error, value } = schema.validate(req.body)
-
-      if (error) {
-        throw error
-      }
-
-      req.body = value
+      req.body = schema.parse(req.body)
       next()
     } catch (error) {
       next(

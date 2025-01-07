@@ -13,16 +13,37 @@ import { initAdmin } from './utils/initAdmin.js'
 
 const app = express()
 
+// CORS configuration
+const corsOptions = {
+  origin:
+    process.env.NODE_ENV === 'development'
+      ? ['http://localhost:3000'] // Frontend URL in development
+      : ['https://your-production-domain.com'], // Production URLs
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}
+
 // Security middleware
 app.use(helmet())
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: 'http://localhost:3000', // your frontend URL
     credentials: true,
   }),
 )
 app.use(express.json())
 app.use(cookieParser())
+
+// Add request logging in development
+if (process.env.NODE_ENV === 'development') {
+  app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`)
+    console.log('Headers:', req.headers)
+    console.log('Body:', req.body)
+    next()
+  })
+}
 
 // Rate limiting
 const limiter = rateLimit({
@@ -47,7 +68,9 @@ const start = async () => {
     await connectDB()
     await initAdmin()
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`)
+      console.log(
+        `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`,
+      )
     })
   } catch (error) {
     console.error('Failed to start server:', error)

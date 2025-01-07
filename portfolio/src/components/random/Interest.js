@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import './Interest.css' // We'll create this file for styling
+import './Interest.css'
 
 const Interest = () => {
   const paragraphs = [
@@ -14,34 +14,49 @@ const Interest = () => {
   const [isTypingComplete, setIsTypingComplete] = useState(false)
 
   useEffect(() => {
-    let timeouts = []
+    const timeoutIds = []
     let currentIndexes = paragraphs.map(() => 0)
+    let isActive = true // For cleanup
 
-    const typeNextCharacter = () => {
-      let allCompleted = true
-
-      const newTypedParagraphs = typedParagraphs.map((typed, index) => {
-        if (currentIndexes[index] < paragraphs[index].length) {
-          allCompleted = false
-          currentIndexes[index]++
-          return paragraphs[index].slice(0, currentIndexes[index])
-        }
-        return typed
+    const delay = (ms) =>
+      new Promise((resolve) => {
+        const timeoutId = window.setTimeout(resolve, ms)
+        timeoutIds.push(timeoutId)
+        return () => window.clearTimeout(timeoutId)
       })
 
-      setTypedParagraphs(newTypedParagraphs)
+    const typeNextCharacter = async () => {
+      while (isActive) {
+        let allCompleted = true
 
-      if (!allCompleted) {
-        timeouts.push(setTimeout(typeNextCharacter, 50))
-      } else {
-        setIsTypingComplete(true)
+        const newTypedParagraphs = typedParagraphs.map((typed, index) => {
+          if (currentIndexes[index] < paragraphs[index].length) {
+            allCompleted = false
+            currentIndexes[index]++
+            return paragraphs[index].slice(0, currentIndexes[index])
+          }
+          return typed
+        })
+
+        if (!isActive) return // Check if component is still mounted
+
+        setTypedParagraphs(newTypedParagraphs)
+
+        if (!allCompleted) {
+          await delay(50)
+        } else {
+          setIsTypingComplete(true)
+          break
+        }
       }
     }
 
     typeNextCharacter()
 
+    // Cleanup function
     return () => {
-      timeouts.forEach(clearTimeout)
+      isActive = false
+      timeoutIds.forEach((id) => window.clearTimeout(id))
     }
   }, [])
 

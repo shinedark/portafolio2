@@ -1,5 +1,17 @@
 import mongoose from 'mongoose'
 
+const commitSchema = new mongoose.Schema({
+  message: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: String,
+    enum: ['code', 'design', 'docs', 'test', 'blog', 'other'],
+    required: true,
+  },
+})
+
 const contributionSchema = new mongoose.Schema(
   {
     userId: {
@@ -11,27 +23,25 @@ const contributionSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    title: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      enum: ['code', 'design', 'docs', 'test', 'blog', 'other'],
+      required: true,
+    },
+    imageUrl: String,
+    commits: [commitSchema],
     count: {
       type: Number,
-      default: 0,
+      default: 1,
     },
-    commits: [
-      {
-        message: {
-          type: String,
-          required: true,
-        },
-        timestamp: {
-          type: Date,
-          default: Date.now,
-        },
-        type: {
-          type: String,
-          enum: ['code', 'design', 'docs', 'test', 'other'],
-          default: 'other',
-        },
-      },
-    ],
   },
   {
     timestamps: true,
