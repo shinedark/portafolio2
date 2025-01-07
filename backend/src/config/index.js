@@ -3,6 +3,11 @@ export const config = {
   mongoUri: process.env.MONGODB_URI,
   jwtSecret: process.env.JWT_SECRET,
   nodeEnv: process.env.NODE_ENV || 'development',
+  adminPassword: process.env.ADMIN_PASSWORD,
+  frontendUrl:
+    process.env.NODE_ENV === 'production'
+      ? process.env.PRODUCTION_URL
+      : process.env.FRONTEND_URL,
   allowedOrigins: [
     'https://shinedark.dev',
     'http://localhost:3000',
@@ -17,7 +22,13 @@ export const config = {
 }
 
 // Validate required environment variables
-const requiredEnvVars = ['MONGODB_URI', 'JWT_SECRET']
+const requiredEnvVars = [
+  'MONGODB_URI',
+  'JWT_SECRET',
+  'ADMIN_PASSWORD',
+  process.env.NODE_ENV === 'production' ? 'PRODUCTION_URL' : 'FRONTEND_URL',
+]
+
 const missingEnvVars = requiredEnvVars.filter((envVar) => !process.env[envVar])
 
 if (missingEnvVars.length > 0) {

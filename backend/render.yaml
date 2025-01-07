@@ -11,5 +11,9 @@ services:
         sync: false
       - key: JWT_SECRET
         sync: false
-      - key: CORS_ORIGIN
+      - key: ADMIN_PASSWORD
         sync: false
+      - key: PRODUCTION_URL
+        value: https://shinedark.dev
+      - key: PORT
+        value: 5000
