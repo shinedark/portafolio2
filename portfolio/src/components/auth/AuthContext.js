@@ -57,13 +57,13 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json()
       await Promise.all([
         setUser(data.user),
-        setIsAdmin(true),
+        setIsAdmin(data.user.isAdmin),
         setActiveRoute('admin'),
       ])
 
       console.log('Login successful:', {
         user: data.user,
-        isAdmin: true,
+        isAdmin: data.user.isAdmin,
         activeRoute: 'admin',
       })
 

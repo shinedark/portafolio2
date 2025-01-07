@@ -2,9 +2,31 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { User } from '../models/User.js'
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body
+
+    // Add debug logging
+    console.log('Login attempt:', {
+      email,
+      hasPassword: !!password,
+      body: req.body,
+    })
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide email and password',
+      })
+    }
+
+    // Set cookie options for production
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    }
 
     // Find user by email
     const user = await User.findOne({ email })
@@ -25,26 +47,20 @@ export const login = async (req, res) => {
       { expiresIn: '1d' },
     )
 
-    // Set HTTP-only cookie with the name 'jwt' instead of 'token'
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax', // Changed from 'strict' to 'lax' for better compatibility
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-      path: '/',
-    })
-
-    // Return user data (excluding sensitive information)
-    res.json({
-      user: {
-        id: user._id,
-        email: user.email,
-        isAdmin: user.isAdmin,
-      },
-    })
+    // Send token in cookie
+    res
+      .cookie('token', token, cookieOptions)
+      .status(200)
+      .json({
+        success: true,
+        data: {
+          id: user._id,
+          email: user.email,
+        },
+      })
   } catch (error) {
     console.error('Login error:', error)
-    res.status(500).json({ message: 'Server error' })
+    next(error)
   }
 }
 
