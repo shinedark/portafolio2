@@ -18,7 +18,7 @@ const corsOptions = {
   origin:
     process.env.NODE_ENV === 'development'
       ? ['http://localhost:3000'] // Frontend URL in development
-      : ['https://shinedark.dev/'], // Production URLs
+      : ['https://shinedark.dev'], // Production URLs
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -26,12 +26,7 @@ const corsOptions = {
 
 // Security middleware
 app.use(helmet())
-app.use(
-  cors({
-    origin: 'http://localhost:3000', // your frontend URL
-    credentials: true,
-  }),
-)
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(cookieParser())
 
