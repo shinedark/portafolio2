@@ -10,7 +10,7 @@ const Timeline = () => {
         <p>Track daily contributions and milestones towards our goals</p>
       </div>
 
-      <ContributionGrid />
+      {/* <ContributionGrid /> */}
 
       <div className="timeline">
         <div className="timeline-item">
