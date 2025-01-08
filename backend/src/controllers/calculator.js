@@ -23,7 +23,9 @@ export const addCost = async (req, res, next) => {
     if (!calculator) {
       calculator = await Calculator.create({
         userId: req.user.id,
-        categories: {},
+        categories: {
+          [categoryId]: { name: categoryId, items: [] },
+        },
       })
     }
 
@@ -98,7 +100,9 @@ export const addRevenue = async (req, res, next) => {
     if (!revenue) {
       revenue = await Revenue.create({
         userId: req.user.id,
-        categories: {},
+        categories: {
+          [categoryId]: { name: categoryId, items: [] },
+        },
       })
     }
 

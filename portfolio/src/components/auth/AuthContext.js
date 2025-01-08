@@ -33,7 +33,9 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   const showAdminPanel = () => {
-    setActiveRoute('admin')
+    if (isAdmin) {
+      setActiveRoute('admin')
+    }
   }
 
   const login = async (email, password) => {
@@ -51,33 +53,69 @@ export const AuthProvider = ({ children }) => {
       )
 
       if (!response.ok) {
-        throw new Error('Invalid credentials')
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Invalid credentials')
       }
 
-      const data = await response.json()
-      await Promise.all([
-        setUser(data.user),
-        setIsAdmin(data.user.isAdmin),
-        setActiveRoute('admin'),
-      ])
+      const { user } = await response.json()
+      if (!user) {
+        throw new Error('No user data received')
+      }
+
+      const defaultRoute = user.isAdmin ? 'admin' : 'projects'
+
+      setUser(user)
+      setIsAdmin(user.isAdmin)
+      setActiveRoute(defaultRoute)
 
       console.log('Login successful:', {
-        user: data.user,
-        isAdmin: data.user.isAdmin,
-        activeRoute: 'admin',
+        user,
+        isAdmin: user.isAdmin,
+        activeRoute: defaultRoute,
       })
 
-      return data
+      return { user }
     } catch (error) {
       console.error('Login failed:', error)
       throw error
     }
   }
 
-  const logout = () => {
-    setUser(null)
-    setIsAdmin(false)
-    setActiveRoute('projects')
+  const logout = async () => {
+    try {
+      // Clear frontend state first for better UX
+      setUser(null)
+      setIsAdmin(false)
+      setActiveRoute('projects')
+
+      // Then try to clear the backend session
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/auth/logout`,
+          {
+            method: 'POST',
+            credentials: 'include',
+          },
+        )
+
+        if (!response.ok) {
+          console.warn('Backend logout failed, but frontend state was cleared')
+        }
+      } catch (error) {
+        // If backend is unreachable, just log it - user is already logged out in frontend
+        console.warn('Backend unreachable during logout:', error.message)
+      }
+
+      // Clear any stored admin access
+      localStorage.removeItem('admin_access')
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Ensure user is logged out in frontend even if something fails
+      setUser(null)
+      setIsAdmin(false)
+      setActiveRoute('projects')
+      localStorage.removeItem('admin_access')
+    }
   }
 
   return (

@@ -2,14 +2,7 @@ import React from 'react'
 import ItemList from './ItemList'
 import { formatCurrency } from '../../utils/formatters'
 
-const RevenueCalculator = ({
-  revenueData,
-  revenue,
-  showRevenueForm,
-  setShowRevenueForm,
-  onDeleteItem,
-  onEditItem,
-}) => {
+const RevenueCalculator = ({ revenueData, revenue, onDeleteItem }) => {
   return (
     <>
       <div className="revenue-summary">
@@ -49,23 +42,10 @@ const RevenueCalculator = ({
               items={category.items}
               categoryId={categoryId}
               onDelete={onDeleteItem}
-              onEdit={onEditItem}
               type="revenue"
             />
           </div>
         ))}
-      </div>
-
-      <div className="revenue-actions">
-        <button
-          className="add-revenue-button"
-          onClick={(e) => {
-            e.stopPropagation()
-            setShowRevenueForm(true)
-          }}
-        >
-          + Add Revenue Stream
-        </button>
       </div>
     </>
   )

@@ -15,9 +15,12 @@ export const protect = async (req, res, next) => {
 
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
-      console.log('Decoded token:', decoded)
 
-      req.user = decoded
+      // Attach the complete decoded token to req.user
+      req.user = {
+        id: decoded.userId, // Map userId to id for consistency
+        isAdmin: decoded.isAdmin,
+      }
 
       if (!req.user) {
         return res

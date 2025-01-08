@@ -27,14 +27,14 @@ app.use(express.json())
 app.use(cookieParser())
 
 // Add request logging in development
-if (config.nodeEnv === 'development') {
-  app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url}`)
-    console.log('Headers:', req.headers)
-    console.log('Body:', req.body)
-    next()
-  })
-}
+// if (config.nodeEnv === 'development') {
+//   app.use((req, res, next) => {
+//     console.log(`${req.method} ${req.url}`)
+//     console.log('Headers:', req.headers)
+//     console.log('Body:', req.body)
+//     next()
+//   })
+// }
 
 // Add CORS pre-flight
 app.options('*', cors(corsOptions))

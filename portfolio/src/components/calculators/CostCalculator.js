@@ -2,14 +2,7 @@ import React from 'react'
 import ItemList from './ItemList'
 import { formatCurrency } from '../../utils/formatters'
 
-const CostCalculator = ({
-  totals,
-  categories,
-  showCostForm,
-  setShowCostForm,
-  onDeleteItem,
-  onEditItem,
-}) => {
+const CostCalculator = ({ totals, categories, onDeleteItem }) => {
   return (
     <>
       <div className="cost-summary">
@@ -55,23 +48,10 @@ const CostCalculator = ({
               items={category.items}
               categoryId={categoryId}
               onDelete={onDeleteItem}
-              onEdit={onEditItem}
               type="cost"
             />
           </div>
         ))}
-      </div>
-
-      <div className="cost-actions">
-        <button
-          className="add-cost-button"
-          onClick={(e) => {
-            e.stopPropagation()
-            setShowCostForm(true)
-          }}
-        >
-          + Add Cost Item
-        </button>
       </div>
     </>
   )

@@ -12,9 +12,12 @@ import {
   deleteRevenue,
 } from '../controllers/calculator.js'
 import {
-  addItemSchema,
-  updateItemSchema,
-  deleteItemSchema,
+  addCostItemSchema,
+  addRevenueItemSchema,
+  updateCostItemSchema,
+  updateRevenueItemSchema,
+  deleteCostItemSchema,
+  deleteRevenueItemSchema,
 } from '../schemas/calculator.js'
 
 const router = express.Router()
@@ -23,29 +26,29 @@ router.use(protect)
 
 // Cost routes
 router.get('/costs', getCosts)
-router.post('/costs', validateRequest(addItemSchema), addCost)
+router.post('/costs', validateRequest(addCostItemSchema), addCost)
 router.put(
   '/costs/:categoryId/:itemIndex',
-  validateRequest(updateItemSchema),
+  validateRequest(updateCostItemSchema),
   updateCost,
 )
 router.delete(
   '/costs/:categoryId/:itemIndex',
-  validateRequest(deleteItemSchema),
+  validateRequest(deleteCostItemSchema),
   deleteCost,
 )
 
 // Revenue routes
 router.get('/revenue', getRevenue)
-router.post('/revenue', validateRequest(addItemSchema), addRevenue)
+router.post('/revenue', validateRequest(addRevenueItemSchema), addRevenue)
 router.put(
   '/revenue/:categoryId/:itemIndex',
-  validateRequest(updateItemSchema),
+  validateRequest(updateRevenueItemSchema),
   updateRevenue,
 )
 router.delete(
   '/revenue/:categoryId/:itemIndex',
-  validateRequest(deleteItemSchema),
+  validateRequest(deleteRevenueItemSchema),
   deleteRevenue,
 )
 

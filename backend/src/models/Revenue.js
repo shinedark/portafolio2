@@ -1,28 +1,36 @@
 import mongoose from 'mongoose'
 
-const revenueItemSchema = new mongoose.Schema(
+const itemSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
     },
-    price: {
+    profit: {
       type: Number,
       required: true,
     },
-    unit: {
+    description: {
       type: String,
-      required: true,
+      default: '',
     },
-    estimated: {
-      type: Number,
-      required: true,
+    isEssential: {
+      type: Boolean,
+      default: false,
     },
     isMonthly: {
       type: Boolean,
+      default: false,
+    },
+    isAsset: {
+      type: Boolean,
+      default: false,
+    },
+    isNeeded: {
+      type: Boolean,
       default: true,
     },
-    description: {
+    link: {
       type: String,
       default: '',
     },
@@ -32,13 +40,13 @@ const revenueItemSchema = new mongoose.Schema(
   },
 )
 
-const revenueCategorySchema = new mongoose.Schema(
+const categorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
     },
-    items: [revenueItemSchema],
+    items: [itemSchema],
   },
   {
     _id: false,
@@ -53,8 +61,10 @@ const revenueSchema = new mongoose.Schema(
       required: true,
     },
     categories: {
-      services: revenueCategorySchema,
-      products: revenueCategorySchema,
+      sales: categorySchema,
+      services: categorySchema,
+      investments: categorySchema,
+      other: categorySchema,
     },
   },
   {
