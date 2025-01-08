@@ -379,6 +379,7 @@ a {
   .projects-h1 {
     max-width: none;
     text-align: center;
+    font-family: "Rubik Mono One", monospace;
   }
 
   .projects-h1 h1 {
