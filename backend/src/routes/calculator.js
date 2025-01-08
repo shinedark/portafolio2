@@ -1,5 +1,5 @@
 import express from 'express'
-import { protect } from '../middleware/auth.js'
+import { adminProtect } from '../middleware/auth.js'
 import { validateRequest } from '../middleware/validateRequest.js'
 import {
   getCosts,
@@ -22,33 +22,40 @@ import {
 
 const router = express.Router()
 
-// All routes are protected
-router.use(protect)
-
-// Cost routes
+// Public read routes
 router.get('/costs', getCosts)
-router.post('/costs', validateRequest(addCostItemSchema), addCost)
+router.get('/revenue', getRevenue)
+
+// Protected write routes - admin only
+router.post('/costs', adminProtect, validateRequest(addCostItemSchema), addCost)
 router.put(
   '/costs/:categoryId/:itemIndex',
+  adminProtect,
   validateRequest(updateCostItemSchema),
   updateCost,
 )
 router.delete(
   '/costs/:categoryId/:itemIndex',
+  adminProtect,
   validateRequest(deleteCostItemSchema),
   deleteCost,
 )
 
-// Revenue routes
-router.get('/revenue', getRevenue)
-router.post('/revenue', validateRequest(addRevenueItemSchema), addRevenue)
+router.post(
+  '/revenue',
+  adminProtect,
+  validateRequest(addRevenueItemSchema),
+  addRevenue,
+)
 router.put(
   '/revenue/:categoryId/:itemIndex',
+  adminProtect,
   validateRequest(updateRevenueItemSchema),
   updateRevenue,
 )
 router.delete(
   '/revenue/:categoryId/:itemIndex',
+  adminProtect,
   validateRequest(deleteRevenueItemSchema),
   deleteRevenue,
 )

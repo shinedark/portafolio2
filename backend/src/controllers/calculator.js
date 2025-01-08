@@ -5,7 +5,8 @@ import { AppError } from '../utils/AppError.js'
 // Cost Controllers
 export const getCosts = async (req, res, next) => {
   try {
-    const calculator = await Calculator.findOne({ userId: req.user.id })
+    // For public access, get the default or first calculator
+    const calculator = await Calculator.findOne({})
     if (!calculator) {
       return res.json({ success: true, data: { categories: {} } })
     }
@@ -19,10 +20,9 @@ export const addCost = async (req, res, next) => {
   try {
     const { categoryId, item } = req.body
 
-    let calculator = await Calculator.findOne({ userId: req.user.id })
+    let calculator = await Calculator.findOne({})
     if (!calculator) {
       calculator = await Calculator.create({
-        userId: req.user.id,
         categories: {
           [categoryId]: { name: categoryId, items: [] },
         },
@@ -47,7 +47,7 @@ export const updateCost = async (req, res, next) => {
     const { categoryId, itemIndex } = req.params
     const { item } = req.body
 
-    const calculator = await Calculator.findOne({ userId: req.user.id })
+    const calculator = await Calculator.findOne({})
     if (!calculator || !calculator.categories[categoryId]) {
       throw new AppError('Category not found', 404)
     }
@@ -65,7 +65,7 @@ export const deleteCost = async (req, res, next) => {
   try {
     const { categoryId, itemIndex } = req.params
 
-    const calculator = await Calculator.findOne({ userId: req.user.id })
+    const calculator = await Calculator.findOne({})
     if (!calculator || !calculator.categories[categoryId]) {
       throw new AppError('Category not found', 404)
     }
@@ -82,7 +82,8 @@ export const deleteCost = async (req, res, next) => {
 // Revenue Controllers
 export const getRevenue = async (req, res, next) => {
   try {
-    const revenue = await Revenue.findOne({ userId: req.user.id })
+    // For public access, get the default or first revenue
+    const revenue = await Revenue.findOne({})
     if (!revenue) {
       return res.json({ success: true, data: { categories: {} } })
     }
@@ -96,10 +97,9 @@ export const addRevenue = async (req, res, next) => {
   try {
     const { categoryId, item } = req.body
 
-    let revenue = await Revenue.findOne({ userId: req.user.id })
+    let revenue = await Revenue.findOne({})
     if (!revenue) {
       revenue = await Revenue.create({
-        userId: req.user.id,
         categories: {
           [categoryId]: { name: categoryId, items: [] },
         },
@@ -124,7 +124,7 @@ export const updateRevenue = async (req, res, next) => {
     const { categoryId, itemIndex } = req.params
     const { item } = req.body
 
-    const revenue = await Revenue.findOne({ userId: req.user.id })
+    const revenue = await Revenue.findOne({})
     if (!revenue || !revenue.categories[categoryId]) {
       throw new AppError('Category not found', 404)
     }
@@ -142,7 +142,7 @@ export const deleteRevenue = async (req, res, next) => {
   try {
     const { categoryId, itemIndex } = req.params
 
-    const revenue = await Revenue.findOne({ userId: req.user.id })
+    const revenue = await Revenue.findOne({})
     if (!revenue || !revenue.categories[categoryId]) {
       throw new AppError('Category not found', 404)
     }

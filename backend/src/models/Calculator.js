@@ -55,15 +55,6 @@ const categorySchema = new mongoose.Schema(
 
 const calculatorSchema = new mongoose.Schema(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    isPublic: {
-      type: Boolean,
-      default: false,
-    },
     categories: {
       equipment: categorySchema,
       subscriptions: categorySchema,

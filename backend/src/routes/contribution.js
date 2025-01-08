@@ -1,5 +1,5 @@
 import express from 'express'
-import { protect, requireAdmin } from '../middleware/auth.js'
+import { adminProtect } from '../middleware/auth.js'
 import { validateRequest } from '../middleware/validateRequest.js'
 import {
   getContributions,
@@ -20,19 +20,17 @@ router.get('/', getContributions)
 // Admin only routes
 router.post(
   '/',
-  protect,
-  requireAdmin,
+  adminProtect,
   validateRequest(addContributionSchema),
   addContribution,
 )
 
 router.put(
   '/:id',
-  protect,
-  requireAdmin,
+  adminProtect,
   validateRequest(updateContributionSchema),
   updateContribution,
 )
-router.delete('/:id', protect, requireAdmin, deleteContribution)
+router.delete('/:id', adminProtect, deleteContribution)
 
 export default router

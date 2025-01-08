@@ -1,39 +1,11 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 
 const AuthContext = createContext(null)
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
   const [isAdmin, setIsAdmin] = useState(false)
   const [activeRoute, setActiveRoute] = useState('projects')
   const [isLoading, setIsLoading] = useState(false)
-  const [isChecked, setIsChecked] = useState(false)
-
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      if (isChecked) return
-
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/auth/me`,
-          {
-            credentials: 'include',
-          },
-        )
-        if (response.ok) {
-          const data = await response.json()
-          setUser(data.user)
-          setIsAdmin(data.user.isAdmin)
-        }
-      } catch (error) {
-        console.error('Failed to check auth status:', error)
-      } finally {
-        setIsChecked(true)
-      }
-    }
-
-    checkAuthStatus()
-  }, [isChecked])
 
   const showAdminPanel = () => {
     if (isAdmin) {
@@ -41,17 +13,17 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const login = async (email, password) => {
+  const login = async (username, password) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/auth/login`,
+        `${process.env.REACT_APP_API_URL}/api/auth/admin/login`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           credentials: 'include',
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ username, password }),
         },
       )
 
@@ -60,25 +32,11 @@ export const AuthProvider = ({ children }) => {
         throw new Error(errorData.message || 'Invalid credentials')
       }
 
-      const { user } = await response.json()
-      if (!user) {
-        throw new Error('No user data received')
-      }
+      const data = await response.json()
+      setIsAdmin(true)
+      setActiveRoute('admin')
 
-      const defaultRoute = user.isAdmin ? 'admin' : 'projects'
-
-      setUser(user)
-      setIsAdmin(user.isAdmin)
-      setActiveRoute(defaultRoute)
-      setIsChecked(true)
-
-      console.log('Login successful:', {
-        user,
-        isAdmin: user.isAdmin,
-        activeRoute: defaultRoute,
-      })
-
-      return { user }
+      return data
     } catch (error) {
       console.error('Login failed:', error)
       throw error
@@ -87,14 +45,12 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      setUser(null)
       setIsAdmin(false)
       setActiveRoute('projects')
-      setIsChecked(true)
 
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/auth/logout`,
+          `${process.env.REACT_APP_API_URL}/api/auth/admin/logout`,
           {
             method: 'POST',
             credentials: 'include',
@@ -107,21 +63,16 @@ export const AuthProvider = ({ children }) => {
       } catch (error) {
         console.warn('Backend unreachable during logout:', error.message)
       }
-
-      localStorage.removeItem('admin_access')
     } catch (error) {
       console.error('Logout error:', error)
-      setUser(null)
       setIsAdmin(false)
       setActiveRoute('projects')
-      localStorage.removeItem('admin_access')
     }
   }
 
   return (
     <AuthContext.Provider
       value={{
-        user,
         isAdmin,
         activeRoute,
         setActiveRoute,

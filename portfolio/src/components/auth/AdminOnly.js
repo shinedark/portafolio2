@@ -1,11 +1,9 @@
 import { useAuth } from './AuthContext'
 
 export const AdminOnly = ({ children }) => {
-  const { user } = useAuth()
-  console.log('AdminOnly user:', user)
-  console.log('isAdmin value:', user?.isAdmin)
+  const { isAdmin } = useAuth()
 
-  if (user && user.isAdmin === true) {
+  if (isAdmin) {
     return children
   }
 

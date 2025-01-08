@@ -1,78 +1,60 @@
-import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { User } from '../models/User.js'
 import { AppError } from '../utils/AppError.js'
 
-export const login = async (req, res, next) => {
+const adminLogin = async (req, res) => {
   try {
-    const { email, password } = req.body
+    const { username, password } = req.body
 
-    // Find user by email
-    const user = await User.findOne({ email })
-    if (!user) {
-      return next(new AppError('Invalid credentials', 401))
+    // Check against environment variables
+    if (
+      username !== process.env.ADMIN_USERNAME ||
+      password !== process.env.ADMIN_PASSWORD
+    ) {
+      throw new AppError('Invalid credentials', 401)
     }
 
-    // Verify password
-    const isMatch = await bcrypt.compare(password, user.password)
-    if (!isMatch) {
-      return next(new AppError('Invalid credentials', 401))
-    }
+    // Create token
+    const token = jwt.sign({ isAdmin: true }, process.env.JWT_SECRET, {
+      expiresIn: '24h',
+    })
 
-    // Create JWT token
-    const token = jwt.sign(
-      { userId: user._id, isAdmin: user.isAdmin },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' },
-    )
-
-    // Set cookie options for production
-    const cookieOptions = {
+    // Set cookie
+    res.cookie('admin_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: 'strict',
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      path: '/',
-    }
+    })
 
-    // Set HTTP-only cookie
-    res
-      .cookie('jwt', token, cookieOptions)
-      .status(200)
-      .json({
-        success: true,
-        user: {
-          id: user._id,
-          email: user.email,
-          isAdmin: user.isAdmin,
-        },
-      })
+    res.status(200).json({
+      success: true,
+      message: 'Admin logged in successfully',
+    })
   } catch (error) {
-    console.error('Login error:', error)
-    next(error)
+    res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message,
+    })
   }
 }
 
-export const logout = async (req, res) => {
-  res.cookie('jwt', '', {
+const adminLogout = (req, res) => {
+  res.cookie('admin_token', 'none', {
+    expires: new Date(Date.now() + 5 * 1000),
     httpOnly: true,
-    expires: new Date(0),
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    path: '/',
   })
-  res.status(200).json({ success: true, message: 'Logged out successfully' })
+
+  res.status(200).json({
+    success: true,
+    message: 'Admin logged out successfully',
+  })
 }
 
-export const getMe = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.user.userId).select('-password')
-    if (!user) {
-      return next(new AppError('User not found', 404))
-    }
-    res.json({ user })
-  } catch (error) {
-    console.error('GetMe error:', error)
-    next(new AppError('Server error', 500))
-  }
+const checkAdminStatus = (req, res) => {
+  res.status(200).json({
+    success: true,
+    isAdmin: true,
+  })
 }
+
+export { adminLogin, adminLogout, checkAdminStatus }

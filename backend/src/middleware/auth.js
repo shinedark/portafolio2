@@ -1,47 +1,39 @@
 import jwt from 'jsonwebtoken'
-import { User } from '../models/User.js'
 import { AppError } from '../utils/AppError.js'
 
-export const protect = async (req, res, next) => {
+export const adminProtect = async (req, res, next) => {
   try {
-    const token = req.cookies.jwt
+    const token = req.cookies.admin_token
 
-    if (!token) {
-      console.log('No token found in cookies:', req.cookies)
-      return res
-        .status(401)
-        .json({ success: false, message: 'No token provided' })
+    if (!token || token === 'none') {
+      return res.status(401).json({
+        success: false,
+        message: 'Admin access required. Please login.',
+      })
     }
 
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-      // Attach the complete decoded token to req.user
-      req.user = {
-        id: decoded.userId, // Map userId to id for consistency
-        isAdmin: decoded.isAdmin,
+      if (!decoded.isAdmin) {
+        return res.status(403).json({
+          success: false,
+          message: 'Admin privileges required',
+        })
       }
 
-      if (!req.user) {
-        return res
-          .status(401)
-          .json({ success: false, message: 'User not found in token' })
-      }
-
+      req.isAdmin = true
       next()
-    } catch (jwtError) {
-      console.log('JWT verification failed:', jwtError)
-      return res.status(401).json({ success: false, message: 'Invalid token' })
+    } catch (error) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid or expired token',
+      })
     }
   } catch (error) {
-    console.error('Auth middleware error:', error)
-    res.status(401).json({ success: false, message: error.message })
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+    })
   }
-}
-
-export const requireAdmin = async (req, res, next) => {
-  if (!req.user || !req.user.isAdmin) {
-    return next(new AppError('Admin access required', 403))
-  }
-  next()
 }

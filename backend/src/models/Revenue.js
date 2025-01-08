@@ -55,15 +55,6 @@ const categorySchema = new mongoose.Schema(
 
 const revenueSchema = new mongoose.Schema(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    isPublic: {
-      type: Boolean,
-      default: false,
-    },
     categories: {
       sales: categorySchema,
       services: categorySchema,

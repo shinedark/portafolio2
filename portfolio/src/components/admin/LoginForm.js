@@ -3,7 +3,7 @@ import { useAuth } from '../auth/AuthContext'
 import '../auth/Auth.css'
 
 const LoginForm = () => {
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -14,9 +14,9 @@ const LoginForm = () => {
     setError('')
     setIsLoading(true)
     try {
-      await login(email, password)
+      await login(username, password)
     } catch (error) {
-      setError('Invalid credentials. Please try again.')
+      setError('Invalid admin credentials. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -34,18 +34,18 @@ const LoginForm = () => {
         <div className="space-y-6">
           <div className="space-y-2">
             <label
-              htmlFor="email"
+              htmlFor="username"
               className="block text-sm font-medium text-white/60"
             >
-              Email
+              Username
             </label>
             <input
-              id="email"
-              type="email"
+              id="username"
+              type="text"
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter admin email"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter admin username"
               disabled={isLoading}
               className="w-full px-4 py-3 bg-neutral-800/50 text-white/90 border border-neutral-700 rounded-lg 
                 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50

@@ -5,7 +5,7 @@ import './Navigation.css'
 
 const Navigation = () => {
   const location = useLocation()
-  const { user, logout } = useAuth()
+  const { isAdmin, logout } = useAuth()
 
   return (
     <nav className="navigation">
@@ -25,15 +25,23 @@ const Navigation = () => {
         >
           Business Plan
         </Link>
+        {isAdmin && (
+          <Link
+            to="/admin"
+            className={location.pathname === '/admin' ? 'active' : ''}
+          >
+            Admin
+          </Link>
+        )}
       </div>
       <div className="auth-section">
-        {user ? (
+        {isAdmin ? (
           <button onClick={logout} className="auth-button">
             Logout
           </button>
         ) : (
-          <Link to="/login" className="auth-button">
-            Login
+          <Link to="/admin" className="auth-button">
+            Admin Login
           </Link>
         )}
       </div>
