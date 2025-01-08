@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import './ProjectCostCalculator.css'
 import CostCalculator from './CostCalculator'
 import RevenueCalculator from './RevenueCalculator'
 import { apiCall } from '../../utils/api'
-import { populateCalculatorData } from '../../utils/populateCalculatorData'
 
 const ProjectCostCalculator = () => {
   const [showCosts, setShowCosts] = useState(false)
@@ -13,34 +12,66 @@ const ProjectCostCalculator = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setIsLoading(true)
-      const [costsData, revenueData] = await Promise.all([
-        apiCall('/api/calculator/costs'),
-        apiCall('/api/calculator/revenue'),
-      ])
-      setCategories(costsData.data.categories || {})
-      setRevenue(revenueData.data.categories || {})
-    } catch (error) {
-      console.error('Error fetching data:', error)
-      setError('Failed to fetch calculator data')
+      setError(null)
+
+      // Fetch costs
+      try {
+        const costsData = await apiCall('/api/calculator/costs')
+        console.log('Costs data:', costsData)
+        setCategories(costsData.data?.categories || {})
+      } catch (error) {
+        console.error('Error fetching costs:', error)
+        setError(error.message)
+      }
+
+      // Fetch revenue
+      try {
+        const revenueData = await apiCall('/api/calculator/revenue')
+        console.log('Revenue data:', revenueData)
+        setRevenue(revenueData.data?.categories || {})
+      } catch (error) {
+        console.error('Error fetching revenue:', error)
+        setError((prev) => prev || error.message)
+      }
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
-    const initializeData = async () => {
-      try {
-        await populateCalculatorData()
-        await fetchData()
-      } catch (error) {
-        setError('Failed to initialize calculator data')
-      }
+    fetchData()
+  }, [fetchData])
+
+  const handleDeleteCostItem = async (categoryId, index) => {
+    try {
+      setIsLoading(true)
+      setError(null)
+      await apiCall(`/api/calculator/costs/${categoryId}/${index}`, {
+        method: 'DELETE',
+      })
+      await fetchData()
+    } catch (error) {
+      console.error('Error deleting cost item:', error)
+      setError(error.message)
     }
-    initializeData()
-  }, [])
+  }
+
+  const handleDeleteRevenueItem = async (categoryId, index) => {
+    try {
+      setIsLoading(true)
+      setError(null)
+      await apiCall(`/api/calculator/revenue/${categoryId}/${index}`, {
+        method: 'DELETE',
+      })
+      await fetchData()
+    } catch (error) {
+      console.error('Error deleting revenue item:', error)
+      setError(error.message)
+    }
+  }
 
   const calculateTotalCost = () => {
     let oneTime = { needed: 0, have: 0 }
@@ -92,30 +123,6 @@ const ProjectCostCalculator = () => {
 
   const totals = calculateTotalCost()
   const revenueData = calculateRevenue()
-
-  const handleDeleteCostItem = async (categoryId, index) => {
-    try {
-      await apiCall(`/api/calculator/costs/${categoryId}/${index}`, {
-        method: 'DELETE',
-      })
-      await fetchData()
-    } catch (error) {
-      console.error('Error deleting cost item:', error)
-      setError('Failed to delete cost item')
-    }
-  }
-
-  const handleDeleteRevenueItem = async (categoryId, index) => {
-    try {
-      await apiCall(`/api/calculator/revenue/${categoryId}/${index}`, {
-        method: 'DELETE',
-      })
-      await fetchData()
-    } catch (error) {
-      console.error('Error deleting revenue item:', error)
-      setError('Failed to delete revenue item')
-    }
-  }
 
   if (isLoading) {
     return (

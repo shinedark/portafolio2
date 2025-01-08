@@ -60,6 +60,10 @@ const calculatorSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    isPublic: {
+      type: Boolean,
+      default: false,
+    },
     categories: {
       equipment: categorySchema,
       subscriptions: categorySchema,

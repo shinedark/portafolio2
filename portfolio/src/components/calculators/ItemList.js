@@ -1,7 +1,7 @@
 import React from 'react'
 import { formatCurrency } from '../../utils/formatters'
 
-const ItemList = ({ items, type = 'cost' }) => {
+const ItemList = ({ items = [], type = 'cost' }) => {
   const isCost = type === 'cost'
 
   return (
@@ -9,26 +9,28 @@ const ItemList = ({ items, type = 'cost' }) => {
       {items.map((item, index) => (
         <div
           key={index}
-          className={`item ${isCost && item.isEssential ? 'essential' : ''}`}
+          className={`item ${isCost && item?.isEssential ? 'essential' : ''}`}
         >
           <div className="item-header">
-            <h4>{item.name}</h4>
+            <h4>{item?.name || 'Unnamed Item'}</h4>
             <span className="amount">
               {isCost
-                ? `$${formatCurrency(item.cost)}${item.isMonthly ? '/mo' : ''}`
-                : `$${formatCurrency(item.price)} ${item.unit}`}
+                ? `$${formatCurrency(item?.cost)}${
+                    item?.isMonthly ? '/mo' : ''
+                  }`
+                : `$${formatCurrency(item?.price)} ${item?.unit || ''}`}
             </span>
           </div>
-          {item.description && (
+          {item?.description && (
             <p className="description">{item.description}</p>
           )}
-          {!isCost && (
+          {!isCost && item?.price != null && item?.estimated != null && (
             <p className="estimate">
-              Est. {item.estimated} {item.unit}/mo = $
+              Est. {item.estimated} {item?.unit || ''}/mo = $
               {formatCurrency(item.price * item.estimated)}/mo
             </p>
           )}
-          {item.link && (
+          {item?.link && (
             <a
               href={item.link}
               target="_blank"

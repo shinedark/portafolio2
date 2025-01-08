@@ -6,10 +6,13 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [isAdmin, setIsAdmin] = useState(false)
   const [activeRoute, setActiveRoute] = useState('projects')
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isChecked, setIsChecked] = useState(false)
 
   useEffect(() => {
     const checkAuthStatus = async () => {
+      if (isChecked) return
+
       try {
         const response = await fetch(
           `${process.env.REACT_APP_API_URL}/api/auth/me`,
@@ -25,12 +28,12 @@ export const AuthProvider = ({ children }) => {
       } catch (error) {
         console.error('Failed to check auth status:', error)
       } finally {
-        setIsLoading(false)
+        setIsChecked(true)
       }
     }
 
     checkAuthStatus()
-  }, [])
+  }, [isChecked])
 
   const showAdminPanel = () => {
     if (isAdmin) {
@@ -67,6 +70,7 @@ export const AuthProvider = ({ children }) => {
       setUser(user)
       setIsAdmin(user.isAdmin)
       setActiveRoute(defaultRoute)
+      setIsChecked(true)
 
       console.log('Login successful:', {
         user,
@@ -83,12 +87,11 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      // Clear frontend state first for better UX
       setUser(null)
       setIsAdmin(false)
       setActiveRoute('projects')
+      setIsChecked(true)
 
-      // Then try to clear the backend session
       try {
         const response = await fetch(
           `${process.env.REACT_APP_API_URL}/api/auth/logout`,
@@ -102,15 +105,12 @@ export const AuthProvider = ({ children }) => {
           console.warn('Backend logout failed, but frontend state was cleared')
         }
       } catch (error) {
-        // If backend is unreachable, just log it - user is already logged out in frontend
         console.warn('Backend unreachable during logout:', error.message)
       }
 
-      // Clear any stored admin access
       localStorage.removeItem('admin_access')
     } catch (error) {
       console.error('Logout error:', error)
-      // Ensure user is logged out in frontend even if something fails
       setUser(null)
       setIsAdmin(false)
       setActiveRoute('projects')
@@ -128,6 +128,7 @@ export const AuthProvider = ({ children }) => {
         showAdminPanel,
         login,
         logout,
+        isLoading,
       }}
     >
       {children}

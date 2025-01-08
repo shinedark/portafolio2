@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import {
-  initialCategories,
-  initialRevenue,
-} from '../../../data/mockCalculatorData'
+
+const COST_CATEGORIES = {
+  equipment: 'Equipment',
+  subscriptions: 'Subscriptions',
+  inventory: 'Inventory',
+  farming: 'Farming Setup',
+  operations: 'Operations',
+  legal: 'Legal & Admin',
+}
+
+const REVENUE_CATEGORIES = {
+  sales: 'Sales',
+  services: 'Services',
+  investments: 'Investments',
+  other: 'Other',
+}
 
 function CalculatorForm({
   onSubmit,
