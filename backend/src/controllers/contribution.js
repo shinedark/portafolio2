@@ -25,7 +25,6 @@ export const addContribution = async (req, res, next) => {
     const { date, title, content, type, imageUrl } = req.body
 
     const contribution = await Contribution.create({
-      userId: req.user.userId,
       date: new Date(date),
       title,
       content,
@@ -57,23 +56,10 @@ export const addContribution = async (req, res, next) => {
 export const updateContribution = async (req, res, next) => {
   try {
     const { id } = req.params
-    const { title, content, type, imageUrl } = req.body
-
-    // Add debug logging
-    console.log('Update attempt:', {
-      contributionId: id,
-      userId: req.user.id,
-      requestUser: req.user,
-    })
-
-    // Validate request body against schema
     const validatedData = updateContributionSchema.parse(req.body)
 
-    const contribution = await Contribution.findOneAndUpdate(
-      {
-        _id: id,
-        userId: req.user.userId,
-      },
+    const contribution = await Contribution.findByIdAndUpdate(
+      id,
       {
         $set: {
           ...validatedData,
@@ -98,11 +84,7 @@ export const updateContribution = async (req, res, next) => {
       data: contribution,
     })
   } catch (error) {
-    console.error('Update error:', {
-      error,
-      id: req.params.id,
-      userId: req.user?.userId,
-    })
+    console.error('Update error:', error)
     next(error)
   }
 }
@@ -110,18 +92,7 @@ export const updateContribution = async (req, res, next) => {
 export const deleteContribution = async (req, res, next) => {
   try {
     const { id } = req.params
-
-    // Add debug logging
-    console.log('Delete attempt:', {
-      contributionId: id,
-      userId: req.user.userId,
-      requestUser: req.user,
-    })
-
-    const contribution = await Contribution.findOneAndDelete({
-      _id: id,
-      userId: req.user.userId,
-    })
+    const contribution = await Contribution.findByIdAndDelete(id)
 
     if (!contribution) {
       throw new AppError('Contribution not found', 404)
@@ -132,11 +103,7 @@ export const deleteContribution = async (req, res, next) => {
       data: contribution,
     })
   } catch (error) {
-    console.error('Delete error:', {
-      error,
-      id: req.params.id,
-      userId: req.user?.userId,
-    })
+    console.error('Delete error:', error)
     next(error)
   }
 }

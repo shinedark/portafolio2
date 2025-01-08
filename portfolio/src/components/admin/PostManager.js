@@ -22,10 +22,12 @@ function PostManager() {
   const fetchPosts = async () => {
     try {
       setIsLoading(true)
+      setError(null)
       const data = await apiCall('/api/contributions')
-      setPosts(data)
+      setPosts(Array.isArray(data) ? data : [])
     } catch (error) {
       console.error('Error fetching posts:', error)
+      setError('Failed to fetch posts. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -57,9 +59,10 @@ function PostManager() {
       await fetchPosts()
       handleCancel()
     } catch (error) {
-      setError(
-        selectedPost ? 'Failed to update post.' : 'Failed to create post.',
-      )
+      const errorMessage =
+        error.message ||
+        (selectedPost ? 'Failed to update post.' : 'Failed to create post.')
+      setError(errorMessage)
       console.error('Error saving post:', error)
     } finally {
       setIsLoading(false)
@@ -71,11 +74,13 @@ function PostManager() {
       !window.confirm(
         'Are you sure you want to delete this post? This action cannot be undone.',
       )
-    )
+    ) {
       return
+    }
 
     setIsLoading(true)
     setError(null)
+
     try {
       await apiCall(`/api/contributions/${id}`, {
         method: 'DELETE',
@@ -83,7 +88,9 @@ function PostManager() {
       await fetchPosts()
       handleCancel()
     } catch (error) {
-      setError('Failed to delete post. Please try again.')
+      const errorMessage =
+        error.message || 'Failed to delete post. Please try again.'
+      setError(errorMessage)
       console.error('Error deleting post:', error)
     } finally {
       setIsLoading(false)
@@ -189,7 +196,9 @@ function PostManager() {
                 isLoading={isLoading}
                 onSubmit={handleSubmit}
                 onChange={handleInputChange}
-                onDelete={() => handleDelete(selectedPost._id)}
+                onDelete={
+                  selectedPost ? () => handleDelete(selectedPost._id) : null
+                }
                 onCancel={handleCancel}
               />
             </div>

@@ -24,13 +24,27 @@ export const apiCall = async (endpoint, options = {}) => {
       },
     })
 
+    // Check if the response is JSON
+    const contentType = response.headers.get('content-type')
+    const isJson = contentType && contentType.includes('application/json')
+
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}))
-      throw new Error(errorData.message || 'API request failed')
+      if (isJson) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'API request failed')
+      }
+      throw new Error('API request failed')
     }
 
-    return await response.json()
+    // Return JSON data if the response is JSON, otherwise return null
+    if (isJson) {
+      const data = await response.json()
+      return data.data || data
+    }
+
+    return null
   } catch (error) {
+    console.error('API call error:', error)
     if (error.message === 'Failed to fetch') {
       throw new Error(
         'Unable to connect to the server. Please check your connection.',

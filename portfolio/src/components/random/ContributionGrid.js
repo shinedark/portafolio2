@@ -6,6 +6,7 @@ const ContributionGrid = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const [selectedDate, setSelectedDate] = useState(null)
+  const START_DATE = new Date('2025-01-06')
 
   useEffect(() => {
     const fetchContributions = async () => {
@@ -13,9 +14,6 @@ const ContributionGrid = () => {
         setIsLoading(true)
         setError(null)
 
-        console.log('Fetching contributions...')
-
-        // Use the correct port for development
         const API_URL =
           process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : ''
 
@@ -24,27 +22,27 @@ const ContributionGrid = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          // Since this is a public endpoint, we don't need credentials
         })
-
-        console.log('Raw response:', response)
 
         if (!response.ok) {
           throw new Error(`Failed to fetch contributions: ${response.status}`)
         }
 
         const data = await response.json()
-        console.log('Contribution data:', data)
-
-        // Transform the data
         const contributionsMap = {}
+
+        // Group contributions by date and count them
         if (data && data.length > 0) {
           data.forEach((contribution) => {
-            contributionsMap[contribution.date] = {
-              severity: contribution.commits.length,
-              description: contribution.commits
-                .map((commit) => `${commit.type}: ${commit.message}`)
-                .join('\n'),
+            const date = contribution.date.split('T')[0]
+            if (!contributionsMap[date]) {
+              contributionsMap[date] = {
+                count: 1,
+                contributions: [contribution],
+              }
+            } else {
+              contributionsMap[date].count++
+              contributionsMap[date].contributions.push(contribution)
             }
           })
         }
@@ -61,35 +59,66 @@ const ContributionGrid = () => {
     fetchContributions()
   }, [])
 
-  const getContributionLevel = (severity) => {
-    if (severity === 0) return 'none'
-    if (severity === 1) return 'low'
-    if (severity === 2) return 'medium'
-    if (severity === 3) return 'high'
-    return 'very-high'
+  const getIntensityLevel = (count) => {
+    if (!count) return 0
+    if (count >= 5) return 5
+    return count
   }
 
   const renderGrid = () => {
+    const today = new Date()
     const years = []
-    for (let year = 2025; year <= 2029; year++) {
+    const END_DATE = new Date('2030-01-06')
+
+    for (
+      let year = START_DATE.getFullYear();
+      year <= END_DATE.getFullYear();
+      year++
+    ) {
       const months = []
-      for (let month = 0; month < 12; month++) {
+      const startMonth =
+        year === START_DATE.getFullYear() ? START_DATE.getMonth() : 0
+      const endMonth =
+        year === END_DATE.getFullYear() ? END_DATE.getMonth() : 11
+
+      for (let month = startMonth; month <= endMonth; month++) {
         const days = []
         const daysInMonth = new Date(year, month + 1, 0).getDate()
+        const startDay =
+          year === START_DATE.getFullYear() && month === START_DATE.getMonth()
+            ? START_DATE.getDate()
+            : 1
 
-        for (let day = 1; day <= daysInMonth; day++) {
+        for (let day = startDay; day <= daysInMonth; day++) {
           const date = new Date(year, month, day)
           const dateStr = date.toISOString().split('T')[0]
-          const data = contributions[dateStr] || { severity: 0 }
+          const isFuture = date > today
+          const isPast = date < START_DATE
+          const data = contributions[dateStr]
+
+          let squareClass = 'contribution-square '
+          if (isFuture || isPast) {
+            squareClass += 'future'
+          } else {
+            squareClass += `level-${getIntensityLevel(data?.count)}`
+          }
+
+          const title = data
+            ? `${dateStr}: ${data.count} contribution${
+                data.count > 1 ? 's' : ''
+              }`
+            : isFuture
+            ? 'Future date'
+            : 'No contributions'
 
           days.push(
             <div
               key={dateStr}
-              className={`contribution-square ${getContributionLevel(
-                data.severity,
-              )}`}
-              onClick={() => handleSquareClick(dateStr)}
-              title={`${dateStr}: ${data.description || 'No contribution'}`}
+              className={squareClass}
+              onClick={() =>
+                !isFuture && !isPast && data && handleSquareClick(dateStr)
+              }
+              title={title}
             />,
           )
         }
@@ -111,7 +140,9 @@ const ContributionGrid = () => {
   }
 
   const handleSquareClick = (date) => {
-    setSelectedDate(date)
+    if (contributions[date]) {
+      setSelectedDate(date)
+    }
   }
 
   const handleCancel = () => {
@@ -122,43 +153,70 @@ const ContributionGrid = () => {
     return <div className="loading">Loading contributions...</div>
   }
 
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  }
+
   return (
     <div className="contribution-container">
-      {error && <div className="error-message">{error}</div>}
+      <div className="contributions-wrapper">{renderGrid()}</div>
 
-      {Object.keys(contributions).length === 0 ? (
-        <div className="no-data">No contributions yet. Start contributing!</div>
-      ) : (
-        <>
-          <div className="contributions-wrapper">{renderGrid()}</div>
-          <div className="contribution-legend">
-            <span>Less</span>
-            <div className="legend-squares">
-              <div className="contribution-square none" />
-              <div className="contribution-square low" />
-              <div className="contribution-square medium" />
-              <div className="contribution-square high" />
-              <div className="contribution-square very-high" />
-            </div>
-            <span>More</span>
-          </div>
-        </>
-      )}
+      <div className="contribution-legend">
+        <span>Less</span>
+        <div className="legend-squares">
+          <div
+            className="contribution-square level-0"
+            title="No contributions"
+          />
+          <div className="contribution-square level-1" title="1 contribution" />
+          <div
+            className="contribution-square level-2"
+            title="2 contributions"
+          />
+          <div
+            className="contribution-square level-3"
+            title="3 contributions"
+          />
+          <div
+            className="contribution-square level-4"
+            title="4 contributions"
+          />
+          <div
+            className="contribution-square level-5"
+            title="5+ contributions"
+          />
+        </div>
+        <span>More</span>
+      </div>
 
       {selectedDate && contributions[selectedDate] && (
-        <div className="contribution-modal">
-          <div className="modal-content">
-            <h3>Contribution for {selectedDate}</h3>
+        <div className="contribution-modal" onClick={handleCancel}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>
+              {formatDate(selectedDate)} - {contributions[selectedDate].count}{' '}
+              contribution(s)
+            </h3>
             <div className="contribution-details">
-              <p>
-                <strong>Severity:</strong>{' '}
-                {getContributionLevel(contributions[selectedDate].severity)}
-              </p>
-              <p>
-                <strong>Description:</strong>{' '}
-                {contributions[selectedDate].description ||
-                  'No description provided'}
-              </p>
+              {contributions[selectedDate].contributions.map(
+                (contribution, index) => (
+                  <div key={index} style={{ marginBottom: '15px' }}>
+                    <p>
+                      <strong>Type:</strong> {contribution.type}
+                    </p>
+                    <p>
+                      <strong>Title:</strong> {contribution.title}
+                    </p>
+                    <p>
+                      <strong>Content:</strong> {contribution.content}
+                    </p>
+                  </div>
+                ),
+              )}
             </div>
             <div className="form-actions">
               <button type="button" onClick={handleCancel}>
