@@ -2,61 +2,56 @@ import React, { useState, useEffect } from 'react'
 import './ContributionGrid.css'
 
 const ContributionGrid = () => {
-  const [contributions, setContributions] = useState({})
+  const [commitData, setCommitData] = useState({})
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
   const [selectedDate, setSelectedDate] = useState(null)
   const START_DATE = new Date('2025-01-06')
 
   useEffect(() => {
-    const fetchContributions = async () => {
+    const fetchCommitHistory = async () => {
       try {
         setIsLoading(true)
-        setError(null)
-
-        const API_URL =
-          process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : ''
-
-        const response = await fetch(`${API_URL}/api/contributions`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
+        const owner = 'shinedark'
+        const repo = 'portafolio2'
+        const response = await fetch(
+          `https://api.github.com/repos/${owner}/${repo}/commits?since=${START_DATE.toISOString()}&per_page=100`,
+          {
+            headers: {
+              Authorization: `token ${process.env.REACT_APP_GITHUB_TOKEN}`,
+              Accept: 'application/vnd.github.v3+json',
+            },
           },
-        })
+        )
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch contributions: ${response.status}`)
+          throw new Error('Failed to fetch commit history')
         }
 
-        const data = await response.json()
-        const contributionsMap = {}
+        const commits = await response.json()
+        const commitMap = {}
 
-        // Group contributions by date and count them
-        if (data && data.length > 0) {
-          data.forEach((contribution) => {
-            const date = contribution.date.split('T')[0]
-            if (!contributionsMap[date]) {
-              contributionsMap[date] = {
-                count: 1,
-                contributions: [contribution],
-              }
-            } else {
-              contributionsMap[date].count++
-              contributionsMap[date].contributions.push(contribution)
+        commits.forEach((commit) => {
+          const date = commit.commit.author.date.split('T')[0]
+          if (!commitMap[date]) {
+            commitMap[date] = {
+              count: 1,
+              messages: [commit.commit.message],
             }
-          })
-        }
+          } else {
+            commitMap[date].count++
+            commitMap[date].messages.push(commit.commit.message)
+          }
+        })
 
-        setContributions(contributionsMap)
+        setCommitData(commitMap)
       } catch (err) {
-        console.error('Fetch error:', err)
-        setError(err.message)
+        console.error('Error fetching commit history:', err)
       } finally {
         setIsLoading(false)
       }
     }
 
-    fetchContributions()
+    fetchCommitHistory()
   }, [])
 
   const getIntensityLevel = (count) => {
@@ -65,161 +60,110 @@ const ContributionGrid = () => {
     return count
   }
 
-  const renderGrid = () => {
-    const today = new Date()
-    const years = []
-    const END_DATE = new Date('2030-01-06')
-
-    for (
-      let year = START_DATE.getFullYear();
-      year <= END_DATE.getFullYear();
-      year++
-    ) {
-      const months = []
-      const startMonth =
-        year === START_DATE.getFullYear() ? START_DATE.getMonth() : 0
-      const endMonth =
-        year === END_DATE.getFullYear() ? END_DATE.getMonth() : 11
-
-      for (let month = startMonth; month <= endMonth; month++) {
-        const days = []
-        const daysInMonth = new Date(year, month + 1, 0).getDate()
-        const startDay =
-          year === START_DATE.getFullYear() && month === START_DATE.getMonth()
-            ? START_DATE.getDate()
-            : 1
-
-        for (let day = startDay; day <= daysInMonth; day++) {
-          const date = new Date(year, month, day)
-          const dateStr = date.toISOString().split('T')[0]
-          const isFuture = date > today
-          const isPast = date < START_DATE
-          const data = contributions[dateStr]
-
-          let squareClass = 'contribution-square '
-          if (isFuture || isPast) {
-            squareClass += 'future'
-          } else {
-            squareClass += `level-${getIntensityLevel(data?.count)}`
-          }
-
-          const title = data
-            ? `${dateStr}: ${data.count} contribution${
-                data.count > 1 ? 's' : ''
-              }`
-            : isFuture
-            ? 'Future date'
-            : 'No contributions'
-
-          days.push(
-            <div
-              key={dateStr}
-              className={squareClass}
-              onClick={() =>
-                !isFuture && !isPast && data && handleSquareClick(dateStr)
-              }
-              title={title}
-            />,
-          )
-        }
-
-        months.push(
-          <div key={`${year}-${month}`} className="month-grid">
-            {days}
-          </div>,
-        )
-      }
-
-      years.push(
-        <div key={year} className="year-grid">
-          {months}
-        </div>,
-      )
-    }
-    return years
-  }
-
-  const handleSquareClick = (date) => {
-    if (contributions[date]) {
-      setSelectedDate(date)
+  const handleSquareClick = (date, data) => {
+    if (data) {
+      setSelectedDate({ date, data })
     }
   }
 
-  const handleCancel = () => {
+  const handleCloseModal = () => {
     setSelectedDate(null)
   }
 
-  if (isLoading) {
-    return <div className="loading">Loading contributions...</div>
-  }
-
   const formatDate = (dateStr) => {
-    const date = new Date(dateStr)
-    return date.toLocaleDateString('en-US', {
+    return new Date(dateStr).toLocaleDateString('en-US', {
+      weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     })
   }
 
+  const renderGrid = () => {
+    const today = new Date()
+    const squares = []
+    const END_DATE = new Date('2030-01-06')
+
+    for (
+      let date = new Date(START_DATE);
+      date <= END_DATE;
+      date.setDate(date.getDate() + 1)
+    ) {
+      const dateStr = date.toISOString().split('T')[0]
+      const isFuture = date > today
+      const data = commitData[dateStr]
+
+      let squareClass = 'contribution-square '
+      if (isFuture) {
+        squareClass += 'future'
+      } else {
+        squareClass += `level-${getIntensityLevel(data?.count)}`
+      }
+
+      squares.push(
+        <div
+          key={dateStr}
+          className={squareClass}
+          onClick={() => !isFuture && handleSquareClick(dateStr, data)}
+          title={data ? `${data.count} commits on ${dateStr}` : 'No commits'}
+        />,
+      )
+    }
+
+    return squares
+  }
+
+  if (isLoading) {
+    return <div className="loading">Loading commit history...</div>
+  }
+
   return (
     <div className="contribution-container">
-      <div className="contributions-wrapper">{renderGrid()}</div>
+      <div className="contributions-wrapper">
+        <div className="contribution-grid">{renderGrid()}</div>
+      </div>
 
       <div className="contribution-legend">
         <span>Less</span>
         <div className="legend-squares">
-          <div
-            className="contribution-square level-0"
-            title="No contributions"
-          />
-          <div className="contribution-square level-1" title="1 contribution" />
-          <div
-            className="contribution-square level-2"
-            title="2 contributions"
-          />
-          <div
-            className="contribution-square level-3"
-            title="3 contributions"
-          />
-          <div
-            className="contribution-square level-4"
-            title="4 contributions"
-          />
-          <div
-            className="contribution-square level-5"
-            title="5+ contributions"
-          />
+          <div className="contribution-square level-0" title="No commits" />
+          <div className="contribution-square level-1" title="1 commit" />
+          <div className="contribution-square level-2" title="2 commits" />
+          <div className="contribution-square level-3" title="3 commits" />
+          <div className="contribution-square level-4" title="4 commits" />
+          <div className="contribution-square level-5" title="5+ commits" />
         </div>
         <span>More</span>
       </div>
 
-      {selectedDate && contributions[selectedDate] && (
-        <div className="contribution-modal" onClick={handleCancel}>
+      {selectedDate && (
+        <div className="contribution-modal" onClick={handleCloseModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>
-              {formatDate(selectedDate)} - {contributions[selectedDate].count}{' '}
-              contribution(s)
-            </h3>
-            <div className="contribution-details">
-              {contributions[selectedDate].contributions.map(
-                (contribution, index) => (
-                  <div key={index} style={{ marginBottom: '15px' }}>
-                    <p>
-                      <strong>Type:</strong> {contribution.type}
-                    </p>
-                    <p>
-                      <strong>Title:</strong> {contribution.title}
-                    </p>
-                    <p>
-                      <strong>Content:</strong> {contribution.content}
-                    </p>
-                  </div>
-                ),
-              )}
+            <div className="modal-header">{formatDate(selectedDate.date)}</div>
+            <div className="modal-body">
+              <p>
+                <strong>
+                  {selectedDate.data.count} commit
+                  {selectedDate.data.count > 1 ? 's' : ''}
+                </strong>
+              </p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '10px 0' }}>
+                {selectedDate.data.messages.map((message, index) => (
+                  <li
+                    key={index}
+                    style={{
+                      marginBottom: '8px',
+                      paddingLeft: '10px',
+                      borderLeft: '2px solid #000',
+                    }}
+                  >
+                    {message}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="form-actions">
-              <button type="button" onClick={handleCancel}>
+            <div className="modal-footer">
+              <button className="modal-close-button" onClick={handleCloseModal}>
                 Close
               </button>
             </div>

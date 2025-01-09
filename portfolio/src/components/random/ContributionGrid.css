@@ -2,38 +2,73 @@
   padding: 15px;
   background: #ffffff;
   border-radius: 8px;
-  max-width: 800px;
+  width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .contributions-wrapper {
-  overflow-x: auto;
   margin-bottom: 15px;
-  padding-bottom: 5px;
+  width: 100%;
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
 }
 
-.year-grid {
+.contribution-grid {
   display: flex;
-  gap: 2px;
-  margin-bottom: 8px;
-  min-width: min-content;
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 10px;
+  min-height: min-content;
 }
 
-.month-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
-  margin-right: 4px;
+/* Custom scrollbar for webkit browsers */
+.contributions-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.contributions-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.contributions-wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.contributions-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .contribution-square {
-  width: 8px;
-  height: 8px;
-  border-radius: 1px;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
   cursor: pointer;
   transition: all 0.2s ease;
   border: 1px solid #000000;
   background-color: #ffffff;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .contribution-square {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .contribution-container {
+    padding: 10px;
+  }
+
+  .contribution-grid {
+    gap: 2px;
+  }
 }
 
 .contribution-square:hover {
@@ -58,27 +93,22 @@
 
 .contribution-square.level-1 {
   background-color: rgba(0, 0, 0, 0.2);
-  border: 1px solid #000000;
 }
 
 .contribution-square.level-2 {
   background-color: rgba(0, 0, 0, 0.4);
-  border: 1px solid #000000;
 }
 
 .contribution-square.level-3 {
   background-color: rgba(0, 0, 0, 0.6);
-  border: 1px solid #000000;
 }
 
 .contribution-square.level-4 {
   background-color: rgba(0, 0, 0, 0.8);
-  border: 1px solid #000000;
 }
 
 .contribution-square.level-5 {
   background-color: #000000;
-  border: 1px solid #000000;
 }
 
 .contribution-legend {
@@ -88,7 +118,8 @@
   gap: 8px;
   color: #000000;
   font-size: 0.75rem;
-  padding: 0 10px;
+  padding: 10px;
+  flex-wrap: wrap;
 }
 
 .legend-squares {
@@ -128,6 +159,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 20px;
 }
 
 .modal-content {
@@ -140,43 +172,34 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.modal-content h3 {
-  color: #000000;
+.modal-header {
   margin-bottom: 15px;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.modal-body {
+  margin-bottom: 20px;
   font-size: 0.9rem;
 }
 
-.contribution-details {
-  color: #000000;
-  margin-bottom: 20px;
-  font-size: 0.85rem;
-}
-
-.contribution-details p {
-  margin: 8px 0;
-}
-
-.contribution-details strong {
-  color: #000000;
-}
-
-.form-actions {
+.modal-footer {
   display: flex;
   justify-content: flex-end;
 }
 
-.form-actions button {
+.modal-close-button {
   background: #ffffff;
   color: #000000;
   border: 1px solid #000000;
-  padding: 5px 10px;
-  border-radius: 3px;
+  padding: 8px 16px;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 }
 
-.form-actions button:hover {
+.modal-close-button:hover {
   background: #000000;
   color: #ffffff;
 } 
