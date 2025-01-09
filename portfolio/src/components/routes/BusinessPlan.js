@@ -6,25 +6,134 @@ const BusinessPlan = () => {
   return (
     <div className="route-page">
       <div className="route-section">
-        <h3>Mission</h3>
+        <h3>Business Plan for Shine Dark Music</h3>
         <p>
-          Using technology and ingenuity, we are creating and developing a
-          replicable process to create a new culture for America's modern
-          farmer. Showing how self-sufficiency and collaboration can revamp
-          America's production of goods.
+          Shine Dark Music is a media company dedicated to Awakening Human
+          Beings via Technology & Art. Our mission is to innovate at the
+          intersection of music, sustainability, and health, creating a
+          replicable model for modern living.
         </p>
       </div>
 
       <div className="route-section">
-        <h3>Goals</h3>
+        <h3>Company Description</h3>
         <ul>
-          <li>Develop sustainable farming practices</li>
-          <li>Create collaborative production networks</li>
-          <li>Document and share processes</li>
-          <li>Build "Made in America" framework</li>
-          <li>Foster self-sufficiency culture</li>
+          <li>
+            Type: Media Company with a focus on music production, technology,
+            and sustainable living.
+          </li>
+          <li>
+            Location: Based in Colorado, with plans to transform a warehouse
+            into a sustainable living and working space.
+          </li>
+          <li>
+            Unique Selling Proposition: Combining music with sustainability
+            initiatives, leveraging technology for community engagement and
+            personal health.
+          </li>
         </ul>
       </div>
+
+      <div className="route-section">
+        <h3>Products and Services</h3>
+        <ul>
+          <li>
+            Music Releases: 186 tracks in 47 releases, available digitally and
+            on vinyl.
+          </li>
+          <li>
+            Sustainable Project: Development of a self-sustaining environment
+            including hydroponic farming and sound therapy for plant growth.
+          </li>
+          <li>
+            Community Engagement: A reward system through Opacity Network for
+            social media interaction.
+          </li>
+        </ul>
+      </div>
+
+      <div className="route-section">
+        <h3>Market Analysis</h3>
+        <ul>
+          <li>
+            Target Market: Music enthusiasts, health-conscious individuals,
+            sustainability advocates, and technology users interested in
+            innovative projects.
+          </li>
+          <li>
+            Competitive Advantage: Unique blend of music, health, and
+            sustainability, with a strong community engagement model.
+          </li>
+        </ul>
+      </div>
+
+      <div className="route-section">
+        <h3>Marketing and Sales Strategy</h3>
+        <ul>
+          <li>
+            Social Media: Use of music and project documentation to drive
+            engagement, with rewards for fan interaction.
+          </li>
+          <li>
+            Direct Sales: Selling vinyl records at $33 each, with potential for
+            exclusive releases or limited editions tied to project milestones.
+          </li>
+          <li>
+            Content Creation: Regular updates, educational content, and
+            behind-the-scenes looks at the project to build a narrative around
+            sustainability and personal health.
+          </li>
+        </ul>
+      </div>
+
+      <div className="route-section">
+        <h3>Operational Plan</h3>
+        <ul>
+          <li>
+            Project Development: Phased transformation of the warehouse into a
+            sustainable living space, including setting up hydroponics and
+            research facilities.
+          </li>
+          <li>
+            Technology Integration: Use of coding for project management,
+            content creation, and community interaction tools.
+          </li>
+        </ul>
+      </div>
+
+      <div className="route-section">
+        <h3>Financial Plan</h3>
+        <ul>
+          <li>
+            Revenue Streams: Sales from music releases, potential sponsorships
+            or partnerships related to sustainability, possible grants for
+            eco-innovation.
+          </li>
+          <li>
+            Cost Structure: Costs associated with music production, vinyl
+            manufacturing, building transformation, hydroponic setup, and
+            ongoing operational expenses.
+          </li>
+          <li>
+            Funding: Initial investment from personal funds, potential
+            crowdfunding for community involvement, and seeking investors
+            interested in sustainable media and health initiatives.
+          </li>
+        </ul>
+      </div>
+
+      <div className="route-section">
+        <h3>Future Outlook</h3>
+        <p>
+          Shine Dark Music aims to be a leader in demonstrating how media
+          companies can pivot towards sustainability, influencing cultural
+          perceptions of living and industry practices. We plan to expand our
+          reach, both in music distribution and in the sustainable living
+          movement, fostering a community that lives by our tagline: Where Music
+          Cultivates Sustainability.
+        </p>
+      </div>
+
       <ProjectCostCalculator />
     </div>
   )

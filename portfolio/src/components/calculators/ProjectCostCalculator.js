@@ -53,7 +53,6 @@ const ProjectCostCalculator = () => {
     let monthly = { needed: 0, have: 0 }
     let assets = { needed: 0, have: 0 }
 
-    // Calculate costs from categories (equipment and subscriptions)
     if (categories && Object.keys(categories).length > 0) {
       Object.entries(categories).forEach(([categoryName, category]) => {
         if (!category?.items?.length) return
@@ -61,10 +60,20 @@ const ProjectCostCalculator = () => {
         category.items.forEach((item) => {
           if (!item) return
 
+          console.log(`Processing ${item.name}:`, {
+            cost: item.cost,
+            category: item.isAsset
+              ? 'asset'
+              : item.isMonthly
+              ? 'monthly'
+              : 'one-time',
+            type: item.isNeeded ? 'needed' : 'have',
+          })
+
           const type = item.isEssential || item.isNeeded ? 'needed' : 'have'
           const cost = parseFloat(item.cost) || 0
 
-          if (categoryName.toLowerCase() === 'equipment') {
+          if (item.isAsset) {
             assets[type] += cost
           } else if (item.isMonthly) {
             monthly[type] += cost
@@ -74,6 +83,31 @@ const ProjectCostCalculator = () => {
         })
       })
     }
+
+    // Log final breakdown
+    console.log('Final Breakdown:', {
+      oneTime: {
+        items: Object.entries(categories)
+          .flatMap(([_, category]) => category.items)
+          .filter((item) => !item.isAsset && !item.isMonthly)
+          .map((item) => ({ name: item.name, cost: item.cost })),
+        total: oneTime,
+      },
+      monthly: {
+        items: Object.entries(categories)
+          .flatMap(([_, category]) => category.items)
+          .filter((item) => item.isMonthly)
+          .map((item) => ({ name: item.name, cost: item.cost })),
+        total: monthly,
+      },
+      assets: {
+        items: Object.entries(categories)
+          .flatMap(([_, category]) => category.items)
+          .filter((item) => item.isAsset)
+          .map((item) => ({ name: item.name, cost: item.cost })),
+        total: assets,
+      },
+    })
 
     return { oneTime, monthly, assets }
   }

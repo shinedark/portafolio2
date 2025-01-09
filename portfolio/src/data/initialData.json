@@ -8,8 +8,33 @@
           "cost": 4199,
           "isEssential": true,
           "isNeeded": true,
+          "isAsset": false,
           "link": "https://www.apple.com/shop/buy-mac/macbook-pro",
           "description": "Current 2013 Mac Pro is outdated and unable to run modern development tools like React Native"
+        },
+        {
+          "name": "Land Purchase",
+          "cost": 150000,
+          "isEssential": true,
+          "isNeeded": true,
+          "isAsset": true,
+          "description": "Land acquisition in Colorado for project development"
+        },
+        {
+          "name": "Building and Infrastructure",
+          "cost": 410000,
+          "isEssential": true,
+          "isNeeded": true,
+          "isAsset": true,
+          "description": "Warehouse/steel building purchase ($300k), modular home ($50k), renovation ($40k), utilities setup ($20k)"
+        },
+        {
+          "name": "Hydroponic System Setup",
+          "cost": 43000,
+          "isEssential": true,
+          "isNeeded": true,
+          "isAsset": true,
+          "description": "Complete hydroponic system including grow lights, nutrients, pumps, tanks, and initial plants/seeds"
         }
       ]
     },
@@ -65,6 +90,60 @@
           "have": true,
           "link": "https://www.keepertax.com/",
           "description": "Tax management service"
+        },
+        {
+          "name": "Living Expenses",
+          "cost": 2000,
+          "isEssential": true,
+          "isMonthly": true,
+          "isNeeded": true,
+          "have": false,
+          "description": "Monthly food, utilities, and personal expenses"
+        },
+        {
+          "name": "Marketing and Social Media",
+          "cost": 833,
+          "isEssential": true,
+          "isMonthly": true,
+          "isNeeded": true,
+          "have": false,
+          "description": "Monthly budget for project promotion and community engagement ($10,000/year)"
+        },
+        {
+          "name": "Legal and Administrative",
+          "cost": 833,
+          "isEssential": true,
+          "isMonthly": true,
+          "isNeeded": true,
+          "have": false,
+          "description": "Monthly legal fees, insurance, LLC maintenance ($10,000/year)"
+        },
+        {
+          "name": "Miscellaneous Operations",
+          "cost": 833,
+          "isEssential": true,
+          "isMonthly": true,
+          "isNeeded": true,
+          "have": false,
+          "description": "Emergency funds, tools, project documentation ($10,000/year)"
+        },
+        {
+          "name": "Relocation Costs",
+          "cost": 20000,
+          "isEssential": true,
+          "isMonthly": false,
+          "isNeeded": true,
+          "have": false,
+          "description": "One-time moving expenses and transport of equipment"
+        },
+        {
+          "name": "Temporary Housing",
+          "cost": 10000,
+          "isEssential": true,
+          "isMonthly": false,
+          "isNeeded": true,
+          "have": false,
+          "description": "3-6 months temporary housing during setup phase"
         }
       ]
     }
