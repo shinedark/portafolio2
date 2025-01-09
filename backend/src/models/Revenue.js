@@ -1,39 +1,21 @@
 import mongoose from 'mongoose'
 
-const itemSchema = new mongoose.Schema(
+const revenueItemSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
     },
-    profit: {
-      type: Number,
-      required: true,
-    },
-    description: {
-      type: String,
-      default: '',
-    },
-    isEssential: {
-      type: Boolean,
-      default: false,
-    },
-    isMonthly: {
-      type: Boolean,
-      default: false,
-    },
-    isAsset: {
-      type: Boolean,
-      default: false,
-    },
-    isNeeded: {
-      type: Boolean,
-      default: true,
-    },
-    link: {
-      type: String,
-      default: '',
-    },
+    price: Number,
+    priceRange: String,
+    basePrice: Number,
+    category: String,
+    type: String,
+    isMonthly: Boolean,
+    description: String,
+    quantity: Number,
+    min: Number,
+    max: Number,
   },
   {
     _id: false,
@@ -46,7 +28,7 @@ const categorySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    items: [itemSchema],
+    items: [revenueItemSchema],
   },
   {
     _id: false,
@@ -56,10 +38,8 @@ const categorySchema = new mongoose.Schema(
 const revenueSchema = new mongoose.Schema(
   {
     categories: {
-      sales: categorySchema,
       services: categorySchema,
-      investments: categorySchema,
-      other: categorySchema,
+      products: categorySchema,
     },
   },
   {

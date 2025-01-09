@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "build": "npm install"
+    "build": "npm install",
+    "upload-data": "node src/scripts/uploadInitialData.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -22,8 +22,49 @@
           "isEssential": true,
           "isMonthly": true,
           "isNeeded": true,
+          "have": false,
           "link": "https://chat.openai.com/",
           "description": "AI-powered assistance and productivity"
+        },
+        {
+          "name": "Dropbox",
+          "cost": 10,
+          "isEssential": true,
+          "isMonthly": true,
+          "isNeeded": true,
+          "have": false,
+          "link": "https://www.dropbox.com/",
+          "description": "Cloud storage for personal and business use"
+        },
+        {
+          "name": "cursor",
+          "cost": 20,
+          "isEssential": true,
+          "isMonthly": true,
+          "isNeeded": true,
+          "have": true,
+          "link": "https://www.cursor.com/",
+          "description": "AI-powered code editor, currently have"
+        },
+        {
+          "name": "distrokid",
+          "cost": 90,
+          "isEssential": true,
+          "isMonthly": false,
+          "isNeeded": true,
+          "have": true,
+          "link": "https://www.distrokid.com/",
+          "description": "Music distribution service"
+        },
+        {
+          "name": "Keeper Tax",
+          "cost": 399,
+          "isEssential": true,
+          "isMonthly": false,
+          "isNeeded": true,
+          "have": true,
+          "link": "https://www.keepertax.com/",
+          "description": "Tax management service"
         }
       ]
     }
@@ -31,11 +72,118 @@
   "revenue": {
     "services": {
       "name": "Services",
-      "items": []
+      "items": [
+        {
+          "name": "Web Development - Simple Website",
+          "priceRange": "2000-8000",
+          "basePrice": 2000,
+          "category": "Web Development",
+          "type": "Project-Based",
+          "description": "5-10 page website development with basic functionality"
+        },
+        {
+          "name": "Web Development - Complex Website",
+          "priceRange": "10000-16000",
+          "basePrice": 10000,
+          "category": "Web Development",
+          "type": "Project-Based",
+          "description": "25-75 page website with advanced functionality"
+        },
+        {
+          "name": "Single-Page Application",
+          "priceRange": "5000-15000",
+          "basePrice": 5000,
+          "category": "Web Development",
+          "type": "Project-Based",
+          "description": "Modern single-page web application development"
+        },
+        {
+          "name": "Web Maintenance - Basic",
+          "price": 300,
+          "category": "Web Development",
+          "type": "Retainer",
+          "isMonthly": true,
+          "description": "5-10 hours of basic website maintenance and support"
+        },
+        {
+          "name": "Web Maintenance - Premium",
+          "price": 3000,
+          "category": "Web Development",
+          "type": "Retainer",
+          "isMonthly": true,
+          "description": "20-40 hours of advanced development and maintenance"
+        },
+        {
+          "name": "Music Production - Track",
+          "priceRange": "500-3000",
+          "basePrice": 500,
+          "category": "Music Production",
+          "type": "Project-Based",
+          "description": "Original music track production"
+        },
+        {
+          "name": "Music Production - Monthly Basic",
+          "price": 500,
+          "category": "Music Production",
+          "type": "Retainer",
+          "isMonthly": true,
+          "description": "Basic monthly music production services"
+        },
+        {
+          "name": "Music Production - Monthly Premium",
+          "price": 3000,
+          "category": "Music Production",
+          "type": "Retainer",
+          "isMonthly": true,
+          "description": "Premium monthly music production and event support"
+        },
+        {
+          "name": "All-Inclusive Media Support - Basic",
+          "price": 2000,
+          "category": "Combined Services",
+          "type": "Retainer",
+          "isMonthly": true,
+          "description": "Basic web, app, and music support for small businesses"
+        },
+        {
+          "name": "All-Inclusive Media Support - Premium",
+          "price": 5000,
+          "category": "Combined Services",
+          "type": "Retainer",
+          "isMonthly": true,
+          "description": "Premium comprehensive service for large projects"
+        },
+        {
+          "name": "Consulting",
+          "price": 75,
+          "category": "Additional Services",
+          "type": "Hourly",
+          "description": "Technical consulting and strategy sessions"
+        }
+      ]
     },
     "products": {
       "name": "Products",
-      "items": []
+      "items": [
+        {
+          "name": "Vinyl Record",
+          "price": 33,
+          "quantity": 500,
+          "description": "Limited edition vinyl record"
+        },
+        {
+          "name": "Music catalog",
+          "price": 0,
+          "description": "Entire music catalog of the label over 2 hours of music, dived in over 47 releases as well as more in the stash."
+        },
+        {
+          "name": "Sync Licensing",
+          "price": 1000,
+          "description": "Synchronization licensing available for media usage (films, TV, advertisements, etc.). Price varies based on project scope and usage.",
+          "min": 10,
+          "max": 20
+        }
+      ]
     }
   }
 } 

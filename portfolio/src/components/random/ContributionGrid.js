@@ -83,7 +83,7 @@ const ContributionGrid = () => {
     const today = new Date()
     const squares = []
     const END_DATE = new Date('2030-01-06')
-
+    let index = 0
     for (
       let date = new Date(START_DATE);
       date <= END_DATE;
@@ -92,7 +92,7 @@ const ContributionGrid = () => {
       const dateStr = date.toISOString().split('T')[0]
       const isFuture = date > today
       const data = commitData[dateStr]
-
+      index++
       let squareClass = 'contribution-square '
       if (isFuture) {
         squareClass += 'future'
@@ -102,7 +102,7 @@ const ContributionGrid = () => {
 
       squares.push(
         <div
-          key={dateStr}
+          key={index}
           className={squareClass}
           onClick={() => !isFuture && handleSquareClick(dateStr, data)}
           title={data ? `${data.count} commits on ${dateStr}` : 'No commits'}

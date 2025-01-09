@@ -9,7 +9,7 @@ const costCategories = [
   'legal',
 ]
 
-const revenueCategories = ['sales', 'services', 'investments', 'other']
+const revenueCategories = ['services', 'products']
 
 const baseItemSchema = {
   name: z.string().min(1, 'Name is required'),
@@ -27,8 +27,17 @@ export const costItemSchema = z.object({
 })
 
 export const revenueItemSchema = z.object({
-  ...baseItemSchema,
-  profit: z.number().positive('Profit must be positive'),
+  name: z.string().min(1, 'Name is required'),
+  price: z.number().optional(),
+  priceRange: z.string().optional(),
+  basePrice: z.number().optional(),
+  category: z.string().optional(),
+  type: z.string().optional(),
+  isMonthly: z.boolean().optional(),
+  description: z.string().optional(),
+  quantity: z.number().optional(),
+  min: z.number().optional(),
+  max: z.number().optional(),
 })
 
 // Base schemas for both cost and revenue items

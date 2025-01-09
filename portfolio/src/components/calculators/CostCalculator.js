@@ -2,7 +2,7 @@ import React from 'react'
 import ItemList from './ItemList'
 import { formatCurrency } from '../../utils/formatters'
 
-const CostCalculator = ({ totals, categories, onDeleteItem }) => {
+const CostCalculator = ({ totals, categories }) => {
   return (
     <>
       <div className="cost-summary">
@@ -47,7 +47,6 @@ const CostCalculator = ({ totals, categories, onDeleteItem }) => {
             <ItemList
               items={category.items}
               categoryId={categoryId}
-              onDelete={onDeleteItem}
               type="cost"
             />
           </div>

@@ -12,84 +12,68 @@ const ProjectCostCalculator = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  const formatData = useCallback((responseData) => {
+    if (!responseData) {
+      return {}
+    }
+    return responseData.categories || {}
+  }, [])
+
   const fetchData = useCallback(async () => {
     try {
       setIsLoading(true)
       setError(null)
 
       // Fetch costs
-      try {
-        const costsData = await apiCall('/api/calculator/costs')
-        console.log('Costs data:', costsData)
-        setCategories(costsData.data?.categories || {})
-      } catch (error) {
-        console.error('Error fetching costs:', error)
-        setError(error.message)
+      const costsResponse = await apiCall('/api/calculator/costs')
+      if (costsResponse && costsResponse.categories) {
+        const formattedCosts = formatData(costsResponse)
+        setCategories(formattedCosts)
       }
 
       // Fetch revenue
-      try {
-        const revenueData = await apiCall('/api/calculator/revenue')
-        console.log('Revenue data:', revenueData)
-        setRevenue(revenueData.data?.categories || {})
-      } catch (error) {
-        console.error('Error fetching revenue:', error)
-        setError((prev) => prev || error.message)
+      const revenueResponse = await apiCall('/api/calculator/revenue')
+      if (revenueResponse && revenueResponse.categories) {
+        const formattedRevenue = formatData(revenueResponse)
+        setRevenue(formattedRevenue)
       }
+    } catch (error) {
+      setError(error.message)
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [formatData])
 
   useEffect(() => {
     fetchData()
   }, [fetchData])
-
-  const handleDeleteCostItem = async (categoryId, index) => {
-    try {
-      setIsLoading(true)
-      setError(null)
-      await apiCall(`/api/calculator/costs/${categoryId}/${index}`, {
-        method: 'DELETE',
-      })
-      await fetchData()
-    } catch (error) {
-      console.error('Error deleting cost item:', error)
-      setError(error.message)
-    }
-  }
-
-  const handleDeleteRevenueItem = async (categoryId, index) => {
-    try {
-      setIsLoading(true)
-      setError(null)
-      await apiCall(`/api/calculator/revenue/${categoryId}/${index}`, {
-        method: 'DELETE',
-      })
-      await fetchData()
-    } catch (error) {
-      console.error('Error deleting revenue item:', error)
-      setError(error.message)
-    }
-  }
 
   const calculateTotalCost = () => {
     let oneTime = { needed: 0, have: 0 }
     let monthly = { needed: 0, have: 0 }
     let assets = { needed: 0, have: 0 }
 
-    Object.values(categories).forEach((category) => {
-      category.items.forEach((item) => {
-        const type = item.isNeeded ? 'needed' : 'have'
-        if (item.isAsset) {
-          assets[type] += Number(item.cost)
-        } else if (item.isMonthly) {
-          monthly[type] += Number(item.cost)
-        } else {
-          oneTime[type] += Number(item.cost)
-        }
+    // Calculate costs from categories (equipment and subscriptions)
+    if (categories && Object.keys(categories).length > 0) {
+      Object.entries(categories).forEach(([categoryName, category]) => {
+        if (!category?.items?.length) return
+
+        category.items.forEach((item) => {
+          if (!item) return
+
+          const type = item.isEssential || item.isNeeded ? 'needed' : 'have'
+          const cost = parseFloat(item.cost) || 0
+
+          if (categoryName.toLowerCase() === 'equipment') {
+            assets[type] += cost
+          } else if (item.isMonthly) {
+            monthly[type] += cost
+          } else {
+            oneTime[type] += cost
+          }
+        })
       })
-    })
+    }
 
     return { oneTime, monthly, assets }
   }
@@ -97,27 +81,59 @@ const ProjectCostCalculator = () => {
   const calculateRevenue = () => {
     let monthlyRevenue = 0
     let annualRevenue = 0
+    let potentialInventoryValue = 0
 
-    Object.values(revenue).forEach((category) => {
+    if (!revenue || Object.keys(revenue).length === 0) {
+      return {
+        monthly: 0,
+        annual: 0,
+        potentialInventoryValue: 0,
+        projectedProfit: { monthly: 0, annual: 0 },
+      }
+    }
+
+    Object.entries(revenue).forEach(([categoryName, category]) => {
+      if (!category?.items?.length) return
+
       category.items.forEach((item) => {
+        let itemRevenue = 0
+
+        if (item.name === 'Vinyl Record' && item.price && item.quantity) {
+          // Calculate potential inventory value
+          potentialInventoryValue = item.price * item.quantity
+          return // Skip adding to monthly/annual revenue
+        }
+
+        if (item.price) {
+          itemRevenue = Number(item.price) * (Number(item.quantity) || 1)
+        } else if (item.basePrice) {
+          itemRevenue = Number(item.basePrice)
+        } else if (item.priceRange) {
+          const [min] = item.priceRange.split('-').map(Number)
+          itemRevenue = min || 0
+        }
+
         if (item.isMonthly) {
-          monthlyRevenue += Number(item.profit)
-          annualRevenue += Number(item.profit) * 12
+          monthlyRevenue += itemRevenue
+          annualRevenue += itemRevenue * 12
         } else {
-          annualRevenue += Number(item.profit)
+          annualRevenue += itemRevenue
         }
       })
     })
 
     const totals = calculateTotalCost()
+    const projectedProfit = {
+      monthly: monthlyRevenue - totals.monthly.needed,
+      annual:
+        annualRevenue - totals.monthly.needed * 12 - totals.oneTime.needed,
+    }
+
     return {
       monthly: monthlyRevenue,
       annual: annualRevenue,
-      projectedProfit: {
-        monthly: monthlyRevenue - totals.monthly.needed,
-        annual:
-          annualRevenue - totals.monthly.needed * 12 - totals.oneTime.needed,
-      },
+      potentialInventoryValue,
+      projectedProfit,
     }
   }
 
@@ -168,9 +184,8 @@ const ProjectCostCalculator = () => {
 
         {showCosts && (
           <CostCalculator
-            totals={totals}
+            totals={calculateTotalCost()}
             categories={categories}
-            onDeleteItem={handleDeleteCostItem}
           />
         )}
       </div>
@@ -194,9 +209,8 @@ const ProjectCostCalculator = () => {
 
         {showRevenue && (
           <RevenueCalculator
-            revenueData={revenueData}
+            revenueData={calculateRevenue()}
             revenue={revenue}
-            onDeleteItem={handleDeleteRevenueItem}
           />
         )}
       </div>
