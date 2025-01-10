@@ -5,6 +5,7 @@
   min-height: 100vh;
   padding: 20px;
   background: var(--background-color, #1a1a1a);
+  background-image: url('../../pictures/giphy.gif');
 }
 
 .login-form {
@@ -61,7 +62,7 @@
 button[type="submit"] {
   width: 100%;
   padding: 0.8rem;
-  background: var(--accent-color, #4a90e2);
+  background: var(--accent-color, #000000);
   color: white;
   border: none;
   border-radius: 4px;
@@ -71,7 +72,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background: var(--accent-hover-color, #357abd);
+  background: var(--accent-hover-color, #4c4e4f);
 }
 
 /* Responsive adjustments */

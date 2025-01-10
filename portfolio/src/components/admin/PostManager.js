@@ -133,55 +133,42 @@ function PostManager() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Top Bar */}
-      <div className="fixed top-0 left-0 right-0 bg-black/50 backdrop-blur-sm border-b border-white/10 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-6">
-            <h1 className="font-mono text-xl text-white/90">Admin</h1>
-            <div className="flex gap-4">
+    <div className="admin-page">
+      <div className="admin-header">
+        <div className="header-content">
+          <div className="header-left">
+            <h1>Admin</h1>
+            <div className="tab-buttons">
               <button
                 onClick={() => setActiveTab('posts')}
-                className={`font-mono text-sm transition-colors ${
-                  activeTab === 'posts'
-                    ? 'text-white/90'
-                    : 'text-white/40 hover:text-white/60'
+                className={`tab-button ${
+                  activeTab === 'posts' ? 'active' : ''
                 }`}
               >
                 Posts
               </button>
               <button
                 onClick={() => setActiveTab('calculators')}
-                className={`font-mono text-sm transition-colors ${
-                  activeTab === 'calculators'
-                    ? 'text-white/90'
-                    : 'text-white/40 hover:text-white/60'
+                className={`tab-button ${
+                  activeTab === 'calculators' ? 'active' : ''
                 }`}
               >
                 Calculators
               </button>
             </div>
           </div>
-          <button
-            onClick={logout}
-            className="font-mono px-3 py-1.5 text-sm text-white/60 hover:text-white/90 transition-colors"
-          >
+          <button onClick={logout} className="logout-button">
             Logout
           </button>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-5xl mx-auto pt-20 px-4 pb-8">
-        {error && (
-          <div className="mb-6 font-mono p-3 bg-red-500/5 border border-red-500/10 rounded text-red-400 text-sm text-center">
-            {error}
-          </div>
-        )}
+      <div className="main-content">
+        {error && <div className="admin-error">{error}</div>}
 
         {activeTab === 'posts' ? (
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-            <div className="md:col-span-2">
+          <div className="content-grid">
+            <div className="post-section">
               <PostList
                 posts={posts}
                 selectedPost={selectedPost}
@@ -189,7 +176,7 @@ function PostManager() {
                 isLoading={isLoading}
               />
             </div>
-            <div className="md:col-span-3">
+            <div className="form-section">
               <PostForm
                 formData={formData}
                 selectedPost={selectedPost}

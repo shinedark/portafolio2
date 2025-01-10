@@ -1,5 +1,5 @@
 import React from 'react'
-
+import './../Admin.css'
 function PostForm({
   formData,
   selectedPost,
@@ -10,8 +10,8 @@ function PostForm({
   onCancel,
 }) {
   return (
-    <div className="sticky top-20">
-      <form onSubmit={onSubmit} className="space-y-4">
+    <div className="form-container">
+      <form onSubmit={onSubmit} className="form-content">
         <div>
           <input
             type="text"
@@ -21,14 +21,12 @@ function PostForm({
             onChange={onChange}
             required
             disabled={isLoading}
-            className="font-mono w-full px-3 py-2 bg-transparent border border-white/10 rounded-lg
-              focus:outline-none focus:border-white/20 transition-colors text-white/90 text-sm
-              placeholder:text-white/20 disabled:opacity-50"
+            className="form-input"
             placeholder="Title"
           />
         </div>
 
-        <div className="flex gap-2">
+        <div className="form-row">
           <select
             id="type"
             name="type"
@@ -36,15 +34,14 @@ function PostForm({
             onChange={onChange}
             required
             disabled={isLoading}
-            className="font-mono px-3 py-2 bg-transparent border border-white/10 rounded-lg
-              focus:outline-none focus:border-white/20 transition-colors text-white/90 text-sm
-              disabled:opacity-50"
+            className="form-select"
           >
             <option value="code">Code</option>
             <option value="design">Design</option>
             <option value="docs">Documentation</option>
             <option value="test">Test</option>
             <option value="blog">Blog</option>
+            <option value="calculator">Calculator</option>
             <option value="other">Other</option>
           </select>
 
@@ -55,12 +52,32 @@ function PostForm({
             value={formData.imageUrl}
             onChange={onChange}
             disabled={isLoading}
-            className="font-mono flex-1 px-3 py-2 bg-transparent border border-white/10 rounded-lg
-              focus:outline-none focus:border-white/20 transition-colors text-white/90 text-sm
-              placeholder:text-white/20 disabled:opacity-50"
+            className="form-input form-url-input"
             placeholder="Image URL (optional)"
           />
         </div>
+
+        {formData.type === 'calculator' && (
+          <div className="form-row">
+            <select
+              id="calculatorType"
+              name="calculatorType"
+              value={formData.calculatorType || ''}
+              onChange={onChange}
+              required={formData.type === 'calculator'}
+              disabled={isLoading}
+              className="form-select"
+            >
+              <option value="">Select Calculator Type</option>
+              <option value="compound">Compound Interest</option>
+              <option value="mortgage">Mortgage</option>
+              <option value="savings">Savings</option>
+              <option value="investment">Investment</option>
+              <option value="tax">Tax</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+        )}
 
         <textarea
           id="content"
@@ -70,26 +87,19 @@ function PostForm({
           required
           disabled={isLoading}
           rows={12}
-          className="font-mono w-full px-3 py-2 bg-transparent border border-white/10 rounded-lg
-            focus:outline-none focus:border-white/20 transition-colors text-white/90 text-sm
-            placeholder:text-white/20 resize-none disabled:opacity-50"
+          className="form-textarea"
           placeholder="Write your content..."
         />
 
-        <div className="flex gap-2">
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="font-mono flex-1 px-4 py-2 bg-white/5 border border-white/10 hover:bg-white/10
-              disabled:opacity-50 rounded-lg transition-colors text-sm text-white/90"
-          >
-            {isLoading ? (
-              <span className="flex items-center justify-center gap-2">
-                <div className="w-4 h-4 border border-white/20 border-t-white/90 rounded-full animate-spin"></div>
-                <span>{selectedPost ? 'Updating...' : 'Creating...'}</span>
-              </span>
-            ) : (
-              <span>{selectedPost ? 'Update' : 'Create'}</span>
+        <div className="button-row">
+          <button type="submit" disabled={isLoading} className="submit-button">
+            <span className={isLoading ? 'button-text' : 'button-text-visible'}>
+              {selectedPost ? 'Update' : 'Create'}
+            </span>
+            {isLoading && (
+              <div className="loading-spinner-container">
+                <div className="spinner" />
+              </div>
             )}
           </button>
 
@@ -99,8 +109,7 @@ function PostForm({
                 type="button"
                 onClick={onDelete}
                 disabled={isLoading}
-                className="font-mono px-4 py-2 border border-red-500/20 text-red-400 
-                  hover:bg-red-500/10 disabled:opacity-50 rounded-lg transition-colors text-sm"
+                className="delete-button"
               >
                 Delete
               </button>
@@ -108,8 +117,7 @@ function PostForm({
                 type="button"
                 onClick={onCancel}
                 disabled={isLoading}
-                className="font-mono px-4 py-2 border border-white/10 hover:bg-white/5 
-                  rounded-lg transition-colors text-sm text-white/90 disabled:opacity-50"
+                className="cancel-button"
               >
                 Cancel
               </button>

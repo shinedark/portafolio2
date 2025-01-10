@@ -11,14 +11,13 @@ const ContributionGrid = () => {
     const fetchCommitHistory = async () => {
       try {
         setIsLoading(true)
-        const owner = 'shinedark'
-        const repo = 'portafolio2'
+        const username = 'shinedark'
         const response = await fetch(
-          `https://api.github.com/repos/${owner}/${repo}/commits?since=${START_DATE.toISOString()}&per_page=100`,
+          `https://api.github.com/search/commits?q=author:${username}+author-date:>=${START_DATE.toISOString()}`,
           {
             headers: {
               Authorization: `token ${process.env.REACT_APP_GITHUB_TOKEN}`,
-              Accept: 'application/vnd.github.v3+json',
+              Accept: 'application/vnd.github.cloak-preview+json',
             },
           },
         )
@@ -27,19 +26,23 @@ const ContributionGrid = () => {
           throw new Error('Failed to fetch commit history')
         }
 
-        const commits = await response.json()
+        const { items: commits } = await response.json()
         const commitMap = {}
 
-        commits.forEach((commit) => {
-          const date = commit.commit.author.date.split('T')[0]
+        commits.forEach((item) => {
+          const date = item.commit.author.date.split('T')[0]
+          const repoName = item.repository.name
+
           if (!commitMap[date]) {
             commitMap[date] = {
               count: 1,
-              messages: [commit.commit.message],
+              messages: [`[${repoName}] ${item.commit.message}`],
             }
           } else {
             commitMap[date].count++
-            commitMap[date].messages.push(commit.commit.message)
+            commitMap[date].messages.push(
+              `[${repoName}] ${item.commit.message}`,
+            )
           }
         })
 
