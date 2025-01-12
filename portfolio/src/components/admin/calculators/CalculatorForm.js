@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import './Calculator.css'
 
 const COST_CATEGORIES = {
   equipment: 'Equipment',
@@ -10,10 +11,8 @@ const COST_CATEGORIES = {
 }
 
 const REVENUE_CATEGORIES = {
-  sales: 'Sales',
   services: 'Services',
-  investments: 'Investments',
-  other: 'Other',
+  products: 'Products',
 }
 
 function CalculatorForm({
@@ -24,15 +23,24 @@ function CalculatorForm({
 }) {
   const getInitialFormData = () => ({
     name: '',
-    cost: '',
-    profit: '',
     description: '',
-    categoryId: type === 'costs' ? 'equipment' : 'sales',
+    categoryId: type === 'costs' ? 'equipment' : 'services',
+    // Cost-specific fields
+    cost: '',
     isEssential: false,
     isMonthly: false,
     isAsset: false,
     isNeeded: true,
     link: '',
+    // Revenue-specific fields
+    price: '',
+    priceRange: '',
+    basePrice: '',
+    category: '',
+    type: '',
+    quantity: '',
+    min: '',
+    max: '',
   })
 
   const [formData, setFormData] = useState(getInitialFormData())
@@ -57,18 +65,6 @@ function CalculatorForm({
       setFormData(getInitialFormData())
     }
   }, [type])
-
-  const categories =
-    type === 'costs'
-      ? [
-          'equipment',
-          'subscriptions',
-          'inventory',
-          'farming',
-          'operations',
-          'legal',
-        ]
-      : ['sales', 'services', 'investments', 'other']
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -96,140 +92,169 @@ function CalculatorForm({
   }
 
   return (
-    <div className="bg-white rounded-lg p-8">
-      <h2 className="text-2xl font-mono mb-6">
-        Add {type === 'costs' ? 'Cost' : 'Revenue'} Item
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <select
-              name="categoryId"
-              value={
-                formData.categoryId ||
-                (type === 'costs' ? 'equipment' : 'sales')
-              }
-              onChange={handleChange}
-              required
-              disabled={isLoading}
-              className="w-full p-3 bg-white border border-gray-200 rounded-lg font-mono text-sm focus:outline-none focus:border-gray-400 transition-colors"
-            >
-              <option value="">SELECT CATEGORY</option>
-              {categories.map((category) => (
-                <option key={category} value={category} className="uppercase">
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <input
-              type="text"
-              name="name"
-              value={formData.name || ''}
-              onChange={handleChange}
-              required
-              disabled={isLoading}
-              placeholder="NAME"
-              className="w-full p-3 bg-white border border-gray-200 rounded-lg font-mono text-sm focus:outline-none focus:border-gray-400 transition-colors uppercase"
-            />
-          </div>
+    <div className="calculator-form">
+      <h2>Add {type === 'costs' ? 'Cost' : 'Revenue'} Item</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-grid">
+          <select
+            name="categoryId"
+            value={formData.categoryId}
+            onChange={handleChange}
+            required
+            disabled={isLoading}
+            className="form-select"
+          >
+            {Object.entries(
+              type === 'costs' ? COST_CATEGORIES : REVENUE_CATEGORIES,
+            ).map(([key, label]) => (
+              <option key={key} value={key}>
+                {label}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            placeholder="NAME"
+            className="form-input"
+          />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
+        {type === 'costs' && (
+          <>
+            <div className="form-grid">
+              <input
+                type="number"
+                name="cost"
+                value={formData.cost}
+                onChange={handleChange}
+                required
+                placeholder="COST"
+                className="form-input"
+              />
+              <input
+                type="url"
+                name="link"
+                value={formData.link}
+                onChange={handleChange}
+                placeholder="LINK (OPTIONAL)"
+                className="form-input"
+              />
+            </div>
+            <div className="form-grid">
+              <div className="checkbox-grid">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="isEssential"
+                    checked={formData.isEssential}
+                    onChange={handleChange}
+                  />
+                  ESSENTIAL
+                </label>
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="isMonthly"
+                    checked={formData.isMonthly}
+                    onChange={handleChange}
+                  />
+                  MONTHLY
+                </label>
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="isAsset"
+                    checked={formData.isAsset}
+                    onChange={handleChange}
+                  />
+                  ASSET
+                </label>
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="isNeeded"
+                    checked={formData.isNeeded}
+                    onChange={handleChange}
+                  />
+                  NEEDED
+                </label>
+              </div>
+            </div>
+          </>
+        )}
+
+        {type === 'revenue' && (
+          <div className="form-grid">
             <input
               type="number"
-              name={type === 'costs' ? 'cost' : 'profit'}
-              value={
-                type === 'costs' ? formData.cost || '' : formData.profit || ''
-              }
+              name="price"
+              value={formData.price}
               onChange={handleChange}
-              required
-              disabled={isLoading}
-              placeholder={type === 'costs' ? 'COST' : 'PROFIT'}
-              step="0.01"
-              min="0"
-              className="w-full p-3 bg-white border border-gray-200 rounded-lg font-mono text-sm focus:outline-none focus:border-gray-400 transition-colors uppercase"
+              placeholder="PRICE"
+              className="form-input"
             />
-          </div>
-          <div>
             <input
-              type="url"
-              name="link"
-              value={formData.link || ''}
+              type="text"
+              name="priceRange"
+              value={formData.priceRange}
               onChange={handleChange}
-              disabled={isLoading}
-              placeholder="LINK (OPTIONAL)"
-              className="w-full p-3 bg-white border border-gray-200 rounded-lg font-mono text-sm focus:outline-none focus:border-gray-400 transition-colors uppercase"
+              placeholder="PRICE RANGE"
+              className="form-input"
             />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center gap-2">
             <input
-              type="checkbox"
-              name="isEssential"
-              checked={formData.isEssential || false}
+              type="number"
+              name="basePrice"
+              value={formData.basePrice}
               onChange={handleChange}
-              disabled={isLoading}
-              className="w-4 h-4 border-gray-300 rounded"
+              placeholder="BASE PRICE"
+              className="form-input"
             />
-            <span className="font-mono text-sm uppercase">ESSENTIAL</span>
-          </div>
-          <div className="flex items-center gap-2">
             <input
-              type="checkbox"
-              name="isMonthly"
-              checked={formData.isMonthly || false}
+              type="number"
+              name="quantity"
+              value={formData.quantity}
               onChange={handleChange}
-              disabled={isLoading}
-              className="w-4 h-4 border-gray-300 rounded"
+              placeholder="QUANTITY"
+              className="form-input"
             />
-            <span className="font-mono text-sm uppercase">MONTHLY</span>
-          </div>
-          <div className="flex items-center gap-2">
             <input
-              type="checkbox"
-              name="isAsset"
-              checked={formData.isAsset || false}
+              type="number"
+              name="min"
+              value={formData.min}
               onChange={handleChange}
-              disabled={isLoading}
-              className="w-4 h-4 border-gray-300 rounded"
+              placeholder="MIN"
+              className="form-input"
             />
-            <span className="font-mono text-sm uppercase">ASSET</span>
-          </div>
-          <div className="flex items-center gap-2">
             <input
-              type="checkbox"
-              name="isNeeded"
-              checked={formData.isNeeded || false}
+              type="number"
+              name="max"
+              value={formData.max}
               onChange={handleChange}
-              disabled={isLoading}
-              className="w-4 h-4 border-gray-300 rounded"
+              placeholder="MAX"
+              className="form-input"
             />
-            <span className="font-mono text-sm uppercase">NEED</span>
           </div>
-        </div>
+        )}
 
         <textarea
           name="description"
-          value={formData.description || ''}
+          value={formData.description}
           onChange={handleChange}
-          disabled={isLoading}
-          placeholder="Description"
+          placeholder="DESCRIPTION"
           rows={3}
-          className="w-full p-3 bg-white border border-gray-200 rounded-lg font-mono text-sm focus:outline-none focus:border-gray-400 transition-colors resize-none"
+          className="form-textarea"
         />
 
-        <div className="flex gap-4">
+        <div className="button-group">
           {editingItem && (
             <button
               type="button"
               onClick={() => setFormData(getInitialFormData())}
-              disabled={isLoading}
-              className="flex-1 p-3 bg-gray-100 hover:bg-gray-200 rounded-lg font-mono text-sm uppercase transition-colors"
+              className="button button-secondary"
             >
               CANCEL
             </button>
@@ -237,15 +262,17 @@ function CalculatorForm({
           <button
             type="submit"
             disabled={isLoading}
-            className="flex-1 p-3 bg-black text-white hover:bg-gray-900 rounded-lg font-mono text-sm uppercase transition-colors"
+            className="button button-primary"
           >
             {isLoading ? (
-              <span className="flex items-center justify-center gap-2">
-                <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+              <span className="button-loading">
+                <div className="spinner"></div>
                 <span>{editingItem ? 'UPDATING...' : 'ADDING...'}</span>
               </span>
             ) : (
-              <span>ADD {type === 'costs' ? 'COST' : 'REVENUE'} ITEM</span>
+              <span>
+                {editingItem ? 'UPDATE' : 'ADD'} {type.toUpperCase()} ITEM
+              </span>
             )}
           </button>
         </div>

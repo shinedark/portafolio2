@@ -17,6 +17,7 @@ import Invest from './components/routes/Invest'
 import AdminRoute from './components/routes/AdminRoute'
 import { AuthProvider, useAuth } from './components/auth/AuthContext'
 import Subscribe from './components/common/Subscribe'
+import Instagram from './components/common/Instagram'
 import planetariaRadioImage from './pictures/pr.png'
 import sdm from './pictures/sdm.png'
 import mmt from './pictures/mmt.png'
@@ -271,6 +272,8 @@ function App() {
                 {activeRoute === 'invest' && <Invest />}
                 {activeRoute === 'admin' && <AdminRoute />}
               </RouteContainer>
+              <br />
+              <Instagram />
               <br />
               <Subscribe />
               <br />

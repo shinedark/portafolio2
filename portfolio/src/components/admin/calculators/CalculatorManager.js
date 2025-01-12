@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { apiCall } from '../../../utils/api'
 import CalculatorForm from './CalculatorForm'
+import './Calculator.css'
 
 function CalculatorManager() {
   const [costs, setCosts] = useState({})
@@ -17,8 +18,10 @@ function CalculatorManager() {
         apiCall('/api/calculator/costs'),
         apiCall('/api/calculator/revenue'),
       ])
-      setCosts(costsData.data.categories)
-      setRevenue(revenueData.data.categories)
+
+      // Access categories directly from the response
+      setCosts(costsData.categories || {})
+      setRevenue(revenueData.categories || {})
     } catch (error) {
       setError('Failed to fetch calculator data')
       console.error('Error fetching calculator data:', error)
@@ -142,34 +145,22 @@ function CalculatorManager() {
   }, [activeTab])
 
   return (
-    <div className="space-y-8">
+    <div className="calculator-container">
       {/* Tabs */}
-      <div className="flex gap-4 border-b border-white/10">
+      <div className="calculator-tabs">
         <button
           onClick={() => setActiveTab('costs')}
-          className={`font-mono text-sm pb-2 px-1 transition-colors relative ${
-            activeTab === 'costs'
-              ? 'text-white/90'
-              : 'text-white/40 hover:text-white/60'
-          }`}
+          className={`calculator-tab ${activeTab === 'costs' ? 'active' : ''}`}
         >
           Costs
-          {activeTab === 'costs' && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/90"></div>
-          )}
         </button>
         <button
           onClick={() => setActiveTab('revenue')}
-          className={`font-mono text-sm pb-2 px-1 transition-colors relative ${
-            activeTab === 'revenue'
-              ? 'text-white/90'
-              : 'text-white/40 hover:text-white/60'
+          className={`calculator-tab ${
+            activeTab === 'revenue' ? 'active' : ''
           }`}
         >
           Revenue
-          {activeTab === 'revenue' && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/90"></div>
-          )}
         </button>
       </div>
 
@@ -182,65 +173,48 @@ function CalculatorManager() {
       />
 
       {/* List */}
-      <div>
+      <div className="item-list">
         {Object.entries(activeTab === 'costs' ? costs : revenue).map(
           ([categoryId, category]) => (
-            <div key={categoryId} className="mb-6">
-              <h3 className="font-mono text-sm text-white/90 mb-2 capitalize">
-                {category.name}
-              </h3>
-              <div className="space-y-2">
+            <div key={categoryId} className="item-category">
+              <h3 className="category-title">{category.name}</h3>
+              <div className="item-list">
                 {category.items.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 border border-white/10 rounded-lg hover:bg-white/5 transition-colors group"
-                  >
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <p className="font-mono text-sm text-white/90">
-                          {item.name}
-                        </p>
-                        <p className="font-mono text-sm text-white/40">
-                          $
-                          {(activeTab === 'costs'
-                            ? item.cost
-                            : item.profit
-                          ).toFixed(2)}
-                        </p>
-                      </div>
-                      {item.description && (
-                        <p className="font-mono text-xs text-white/40 mt-1">
-                          {item.description}
+                  <div key={index} className="item-card">
+                    <div className="item-details">
+                      <p className="item-name">{item.name}</p>
+                      {activeTab === 'costs' ? (
+                        <p className="item-price">${item.cost.toFixed(2)}</p>
+                      ) : (
+                        <p className="item-price">
+                          {item.price
+                            ? `$${item.price.toFixed(2)}`
+                            : item.priceRange}
                         </p>
                       )}
-                      <div className="flex gap-2 mt-2">
+                      {item.description && (
+                        <p className="item-description">{item.description}</p>
+                      )}
+                      <div className="item-tags">
                         {item.isEssential && (
-                          <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400">
-                            Essential
-                          </span>
+                          <span className="tag tag-essential">Essential</span>
                         )}
                         {item.isMonthly && (
-                          <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-400">
-                            Monthly
-                          </span>
+                          <span className="tag tag-monthly">Monthly</span>
                         )}
                         {item.isAsset && (
-                          <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-green-500/10 text-green-400">
-                            Asset
-                          </span>
+                          <span className="tag tag-asset">Asset</span>
                         )}
                         {!item.isNeeded && (
-                          <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-yellow-500/10 text-yellow-400">
-                            Optional
-                          </span>
+                          <span className="tag tag-optional">Optional</span>
                         )}
                       </div>
                     </div>
-                    <div className="flex gap-2 ml-4">
+                    <div className="item-actions">
                       <button
                         onClick={() => handleEdit(categoryId, index, item)}
                         disabled={isLoading}
-                        className="font-mono text-xs px-2 py-1 text-white/60 opacity-0 group-hover:opacity-100 hover:text-white/90 transition-all"
+                        className="action-button"
                       >
                         Edit
                       </button>
@@ -249,7 +223,7 @@ function CalculatorManager() {
                           handleDeleteItem(categoryId, index, activeTab)
                         }
                         disabled={isLoading}
-                        className="font-mono text-xs px-2 py-1 text-red-400 opacity-0 group-hover:opacity-100 hover:text-red-300 transition-all"
+                        className="action-button action-button-delete"
                       >
                         Delete
                       </button>
@@ -262,11 +236,7 @@ function CalculatorManager() {
         )}
       </div>
 
-      {error && (
-        <div className="font-mono p-3 bg-red-500/5 border border-red-500/10 rounded text-red-400 text-sm text-center">
-          {error}
-        </div>
-      )}
+      {error && <div className="error-message">{error}</div>}
     </div>
   )
 }
