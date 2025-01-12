@@ -3,7 +3,10 @@ import { parseEther, formatEther } from 'ethers'
 import { connectors } from '../../providers/Web3Provider'
 import './Donate.css'
 
-const RECIPIENT_ADDRESS = '0xfB91A0Dba31ba4d042886C2A0b3AA23BFb23F196'
+const RECIPIENT_ADDRESS = process.env.REACT_APP_RECIPIENT_ADDRESS
+if (!RECIPIENT_ADDRESS) {
+  throw new Error('REACT_APP_RECIPIENT_ADDRESS environment variable is not set')
+}
 
 // Supported chains
 const SUPPORTED_CHAINS = {
