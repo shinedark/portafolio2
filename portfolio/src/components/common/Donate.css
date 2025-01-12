@@ -1,0 +1,248 @@
+.donate-container {
+  padding: 2rem;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid #000000;
+  max-width: 400px;
+  margin: 2rem auto;
+  font-family: 'Major Mono Display', monospace;
+  position: relative;
+}
+
+.connect-button,
+.donate-button,
+.disconnect-button {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  background: transparent;
+  color: #000000;
+  font-family: 'Major Mono Display', monospace;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.connect-button:hover,
+.donate-button:hover,
+.disconnect-button:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+.connect-button:disabled,
+.donate-button:disabled {
+  background: transparent;
+  border: 1px solid #ccc;
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.wallet-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.disconnect-button {
+  width: auto;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+}
+
+.donation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.amount-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.amount-input {
+  width: 100%;
+  padding: 12px;
+  padding-right: 50px; /* Make room for ETH label */
+  border: 1px solid #000000;
+  border-radius: 4px;
+  font-family: 'Major Mono Display', monospace;
+  background: transparent;
+  color: #000000;
+  font-size: 1.1rem;
+}
+
+.amount-input:focus {
+  outline: none;
+  border-color: #000000;
+}
+
+.amount-input:invalid {
+  border-color: #ff0000;
+}
+
+.eth-label {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #000000;
+  font-family: 'Major Mono Display', monospace;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.connected-address {
+  font-size: 0.9rem;
+  color: #000000;
+  font-family: 'Major Mono Display', monospace;
+}
+
+.status-message {
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.status-message.success {
+  background: rgba(0, 255, 0, 0.1);
+  border: 1px solid #00ff00;
+  color: #006600;
+}
+
+.status-message.error {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid #ff0000;
+  color: #660000;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .donate-container {
+    padding: 1rem;
+    margin: 1rem auto;
+    width: 100%;
+  }
+
+  .wallet-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .disconnect-button {
+    width: 100%;
+  }
+}
+
+.wallet-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.network-info {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.network-switcher {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.network-switch-button {
+  padding: 8px 16px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  background: transparent;
+  color: #000000;
+  font-family: 'Major Mono Display', monospace;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+}
+
+.network-switch-button:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+.amount-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.balance-info {
+  font-size: 0.8rem;
+  color: #666;
+  font-family: 'Major Mono Display', monospace;
+  margin-top: 0.25rem;
+}
+
+.wallet-options {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 1rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.wallet-option-button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 12px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  background: transparent;
+  color: #000000;
+  font-family: 'Major Mono Display', monospace;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.wallet-option-button:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+.wallet-icon {
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .wallet-options {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 320px;
+    background: white;
+  }
+}
