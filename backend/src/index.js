@@ -10,6 +10,7 @@ import { errorHandler } from './middleware/errorHandler.js'
 import authRoutes from './routes/auth.js'
 import calculatorRoutes from './routes/calculator.js'
 import contributionRoutes from './routes/contribution.js'
+import subscriberRoutes from './routes/subscriberRoutes.js'
 import { initAdmin } from './utils/initAdmin.js'
 
 const app = express()
@@ -50,6 +51,7 @@ app.use(limiter)
 app.use('/api/auth', authRoutes)
 app.use('/api/calculator', calculatorRoutes)
 app.use('/api/contributions', contributionRoutes)
+app.use('/api/subscribers', subscriberRoutes)
 
 // Error handling
 app.use(errorHandler)
