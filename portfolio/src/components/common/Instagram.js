@@ -37,6 +37,27 @@ const Instagram = () => {
     fetchInstagramPosts()
   }, [])
 
+  const handleVideoPlay = async (event) => {
+    try {
+      const playPromise = event.target.play()
+      if (playPromise !== undefined) {
+        await playPromise
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        console.error('Video playback error:', err)
+      }
+    }
+  }
+
+  const handleVideoPause = (event) => {
+    event.target.pause()
+  }
+
+  const handleVideoClick = (permalink) => {
+    window.open(permalink, '_blank', 'noopener,noreferrer')
+  }
+
   if (loading) {
     return (
       <div className="instagram-container loading">
@@ -54,22 +75,27 @@ const Instagram = () => {
       <div className="instagram-grid">
         {posts.slice(0, 18).map((post) => (
           <div key={post.id} className="instagram-post">
-            <a href={post.permalink} target="_blank" rel="noopener noreferrer">
-              {post.media_type === 'VIDEO' ? (
-                <video
-                  src={post.media_url}
-                  poster={post.thumbnail_url}
-                  muted
-                  loop
-                  playsInline
-                  onClick={(e) => e.preventDefault()}
-                  onMouseOver={(e) => e.target.play()}
-                  onMouseOut={(e) => e.target.pause()}
-                />
-              ) : (
+            {post.media_type === 'VIDEO' ? (
+              <video
+                src={post.media_url}
+                poster={post.thumbnail_url}
+                muted
+                loop
+                playsInline
+                onClick={() => handleVideoClick(post.permalink)}
+                onMouseOver={handleVideoPlay}
+                onMouseOut={handleVideoPause}
+                style={{ cursor: 'pointer' }}
+              />
+            ) : (
+              <a
+                href="https://www.instagram.com/shinedarkmusic/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <img src={post.media_url} alt="Instagram post" />
-              )}
-            </a>
+              </a>
+            )}
           </div>
         ))}
       </div>
