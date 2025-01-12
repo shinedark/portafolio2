@@ -309,7 +309,7 @@ function App() {
                         </div>
                       ) : (
                         <div className="projects-h1">
-                          <h1>LegacyProjects</h1>
+                          <h1 className="projects-h1">LegacyProjects</h1>
                         </div>
                       )}
                       <TechStack
@@ -331,7 +331,7 @@ function App() {
             </div>
           </main>
           <footer className="footer">
-            <p>© 2024 SHINE DARK. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} SHINE DARK. All rights reserved.</p>
             <p>
               <a
                 href="https://x.com/ShineDarkmusic"
