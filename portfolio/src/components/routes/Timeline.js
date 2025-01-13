@@ -41,8 +41,9 @@ const Timeline = () => {
             Opacity Network to engage fans with the project's progress.
           </li>
           <li>
-            Health Integration: Document the integration of personal health
-            practices into the project, focusing on diet and medical marijuana.
+            Health and Plant Use: Document how personal health practices
+            integrate with the project, focusing on diet and the use of plants
+            for food and clothing.
           </li>
         </ul>
       </div>
@@ -54,11 +55,12 @@ const Timeline = () => {
           <li>
             Construction Phase: Begin the physical transformation of the
             warehouse into a living and working space, including the
-            installation of the modular home.
+            installation of sustainable living areas.
           </li>
           <li>
             Hydroponic Setup: Start setting up the hydroponic farming system,
-            focusing on initial testing and training.
+            focusing on initial testing and training for growing plants that
+            will be used for both food and clothing materials.
           </li>
         </ul>
         <h4>Q3 - Q4:</h4>
@@ -69,8 +71,8 @@ const Timeline = () => {
           </li>
           <li>
             Sound Therapy Research: Initiate experiments on how music affects
-            plant growth, particularly with medical marijuana, in the new
-            controlled environment.
+            plant growth, documenting the process for future educational
+            content.
           </li>
         </ul>
       </div>

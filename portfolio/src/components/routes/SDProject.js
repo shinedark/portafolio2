@@ -37,8 +37,8 @@ const SDProject = () => {
       <div className="route-section">
         <h3>Community Engagement</h3>
         <p>
-          Social Media Rewards: We are looking into utilizing Opacity Network to
-          reward fans for engaging with our records on social media, creating a
+          Social Media Rewards: We are exploring the use of Opacity Network to
+          reward fans for engaging with our records on social media, fostering a
           community-driven approach to music sharing.
         </p>
       </div>
@@ -47,16 +47,18 @@ const SDProject = () => {
         <h3>Sustainability Commitment</h3>
         <ul>
           <li>
-            <strong>Carbon Footprint:</strong> We acknowledge every interaction
-            with our music creates a carbon footprint, which we aim to offset
-            through our innovative steel building farm project.
+            <strong>Carbon Footprint:</strong> We recognize that every
+            interaction with our music has an environmental impact, which we aim
+            to mitigate through innovative projects like our steel building
+            farm.
           </li>
           <li>
             <strong>The Project:</strong> Transforming a warehouse in Colorado
             into a multifunctional space for living, working, and hydroponic
-            farming. This space will also serve as a lab to study how music
-            influences plant growth, particularly for medical marijuana,
-            promoting Where Music Cultivates Sustainability.
+            farming, where we study how music influences plant growth. Here, we
+            grow plants that serve dual purposes - as a source of food and
+            medicine for me, and as a reusable resource for broader
+            sustainability efforts.
           </li>
         </ul>
       </div>
@@ -64,26 +66,26 @@ const SDProject = () => {
       <div className="route-section">
         <h3>Health and Innovation</h3>
         <p>
-          Personal Journey: My health requires a strict diet and medical
-          marijuana, driving the project's focus on integrating personal health
-          with environmental sustainability.
+          Personal Journey: My health needs have driven this project, where
+          plants are not only a source of nourishment and healing for me but are
+          also central to our ethos of reuse and sustainability.
         </p>
       </div>
 
       <div className="route-section">
         <h3>Media and Promotion</h3>
         <p>
-          We'll use our media presence to document and promote this journey,
-          engaging our audience through social media to share insights on
-          sustainability, music, and health.
+          We will document and share this journey via our media channels,
+          engaging our audience with updates on sustainability, health, and
+          music.
         </p>
       </div>
 
       <div className="route-section">
         <h3>Get Involved</h3>
         <p>
-          Join us at shinedark.dev to follow this groundbreaking journey. Let's
-          grow, create, and inspire together.
+          Join us at shinedark.dev to follow this pioneering journey. Together,
+          let's grow, create, and inspire a sustainable future.
         </p>
       </div>
     </div>
