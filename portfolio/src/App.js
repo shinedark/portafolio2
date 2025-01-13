@@ -15,9 +15,10 @@ import Timeline from './components/routes/Timeline'
 import Development from './components/routes/Development'
 import Invest from './components/routes/Invest'
 import AdminRoute from './components/routes/AdminRoute'
-import { AuthProvider, useAuth } from './components/auth/AuthContext'
+import { AuthProvider } from './components/auth/AuthContext'
 import Subscribe from './components/common/Subscribe'
 import Instagram from './components/common/Instagram'
+import Twitch from './components/common/Twitch'
 import planetariaRadioImage from './pictures/pr.png'
 import sdm from './pictures/sdm.png'
 import mmt from './pictures/mmt.png'
@@ -26,7 +27,7 @@ import nms from './pictures/nms.png'
 import vid from './pictures/vid.png'
 import guide from './pictures/guide.png'
 import './App.css'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Web3ProviderWrapper from './providers/Web3Provider'
 import Donate from './components/common/Donate'
 import { BrowserProvider } from 'ethers'
@@ -282,6 +283,8 @@ function App() {
                 </RouteContainer>
                 <br />
                 <Donate />
+                <br />
+                <Twitch />
                 <br />
                 <Instagram />
                 <br />
