@@ -83,16 +83,27 @@ const Twitch = () => {
   useEffect(() => {
     console.log('Initial useEffect running...')
 
-    // Check for auth callback
-    const hash = window.location.hash
-    if (hash) {
-      const params = new URLSearchParams(hash.substring(1))
+    // Check for auth callback and handle # more robustly
+    const fullHash = window.location.hash
+    if (fullHash) {
+      // Remove the initial # if it exists alone
+      if (fullHash === '#') {
+        window.history.replaceState(null, null, window.location.pathname)
+        return
+      }
+
+      // Handle auth callback parameters
+      const hashContent = fullHash.substring(1) // Remove the first #
+      const params = new URLSearchParams(hashContent)
       const token = params.get('access_token')
+
       if (token) {
         console.log('Found token in URL')
         localStorage.setItem('twitch_access_token', token)
         setAccessToken(token)
-        window.location.hash = ''
+        // Clean up URL without losing the base #
+        window.history.replaceState(null, null, '/#')
+        checkStreamStatus(token)
         return
       }
     }
