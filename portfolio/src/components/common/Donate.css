@@ -235,6 +235,12 @@
   font-size: 1.2rem;
 }
 
+.donate-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
 @media (max-width: 768px) {
   .wallet-options {
     position: fixed;

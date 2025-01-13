@@ -14,9 +14,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    justify-content: center;
+    justify-content: space-evenly;
     max-height: calc((150px * 3) + (1rem * 2)); /* Height for 3 rows + 2 gaps */
-    overflow: hidden;
+    overflow: scroll;
+
 }
 
 .instagram-post {

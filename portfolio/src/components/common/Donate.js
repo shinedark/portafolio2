@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { parseEther, formatEther } from 'ethers'
 import { connectors } from '../../providers/Web3Provider'
 import './Donate.css'
@@ -18,6 +18,26 @@ const SUPPORTED_CHAINS = {
 function Donate() {
   const [selectedConnector, setSelectedConnector] = useState(null)
   const [showWalletOptions, setShowWalletOptions] = useState(false)
+
+  // Add ref for the modal
+  const modalRef = useRef(null)
+
+  // Add useEffect for click outside handling
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setShowWalletOptions(false)
+      }
+    }
+
+    if (showWalletOptions) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showWalletOptions])
 
   // Get hooks for selected connector
   const hooks = selectedConnector
@@ -51,20 +71,117 @@ function Donate() {
     return `${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`
   }
 
+  // Add new state for connection status
+  const [connectionPending, setConnectionPending] = useState(false)
+
   const handleWalletSelect = async (connectorKey) => {
     try {
+      setConnectionPending(true)
       setError(null)
-      setSelectedConnector(connectorKey)
+
       const connector = connectors[connectorKey].connector
+
+      // Attempt to connect
       await connector.activate()
-      setShowWalletOptions(false)
+
+      // Get provider and accounts after successful connection
+      let provider
+      let accounts
+
+      try {
+        if (window.ethereum) {
+          provider = window.ethereum
+          accounts = await window.ethereum.request({ method: 'eth_accounts' })
+        } else if (connector.provider) {
+          provider = connector.provider
+          accounts = await provider.request({ method: 'eth_accounts' })
+        }
+
+        if (!accounts?.length) {
+          throw new Error('No accounts found')
+        }
+
+        // If we get here, connection was successful
+        localStorage.setItem('lastConnector', connectorKey)
+        setSelectedConnector(connectorKey)
+        setShowWalletOptions(false)
+
+        // Subscribe to events
+        provider.on('accountsChanged', handleAccountsChanged)
+        provider.on('chainChanged', handleChainChanged)
+        provider.on('disconnect', handleDisconnect)
+
+        // Request signature after successful connection
+        try {
+          const signer = provider.getSigner?.() || provider
+          const message = `Welcome to SHINE DARK!\n\nThis signature is used to verify that you are the owner of this wallet.\n\nThis will not trigger a blockchain transaction or cost any gas fees.\n\nTimestamp: ${new Date().toISOString()}`
+
+          const signature = await signer.signMessage?.(message)
+          if (signature) {
+            setSignatureStatus(
+              'Successfully connected and verified wallet ownership!',
+            )
+          }
+        } catch (signError) {
+          // If signature fails, we still want to keep the connection
+          console.warn('Signature failed:', signError)
+          setSignatureStatus('Connected without signature verification')
+        }
+      } catch (error) {
+        // If anything fails after initial connection, cleanup
+        await handleDisconnect()
+        throw error
+      }
     } catch (error) {
-      console.error('Error connecting:', error)
-      setError('Failed to connect wallet. Please try again.')
+      console.error('Connection error:', error)
+      let errorMessage = 'Failed to connect wallet.'
+
+      if (error.code === 4001) {
+        errorMessage = 'Connection rejected by user'
+      } else if (error.code === -32002) {
+        errorMessage = 'Please check your wallet - connection already pending'
+      } else if (error.message?.includes('No accounts found')) {
+        errorMessage = 'Please unlock your wallet and try again'
+      }
+
+      setError(errorMessage)
+      await handleDisconnect()
+    } finally {
+      setConnectionPending(false)
     }
   }
 
+  // Handle account changes
+  const handleAccountsChanged = (accounts) => {
+    if (accounts.length === 0) {
+      // User disconnected their wallet
+      handleDisconnect()
+    } else {
+      // Update the current account
+      // This will trigger a re-render through your web3-react hooks
+    }
+  }
+
+  // Handle chain changes
+  const handleChainChanged = (chainId) => {
+    // Force a page refresh when chain changes
+    // This is recommended by MetaMask
+    window.location.reload()
+  }
+
+  // Cleanup listeners on unmount
+  useEffect(() => {
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged)
+        window.ethereum.removeListener('chainChanged', handleChainChanged)
+        window.ethereum.removeListener('disconnect', handleDisconnect)
+      }
+    }
+  }, [])
+
   const handleConnect = () => {
+    setError(null) // Clear any previous errors
     setShowWalletOptions(true)
   }
 
@@ -111,15 +228,6 @@ function Donate() {
     }
   }, [chainId, isActive, isChainSupported])
 
-  // Try to connect eagerly with MetaMask if available
-  useEffect(() => {
-    if (connectors.metaMask?.connector) {
-      connectors.metaMask.connector.connectEagerly().catch(() => {
-        console.debug('Failed to connect eagerly to metamask')
-      })
-    }
-  }, [])
-
   // Handle chain switching
   const switchChain = async (targetChainId) => {
     try {
@@ -160,25 +268,24 @@ function Donate() {
     }
   }
 
-  const getBalanceDisplay = async () => {
-    if (!isActive || !provider || !accounts?.[0]) return null
-    try {
-      const balance = await provider.getBalance(accounts[0])
-      const formattedBalance = formatEther(balance.toString())
-      // Format to max 4 decimal places and remove trailing zeros
-      const displayBalance = Number(formattedBalance)
-        .toFixed(4)
-        .replace(/\.?0+$/, '')
-      return `Balance: ${displayBalance} ETH`
-    } catch (error) {
-      console.error('Error getting balance:', error)
-      return null
-    }
-  }
-
   const [balance, setBalance] = useState(null)
 
   useEffect(() => {
+    const getBalanceDisplay = async () => {
+      if (!isActive || !provider || !accounts?.[0]) return null
+      try {
+        const balance = await provider.getBalance(accounts[0])
+        const formattedBalance = formatEther(balance.toString())
+        const displayBalance = Number(formattedBalance)
+          .toFixed(4)
+          .replace(/\.?0+$/, '')
+        return `Balance: ${displayBalance} ETH`
+      } catch (error) {
+        console.error('Error getting balance:', error)
+        return null
+      }
+    }
+
     if (isActive && provider && accounts?.[0]) {
       getBalanceDisplay().then(setBalance)
     } else {
@@ -278,25 +385,36 @@ function Donate() {
 
   return (
     <div className="donate-container">
+      <div className="donate-header">
+        <h2>Donate</h2>
+      </div>
       {!isActive ? (
         <>
           <button
             onClick={handleConnect}
-            disabled={isActivating}
+            disabled={connectionPending || isActivating}
             className="connect-button"
           >
-            {isActivating ? 'Connecting...' : 'Connect Wallet'}
+            {connectionPending
+              ? 'Connecting...'
+              : isActivating
+              ? 'Activating...'
+              : 'Connect Wallet'}
           </button>
           {showWalletOptions && (
-            <div className="wallet-options">
+            <div className="wallet-options" ref={modalRef}>
               {Object.entries(connectors).map(([key, { name, icon }]) => (
                 <button
                   key={key}
                   onClick={() => handleWalletSelect(key)}
+                  disabled={connectionPending}
                   className="wallet-option-button"
                 >
                   <span className="wallet-icon">{icon}</span>
                   {name}
+                  {connectionPending && key === selectedConnector && (
+                    <span className="connecting-indicator">Connecting...</span>
+                  )}
                 </button>
               ))}
             </div>
