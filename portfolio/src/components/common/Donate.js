@@ -166,9 +166,21 @@ function Donate() {
 
   // Handle chain changes
   const handleChainChanged = (chainId) => {
-    // Force a page refresh when chain changes
-    // This is recommended by MetaMask
-    window.location.reload()
+    // Convert chainId from hex to decimal if needed
+    const newChainId =
+      typeof chainId === 'string' ? parseInt(chainId, 16) : chainId
+
+    // Update the chain state through the connector
+    if (selectedConnector) {
+      connectors[selectedConnector].connector
+        .activate(newChainId)
+        .catch((error) => {
+          console.error('Error updating chain:', error)
+          setError(
+            'Failed to switch network. Please try manually in your wallet.',
+          )
+        })
+    }
   }
 
   // Cleanup listeners on unmount
