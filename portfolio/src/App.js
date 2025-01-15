@@ -268,7 +268,7 @@ function App() {
             </header>
             <main className="main">
               <PrototypeShowcase />
-
+              <Donate />
               <div className="content-wrapper">
                 <RouteContainer
                   activeRoute={activeRoute}
@@ -281,8 +281,6 @@ function App() {
                   {activeRoute === 'invest' && <Invest />}
                   {activeRoute === 'admin' && <AdminRoute />}
                 </RouteContainer>
-                <br />
-                <Donate />
                 <br />
                 <Twitch />
                 <br />

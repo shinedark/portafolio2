@@ -12,7 +12,9 @@ if (!RECIPIENT_ADDRESS) {
 const SUPPORTED_CHAINS = {
   1: 'Ethereum Mainnet',
   5: 'Goerli Testnet',
+  10: 'Optimism Mainnet',
   11155111: 'Sepolia',
+  59144: 'Linea Mainnet',
 }
 
 function Donate() {
@@ -102,7 +104,7 @@ function Donate() {
         }
 
         // If we get here, connection was successful
-        localStorage.setItem('lastConnector', connectorKey)
+        localStorage.setItem('connected', connectorKey)
         setSelectedConnector(connectorKey)
         setShowWalletOptions(false)
 
@@ -387,6 +389,7 @@ function Donate() {
     <div className="donate-container">
       <div className="donate-header">
         <h2>Donate</h2>
+        <p>to continue the vision</p>
       </div>
       {!isActive ? (
         <>
@@ -468,7 +471,7 @@ function Donate() {
             }
             className="donate-button"
           >
-            {loading ? 'Processing...' : 'Donate'}
+            {loading ? 'Processing...' : 'Donate to continue the vision'}
           </button>
 
           {signatureStatus && (

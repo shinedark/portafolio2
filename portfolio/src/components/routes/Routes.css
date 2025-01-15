@@ -94,6 +94,15 @@ p, ol, ul, li ,div{
   color: #666;
 }
 
+.xpost {
+  background-image: url('./../../pictures/xpost.jpg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 300px;
+  width: 100%;
+}
+
 /* Tech grid styles */
 .tech-grid {
   display: grid;

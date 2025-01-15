@@ -223,7 +223,7 @@ const ProjectCostCalculator = () => {
           />
         )}
       </div>
-
+      {/* 
       <div
         className={`calculator-section ${showRevenue ? 'expanded' : ''}`}
         onClick={() => setShowRevenue(!showRevenue)}
@@ -247,7 +247,7 @@ const ProjectCostCalculator = () => {
             revenue={revenue}
           />
         )}
-      </div>
+      </div> */}
     </div>
   )
 }
