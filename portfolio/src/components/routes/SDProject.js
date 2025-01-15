@@ -6,7 +6,7 @@ const SDProject = () => {
     <div className="route-page">
       <div className="route-section">
         <h3>Shine Dark Music: Where Music Cultivates Sustainability</h3>
-        <div className="xpost"></div>
+        {/* <div className="xpost"></div> */}
       </div>
       <div className="route-section">
         <p>
