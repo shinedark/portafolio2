@@ -12,24 +12,35 @@ const ContributionGrid = () => {
       try {
         setIsLoading(true)
         const username = 'shinedark'
-        const response = await fetch(
-          `https://api.github.com/search/commits?q=author:${username}+author-date:>=${START_DATE.toISOString()}`,
-          {
-            headers: {
-              Authorization: `token ${process.env.REACT_APP_GITHUB_TOKEN}`,
-              Accept: 'application/vnd.github.cloak-preview+json',
-            },
-          },
-        )
+        let allCommits = []
+        let page = 1
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch commit history')
+        // Keep fetching until we get all commits
+        while (true) {
+          const response = await fetch(
+            `https://api.github.com/search/commits?q=author:${username}+author-date:>=${START_DATE.toISOString()}&page=${page}&per_page=100`,
+            {
+              headers: {
+                Authorization: `token ${process.env.REACT_APP_GITHUB_TOKEN}`,
+                Accept: 'application/vnd.github.cloak-preview+json',
+              },
+            },
+          )
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch commit history')
+          }
+
+          const { items: commits, total_count } = await response.json()
+          if (!commits || commits.length === 0) break
+
+          allCommits = [...allCommits, ...commits]
+          if (allCommits.length >= total_count) break
+          page++
         }
 
-        const { items: commits } = await response.json()
         const commitMap = {}
-
-        commits.forEach((item) => {
+        allCommits.forEach((item) => {
           const date = item.commit.author.date.split('T')[0]
           const repoName = item.repository.name
 

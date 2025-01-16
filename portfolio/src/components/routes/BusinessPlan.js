@@ -9,7 +9,7 @@ const BusinessPlan = () => {
         <h3>Business Plan for Shine Dark Music</h3>
       </div>
 
-      <ProjectCostCalculator />
+      {/* <ProjectCostCalculator /> */}
       <div className="route-section">
         <h3>Company Description</h3>
         <ul>
