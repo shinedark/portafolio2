@@ -268,7 +268,7 @@ function App() {
             </header>
             <main className="main">
               <PrototypeShowcase />
-              <Donate />
+              {/* <Donate /> */}
               <div className="content-wrapper">
                 <RouteContainer
                   activeRoute={activeRoute}
