@@ -15,6 +15,7 @@ import Timeline from './components/routes/Timeline'
 import Development from './components/routes/Development'
 import Invest from './components/routes/Invest'
 import AdminRoute from './components/routes/AdminRoute'
+
 import { AuthProvider } from './components/auth/AuthContext'
 import Subscribe from './components/common/Subscribe'
 import Instagram from './components/common/Instagram'
@@ -270,7 +271,7 @@ function App() {
               <PrototypeShowcase />
               {/* <Donate /> */}
               <div className="content-wrapper">
-                <RouteContainer
+                {/* <RouteContainer
                   activeRoute={activeRoute}
                   onRouteChange={setActiveRoute}
                 >
@@ -280,7 +281,7 @@ function App() {
                   {activeRoute === 'development' && <Development />}
                   {activeRoute === 'invest' && <Invest />}
                   {activeRoute === 'admin' && <AdminRoute />}
-                </RouteContainer>
+                </RouteContainer> */}
                 <br />
                 <Twitch />
                 <br />
