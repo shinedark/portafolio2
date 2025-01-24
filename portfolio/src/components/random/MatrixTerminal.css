@@ -1,6 +1,6 @@
 .matrix-terminal-container{
     background-image: url('./../../pictures/sddev.gif');
-    background-size: contain;
+    background-size: 40%;
     background-color: #000;
     background-repeat: no-repeat;
     background-position: 0% 0%;
@@ -8,43 +8,30 @@
     height: 450px;
 }
 
-
-/* .matrix-terminal {
-    position: sticky;
-    left: 50vw;
-    top: 25vh;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 300px;
-    font-family: 'Courier New', monospace;
-    box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
-    transform: perspective(180px) rotate3d(66, -27, -11, 10deg);
-} */
-
 .matrix-terminal-animate-initial {
     animation: perspectiveShift 3s ease-in-out;
     position: sticky;
-    left: 50vw;
-    top: 25vh;
+    left: 40vw;
+    right: 10vw;
     border-radius: 8px;
     width: 100%;
-    max-width: 300px;
+    max-width: 50vw;
     font-family: 'Courier New', monospace;
     box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
     transform: perspective(180px) rotate3d(66, -27, -11, 10deg);
 }
 
 .matrix-terminal-animate-continuous {
-    animation: perspectiveShift2 6s ease-in-out infinite;
+    /* animation: perspectiveShift2 9s ease-in-out infinite; */
     position: sticky;
-    left: 50vw;
-    top: 25vh;
+    left: 40vw;
+    right: 10vw;
     border-radius: 8px;
     width: 100%;
-    max-width: 300px;
+    max-width: 50vw;
     font-family: 'Courier New', monospace;
     box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
-    transform: perspective(180px) rotate3d(66, -27, -11, 10deg);
+    transform: perspective(180px) rotate3d(33, -33, -12, 3deg);
 }
 
 .terminal-header {
@@ -115,12 +102,26 @@
 }
 
 .terminal-line {
-    color: #129112;
-    /* margin-bottom: 8px; */
-    font-size: 5px;
-    line-height: 1.4;
-    animation: phosphorFade 1s ease-out;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    display: flex;
+    align-items: center;
+    line-height: 1.2;
+    margin: 2px 0;
+}
+
+.terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #33ff33;
+    font-family: monospace;
+    font-size: 7px;
+    margin-left: 8px;
+    outline: none;
+    padding: 0;
+    text-shadow: 0 0 1px rgba(51, 255, 51, 0.4),
+                 0 0 2px rgba(51, 255, 51, 0.3),
+                 0 0 3px rgba(51, 255, 51, 0.2);
+    animation: textShadow 1.6s infinite;
 }
 
 .prompt {
@@ -132,8 +133,9 @@
 
 .text {
     color: #129112;
-    font-size: 5px;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    font-size: 7px;
+    text-shadow: 0 -23px 4px #FFF, 0 26px 10px #ff0, 0 -22px 24px #ff8000, 0 -18px 40px #F00;
+    animation: textShadowFade 9s ease-in-out infinite;
 }
 
 .terminal-cursor {
@@ -156,7 +158,7 @@
 }
 
 .terminal-content::-webkit-scrollbar {
-    width: 8px;
+    width: 3px;
 }
 
 .terminal-content::-webkit-scrollbar-track {
@@ -195,7 +197,7 @@
 /* Add new perspective shift animation */
 @keyframes perspectiveShift {
     0% {  transform: perspective(180px) rotateX(-9deg); }
-    50% { transform: perspective(3px) rotateX(-232deg); }
+    50% { transform: perspective(3px) rotateX(-180deg); }
     100% { transform: perspective(180px) rotateX(-9deg) }
 } 
 
@@ -204,3 +206,67 @@
     50% { transform: perspective(180px) rotate3d(33, 62, 25, 0deg); }
     100% { transform: perspective(180px) rotate3d(-33, -62, -25, -9deg); }
 } 
+
+@keyframes textShadowFade {
+    0% { 
+        text-shadow: 0 -23px 4px rgba(255, 255, 255, 0), 
+                     0 26px 10px rgba(255, 255, 0, 0), 
+                     0 -22px 24px rgba(255, 128, 0, 0), 
+                     0 -18px 40px rgba(255, 0, 0, 0);
+    }
+    50% {
+        text-shadow: 0 -23px 4px rgba(255, 255, 255, 0.7), 
+                     0 26px 10px rgba(255, 255, 0, 0.7), 
+                     0 -22px 24px rgba(255, 128, 0, 0.7), 
+                     0 -18px 40px rgba(255, 0, 0, 0.7);
+    }
+    100% {
+        text-shadow: 0 -23px 4px rgba(255, 255, 255, 0), 
+                     0 26px 10px rgba(255, 255, 0, 0), 
+                     0 -22px 24px rgba(255, 128, 0, 0), 
+                     0 -18px 40px rgba(255, 0, 0, 0);
+    }
+}
+
+.user-message {
+    color: #129112;
+    font-size: 7px;
+    text-shadow: 0 -23px 4px #FFF, 0 26px 10px #ff0, 0 -22px 24px #ff8000, 0 -18px 40px #F00;
+    animation: textShadowFade 9s ease-in-out infinite;
+}
+
+/* If you don't already have this animation keyframe, add it */
+@keyframes textShadow {
+  0% {
+    text-shadow: 0.4389924193300864px 0 1px rgba(0,30,255,0.5), -0.4389924193300864px 0 1px rgba(255,0,80,0.3), 0 0 3px;
+  }
+  5% {
+    text-shadow: 2.7928974010788217px 0 1px rgba(0,30,255,0.5), -2.7928974010788217px 0 1px rgba(255,0,80,0.3), 0 0 3px;
+  }
+  /* ... you can keep the existing animation keyframes if you already have them ... */
+}
+
+/* Add styles for disabled input during typing */
+.terminal-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.empty-line {
+  height: 1.2em;
+  display: block;
+}
+
+.user-message.success {
+  color: #33ff33;
+  text-shadow: 0 0 1px rgba(51, 255, 51, 0.6),
+               0 0 2px rgba(51, 255, 51, 0.4),
+               0 0 3px rgba(51, 255, 51, 0.3);
+}
+
+.user-message.error {
+  color: #ff3333;
+  text-shadow: 0 0 1px rgba(255, 51, 51, 0.6),
+               0 0 2px rgba(255, 51, 51, 0.4),
+               0 0 3px rgba(255, 51, 51, 0.3);
+}

@@ -59,6 +59,15 @@ const MatrixTerminal = ({ animate }) => {
   const [isAsciiComplete, setIsAsciiComplete] = useState(false)
   const [asciiIndex, setAsciiIndex] = useState(0)
   const [animationState, setAnimationState] = useState(false)
+  const [userInput, setUserInput] = useState('')
+  const [userMessages, setUserMessages] = useState([])
+  const [typingMessage, setTypingMessage] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0)
+  const [displayedMessages, setDisplayedMessages] = useState([])
+  const [isSubscribing, setIsSubscribing] = useState(false)
+  const [subscriptionEmail, setSubscriptionEmail] = useState('')
+  const [subscriptionStatus, setSubscriptionStatus] = useState('')
   // Add ref for scrolling
   const terminalContentRef = useRef(null)
 
@@ -68,7 +77,7 @@ const MatrixTerminal = ({ animate }) => {
       terminalContentRef.current.scrollTop =
         terminalContentRef.current.scrollHeight
     }
-  }, [lines, asciiLines])
+  }, [lines, asciiLines, displayedMessages])
 
   // Add function to fetch commit data
   const fetchCommitHistory = async () => {
@@ -88,7 +97,6 @@ const MatrixTerminal = ({ animate }) => {
             },
           },
         )
-
         if (!response.ok) {
           throw new Error('Failed to fetch commit history')
         }
@@ -100,6 +108,8 @@ const MatrixTerminal = ({ animate }) => {
         if (allCommits.length >= total_count) break
         page++
       }
+
+      // console.log(allCommits)
 
       // Format commits into terminal lines
       const commitLines = allCommits.map(
@@ -143,11 +153,108 @@ const MatrixTerminal = ({ animate }) => {
   }, [asciiIndex, currentIndex, isAsciiComplete, data.length])
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    if (animate) {
       setAnimationState(true)
-    }, 7000)
-    return () => clearTimeout(timer)
-  }, [])
+    } else {
+      setAnimationState(false)
+    }
+  }, [animate])
+
+  const handleInputChange = (e) => {
+    setUserInput(e.target.value)
+  }
+
+  // Add email validation function
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const handleInputSubmit = async (e) => {
+    e.preventDefault()
+    if (userInput.trim()) {
+      const input = userInput.toLowerCase()
+      setUserMessages((prev) => [...prev, userInput])
+      setUserInput('')
+      setIsTyping(true)
+      setTypingMessage('')
+
+      if (input.includes('subscribe') || input.includes('email')) {
+        setIsSubscribing(true)
+        setUserMessages((prev) => [
+          ...prev,
+          'Please enter your email to subscribe:',
+        ])
+      } else if (isSubscribing) {
+        // Validate email before making API call
+        if (!isValidEmail(input)) {
+          setUserMessages((prev) => [
+            ...prev,
+            'Please enter a valid email address.',
+          ])
+          setTypingMessage('')
+          return
+        }
+
+        setSubscriptionEmail(input)
+        try {
+          const response = await fetch(
+            `${process.env.REACT_APP_API_URL}/api/subscribers/subscribe`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email: input }),
+            },
+          )
+
+          const data = await response.json()
+
+          if (!response.ok) {
+            throw new Error(data.message || 'Something went wrong')
+          }
+
+          setUserMessages((prev) => [
+            ...prev,
+            'Thank you for subscribing! You will receive updates about new projects and features.',
+          ])
+          setSubscriptionStatus('success')
+        } catch (error) {
+          setUserMessages((prev) => [
+            ...prev,
+            error.message || 'Something went wrong. Please try again.',
+          ])
+          setSubscriptionStatus('error')
+        } finally {
+          setIsSubscribing(false)
+        }
+      } else {
+        setUserMessages((prev) => [
+          ...prev,
+          'Type "subscribe" to receive updates about new projects and features.',
+        ])
+      }
+
+      setCurrentMessageIndex((prev) => prev + 1)
+    }
+  }
+
+  useEffect(() => {
+    if (isTyping && userMessages.length > displayedMessages.length) {
+      const currentMessage = userMessages[userMessages.length - 1]
+      const timeout = setTimeout(() => {
+        if (typingMessage.length < currentMessage.length) {
+          setTypingMessage(currentMessage.slice(0, typingMessage.length + 1))
+        } else {
+          setIsTyping(false)
+          setDisplayedMessages((prev) => [...prev, currentMessage])
+        }
+      }, 50) // Adjust speed of typing here
+
+      return () => clearTimeout(timeout)
+    }
+  }, [isTyping, typingMessage, userMessages, displayedMessages])
 
   const renderTerminal = () => {
     if (animate) return
@@ -182,7 +289,35 @@ const MatrixTerminal = ({ animate }) => {
               <span className="text">{line}</span>
             </div>
           ))}
-          <div className="terminal-cursor"></div>
+          {displayedMessages.map((message, index) => (
+            <div key={`user-${index}`} className="terminal-line">
+              <span className="prompt">|</span>
+              <span className="text user-message">{message}</span>
+            </div>
+          ))}
+          {isTyping && (
+            <div className="terminal-line">
+              <span className="prompt">$</span>
+              <span className="text user-message">{typingMessage}</span>
+            </div>
+          )}
+          <div className="terminal-line">
+            <span className="prompt">$</span>
+            <input
+              type="text"
+              placeholder="TYPE TO SEE"
+              value={userInput}
+              onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleInputSubmit(e)
+                }
+              }}
+              className="terminal-input"
+              autoFocus
+              disabled={isTyping}
+            />
+          </div>
         </div>
       </div>
     )
