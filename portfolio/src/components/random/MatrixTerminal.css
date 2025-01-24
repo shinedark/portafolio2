@@ -284,7 +284,7 @@
     top: 10vh;
     border-radius: 8px;
     width: 100%;
-    /* max-width: 50vw; */
+    max-width: 85vw;
     font-family: 'Courier New', monospace;
     box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
 
@@ -297,7 +297,7 @@
     right: 10vw;
     border-radius: 8px;
     width: 100%;
-    /* max-width: 50vw; */
+    max-width: 85vw;
     font-family: 'Courier New', monospace;
     box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
 
