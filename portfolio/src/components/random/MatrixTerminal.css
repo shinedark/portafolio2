@@ -270,3 +270,36 @@
                0 0 2px rgba(255, 51, 51, 0.4),
                0 0 3px rgba(255, 51, 51, 0.3);
 }
+
+
+@media (max-width: 668px) {
+  .matrix-terminal-container {
+    background-image: none;
+  }
+  .matrix-terminal-animate-initial {
+
+    position: sticky;
+    left: 40vw;
+    right: 10vw;
+    top: 10vh;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 50vw;
+    font-family: 'Courier New', monospace;
+    box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
+
+}
+
+.matrix-terminal-animate-continuous {
+
+    position: sticky;
+    left: 40vw;
+    right: 10vw;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 50vw;
+    font-family: 'Courier New', monospace;
+    box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
+
+}
+}
