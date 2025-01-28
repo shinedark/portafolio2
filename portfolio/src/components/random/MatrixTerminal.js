@@ -40,7 +40,7 @@ XVXXXXRXYVI==;;;;;;;;;;+i+YIii==+====;;;t+tti+=;::::::;;=itVXXVVVVXRRVt
 RRRRXVVXYXXYYIti;;;;;;;=YtIXVVIYti+;+;;;XitIIItt=:::::;=++iIYVXRRXRXXVI         
 RXXYVVVXRXI+;==;;;;;;=;;=;;++=+it++==;+==;;;;;;;:;;;;;;;;+++ItIVXXVVYtXB        
 RRRXXXXVVI+;;;;;;;;;;=+++=+==i++=+i+=i++Y=;;;;::::::;===;;;;VYIitYVVYt+V+=      
-XXXXXXXItYi;;;;;;;;;;;;;=;===+==+=+i==iii;;;;;;::;=;:::::;:=VVVitIVVYi=::;;     
+XXXXXXXItYi;;;;;;;;;;;;;=;===+==+=+t==iii;;;;;;::;=;:::::;:=VVVitIVVYi=::;;     
 YVXXVVIiYVt;;;;;;=;::::;=;=+++==+=+t++Iti+;;:::::;;+=;:;:::+VXVitYVVYI=;:::;    
 YVVVYYitXRt;:::;+itt+=:::;;=iIItt;=+=+Vttti+;::::==ii+=::::iY:=;+tYYYI=:,::::   
 IYVVYIi=IX+:::;;;;+=+====+++itItIIIIIYVIIYIYIIIIIIIYIIItIIIYY ;==+IIIt=:,,,::   
@@ -68,8 +68,19 @@ const MatrixTerminal = ({ animate }) => {
   const [isSubscribing, setIsSubscribing] = useState(false)
   const [subscriptionEmail, setSubscriptionEmail] = useState('')
   const [subscriptionStatus, setSubscriptionStatus] = useState('')
+  const [showMenu, setShowMenu] = useState(true)
+  const [menuOptions, setMenuOptions] = useState([
+    { command: 'art', description: 'Display ASCII art' },
+    { command: 'commits', description: 'Show recent Git commits' },
+    { command: 'demo', description: 'Show demo terminal data' },
+    { command: 'subscribe', description: 'Subscribe to updates' },
+    { command: 'help', description: 'Show available commands' },
+    { command: 'clear', description: 'Clear terminal' },
+  ])
   // Add ref for scrolling
   const terminalContentRef = useRef(null)
+  // Add new state for loading
+  const [isLoading, setIsLoading] = useState(false)
 
   // Add scroll effect
   useEffect(() => {
@@ -135,10 +146,8 @@ const MatrixTerminal = ({ animate }) => {
           setAsciiIndex((prev) => prev + 1)
         } else {
           setIsAsciiComplete(true)
-          const dummyData = require('../../data/terminal-data.json')
-          setData(dummyData.lines)
-          // Fetch commit data after dummy data is loaded
-          fetchCommitHistory()
+          setData([])
+          displayMenu()
         }
       } else {
         if (currentIndex < data.length) {
@@ -148,7 +157,7 @@ const MatrixTerminal = ({ animate }) => {
       }
     }
 
-    const timer = setInterval(typewriterEffect, 200)
+    const timer = setInterval(typewriterEffect, 100)
     return () => clearInterval(timer)
   }, [asciiIndex, currentIndex, isAsciiComplete, data.length])
 
@@ -170,91 +179,149 @@ const MatrixTerminal = ({ animate }) => {
     return emailRegex.test(email)
   }
 
+  const displayMenu = () => {
+    const menuText = [
+      'Welcome to TERMINAL 303',
+      'Available commands:',
+      ...menuOptions.map(
+        (opt) => `  ${opt.command.padEnd(10)} - ${opt.description}`,
+      ),
+      '',
+      'Enter a command to begin:',
+    ]
+    setDisplayedMessages(menuText)
+    setCurrentMessageIndex(menuText.length)
+  }
+
   const handleInputSubmit = async (e) => {
     e.preventDefault()
     if (userInput.trim()) {
       const input = userInput.toLowerCase()
-      setUserMessages((prev) => [...prev, userInput])
+      setDisplayedMessages((prev) => [...prev, `> ${userInput}`])
       setUserInput('')
-      setIsTyping(true)
-      setTypingMessage('')
 
-      if (input.includes('subscribe') || input.includes('email')) {
-        setIsSubscribing(true)
-        setUserMessages((prev) => [
-          ...prev,
-          'Please enter your email to subscribe:',
-        ])
-      } else if (isSubscribing) {
-        // Validate email before making API call
-        if (!isValidEmail(input)) {
-          setUserMessages((prev) => [
+      switch (input) {
+        case 'art':
+          setAsciiLines([])
+          setAsciiIndex(0)
+          setIsAsciiComplete(false)
+          setLines([])
+          setData([])
+          setDisplayedMessages([])
+          break
+        case 'commits':
+          setLines([])
+          setCurrentIndex(0)
+          setAsciiLines([])
+          setDisplayedMessages([])
+          await fetchCommitHistory()
+          break
+        case 'demo':
+          setLines([])
+          setCurrentIndex(0)
+          setAsciiLines([])
+          setDisplayedMessages([])
+          const dummyData = require('../../data/terminal-data.json')
+          setData(dummyData.lines)
+          break
+        case 'clear':
+          setLines([])
+          setAsciiLines([])
+          setUserMessages([])
+          setDisplayedMessages([])
+          setData([])
+          displayMenu()
+          break
+        case 'help':
+          displayMenu()
+          break
+        case 'subscribe':
+          setIsSubscribing(true)
+          setSubscriptionEmail('')
+          setSubscriptionStatus('pending')
+          setDisplayedMessages((prev) => [
             ...prev,
-            'Please enter a valid email address.',
+            'Please enter your email to subscribe:',
           ])
-          setTypingMessage('')
-          return
-        }
+          break
+        default:
+          if (isSubscribing) {
+            if (!isValidEmail(input)) {
+              setDisplayedMessages((prev) => [
+                ...prev,
+                'Please enter a valid email address.',
+                'Try again or type "clear" to cancel.',
+              ])
+              setSubscriptionStatus('error')
+              return
+            }
 
-        setSubscriptionEmail(input)
-        try {
-          const response = await fetch(
-            `${process.env.REACT_APP_API_URL}/api/subscribers/subscribe`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ email: input }),
-            },
-          )
+            setSubscriptionEmail(input)
+            setIsLoading(true)
+            setDisplayedMessages((prev) => [
+              ...prev,
+              `Attempting to subscribe: ${input}`,
+              'Processing...',
+            ])
 
-          const data = await response.json()
+            try {
+              const response = await fetch(
+                `${process.env.REACT_APP_API_URL}/api/subscribers/subscribe`,
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ email: input }),
+                },
+              )
 
-          if (!response.ok) {
-            throw new Error(data.message || 'Something went wrong')
+              const data = await response.json()
+
+              if (!response.ok) {
+                throw new Error(data.message || 'Something went wrong')
+              }
+
+              setDisplayedMessages((prev) => [
+                ...prev,
+                '✓ Subscription successful!',
+                `Email confirmed: ${input}`,
+                'You will receive updates about new projects and features.',
+                '',
+                'Type "help" to see available commands.',
+              ])
+              setSubscriptionStatus('success')
+            } catch (error) {
+              setDisplayedMessages((prev) => [
+                ...prev,
+                `× Subscription failed: ${
+                  error.message || 'Something went wrong.'
+                }`,
+                'Please try again or type "clear" to cancel.',
+              ])
+              setSubscriptionStatus('error')
+            } finally {
+              setIsLoading(false)
+              setIsSubscribing(false)
+            }
+          } else {
+            setDisplayedMessages((prev) => [
+              ...prev,
+              'Unknown command. Type "help" to see available commands.',
+            ])
           }
-
-          setUserMessages((prev) => [
-            ...prev,
-            'Thank you for subscribing! You will receive updates about new projects and features.',
-          ])
-          setSubscriptionStatus('success')
-        } catch (error) {
-          setUserMessages((prev) => [
-            ...prev,
-            error.message || 'Something went wrong. Please try again.',
-          ])
-          setSubscriptionStatus('error')
-        } finally {
-          setIsSubscribing(false)
-        }
-      } else {
-        setUserMessages((prev) => [
-          ...prev,
-          'Type "subscribe" to receive updates about new projects and features.',
-        ])
       }
-
-      setCurrentMessageIndex((prev) => prev + 1)
     }
   }
 
   useEffect(() => {
-    if (isTyping && userMessages.length > displayedMessages.length) {
-      const currentMessage = userMessages[userMessages.length - 1]
-      const timeout = setTimeout(() => {
-        if (typingMessage.length < currentMessage.length) {
-          setTypingMessage(currentMessage.slice(0, typingMessage.length + 1))
-        } else {
-          setIsTyping(false)
-          setDisplayedMessages((prev) => [...prev, currentMessage])
-        }
-      }, 50) // Adjust speed of typing here
-
-      return () => clearTimeout(timeout)
+    if (userMessages.length > displayedMessages.length) {
+      setDisplayedMessages((prev) => [
+        ...prev,
+        ...userMessages.slice(prev.length),
+      ])
     }
-  }, [isTyping, typingMessage, userMessages, displayedMessages])
+  }, [userMessages, displayedMessages.length])
 
   const renderTerminal = () => {
     if (animate) return
@@ -290,17 +357,13 @@ const MatrixTerminal = ({ animate }) => {
             </div>
           ))}
           {displayedMessages.map((message, index) => (
-            <div key={`user-${index}`} className="terminal-line">
-              <span className="prompt">|</span>
+            <div key={`msg-${index}`} className="terminal-line">
+              <span className="prompt">
+                {message.startsWith('>') ? '' : '$'}
+              </span>
               <span className="text user-message">{message}</span>
             </div>
           ))}
-          {isTyping && (
-            <div className="terminal-line">
-              <span className="prompt">$</span>
-              <span className="text user-message">{typingMessage}</span>
-            </div>
-          )}
           <div className="terminal-line">
             <span className="prompt">$</span>
             <input
@@ -315,7 +378,6 @@ const MatrixTerminal = ({ animate }) => {
               }}
               className="terminal-input"
               autoFocus
-              disabled={isTyping}
             />
           </div>
         </div>

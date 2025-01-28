@@ -1,35 +1,37 @@
 .matrix-terminal-container{
-    background-image: url('./../../pictures/sddev.gif');
+    /* background-image: url('./../../pictures/sddev.gif');
     background-size: 40%;
     background-color: #000;
     background-repeat: no-repeat;
     background-position: 0% 0%;
     width: 100vw;
-    height: 55vh;
+    height: 55vh; */
 }
 
 .matrix-terminal-animate-initial {
     animation: perspectiveShift 3s ease-in-out;
     position: sticky;
-    left: 40vw;
-    right: 10vw;
+    left: 5vw;
+    right: 5vw;
     top: 10vh;
     border-radius: 8px;
-    width: 100%;
-    max-width: 50vw;
+    padding: 0px 3px;
+width: 80vw;
+    background-color: #000;
     font-family: 'Courier New', monospace;
     box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
-    transform: perspective(180px) rotate3d(33, -33, -12, 3deg);
+
 }
 
 .matrix-terminal-animate-continuous {
     /* animation: perspectiveShift2 9s ease-in-out infinite; */
     position: sticky;
-    left: 40vw;
-    right: 10vw;
+    left: 5vw;
+    right: 5vw;
     border-radius: 8px;
-    width: 100%;
-    max-width: 50vw;
+width: 80vw;
+    padding: 0px 3px;
+    background-color: #000;
     font-family: 'Courier New', monospace;
     box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
     transform: perspective(180px) rotate3d(33, -33, -12, 3deg);
@@ -279,12 +281,13 @@
   .matrix-terminal-animate-initial {
 
     position: sticky;
-    left: 10vw;
-    right: 10vw;
+    left: 5vw;
+    right: 5vw;
     top: 10vh;
     border-radius: 8px;
     width: 100%;
     max-width: 85vw;
+    background-color: #000;
     font-family: 'Courier New', monospace;
     box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
 
@@ -293,11 +296,12 @@
 .matrix-terminal-animate-continuous {
 
     position: sticky;
-    left: 10vw;
-    right: 10vw;
+    left: 5vw;
+    right: 5vw;
     border-radius: 8px;
     width: 100%;
     max-width: 85vw;
+    background-color: #000;
     font-family: 'Courier New', monospace;
     box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
 
