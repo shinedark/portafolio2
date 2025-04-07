@@ -272,7 +272,7 @@ function App() {
               {/* <PrototypeShowcase /> */}
               {/* <Donate /> */}
               <div className="content-wrapper">
-                <RouteContainer
+                {/* <RouteContainer
                   activeRoute={activeRoute}
                   onRouteChange={setActiveRoute}
                 >
@@ -287,7 +287,7 @@ function App() {
                 <Twitch />
                 <br />
                 <Instagram />
-                <br />
+                <br /> */}
                 <Subscribe />
                 <br />
                 <Interest />
