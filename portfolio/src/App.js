@@ -272,7 +272,7 @@ function App() {
               {/* <PrototypeShowcase /> */}
               {/* <Donate /> */}
               <div className="content-wrapper">
-                {/* <RouteContainer
+                <RouteContainer
                   activeRoute={activeRoute}
                   onRouteChange={setActiveRoute}
                 >
@@ -284,12 +284,12 @@ function App() {
                   {activeRoute === 'admin' && <AdminRoute />}
                 </RouteContainer>
                 <br />
-                <Twitch />
-                <br />
-                <Instagram />
+                {/* <Twitch />
                 <br /> */}
-                <Subscribe />
+                <Instagram />
                 <br />
+                {/* <Subscribe />
+                <br /> */}
                 <Interest />
                 <br />
                 <>
