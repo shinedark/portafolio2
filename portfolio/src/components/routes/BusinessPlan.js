@@ -6,7 +6,7 @@ const BusinessPlan = () => {
   return (
     <div className="route-page">
       <div className="route-section">
-        <h3>Business Plan for Shine Dark Music</h3>
+        <h3>Business Plan for Shine Dark</h3>
       </div>
 
       {/* <ProjectCostCalculator /> */}
@@ -14,17 +14,17 @@ const BusinessPlan = () => {
         <h3>Company Description</h3>
         <ul>
           <li>
-            Type: Media Company with a focus on music production, technology,
-            and sustainable living.
+            Type: Content Creator and Artist focusing on health journey documentation,
+            music production, and personal transformation.
           </li>
           <li>
-            Location: To based in Colorado, with plans to transform a warehouse
-            into a sustainable living and working space.
+            Focus: Creating multi-platform content that documents the recovery journey,
+            combining music, fitness, and personal development.
           </li>
           <li>
-            Unique Selling Proposition: Combining music with sustainability
-            initiatives, leveraging technology for community engagement and
-            personal health.
+            Unique Selling Proposition: Authentic documentation of health recovery
+            journey through various creative mediums including music, live performances,
+            and documentary content.
           </li>
         </ul>
       </div>
@@ -32,9 +32,9 @@ const BusinessPlan = () => {
       <div className="route-section">
         <h3>Mission</h3>
         <p>
-          Shine Dark Music is dedicated to Awakening Human Beings via Technology
-          & Art, innovating at the intersection of music, sustainability, and
-          health to create a replicable model for modern living.
+          Shine Dark is committed to documenting and sharing a transformative health
+          journey, inspiring others through the intersection of music, physical recovery,
+          and personal growth while creating awareness about health conditions and their solutions.
         </p>
       </div>
 
@@ -42,14 +42,16 @@ const BusinessPlan = () => {
         <h3>Operational Plan</h3>
         <ul>
           <li>
-            Project Development: Phased transformation of the warehouse into a
-            sustainable living space, including setting up hydroponics, research
-            facilities, and a small-scale clothing production area for hemp
-            jeans.
+            Content Creation: Regular documentation of recovery process through workout sessions,
+            music creation, and treatment progress.
           </li>
           <li>
-            Technology Integration: Use of coding for project management,
-            content creation, and community interaction tools.
+            Performance & Streaming: Live performances showcasing the recovery journey,
+            combined with regular streaming sessions for community engagement.
+          </li>
+          <li>
+            Documentary Production: Filming and producing a comprehensive documentary
+            that captures the full scope of the health journey, challenges, and solutions.
           </li>
         </ul>
       </div>
@@ -58,20 +60,17 @@ const BusinessPlan = () => {
         <h3>Financial Plan</h3>
         <ul>
           <li>
-            Revenue Streams: Sales from music releases, potential sponsorships
-            or partnerships related to sustainability, clothing sales, and
-            possible grants for eco-innovation.
+            Revenue Streams: Social media monetization, streaming revenue, music releases,
+            documentary distribution, live performance tickets, and potential sponsorships
+            from health and fitness brands.
           </li>
           <li>
-            Cost Structure: Costs associated with music production, vinyl
-            manufacturing, building transformation, hydroponic setup, clothing
-            production, and ongoing operational expenses.
+            Cost Structure: Production equipment, documentary filming and editing,
+            marketing expenses, medical treatment documentation, and performance venue costs.
           </li>
           <li>
-            Funding: Initial investment from personal funds, potential
-            crowdfunding for community involvement, and seeking investors
-            interested in sustainable media, health, and eco-fashion
-            initiatives.
+            Funding: Initial self-funding, potential crowdfunding for documentary production,
+            and seeking partnerships with health awareness organizations.
           </li>
         </ul>
       </div>
@@ -79,12 +78,12 @@ const BusinessPlan = () => {
       <div className="route-section">
         <h3>Future Outlook</h3>
         <p>
-          Shine Dark Music aims to lead by example in showing how media
-          companies can pivot towards sustainability, influencing cultural
-          perceptions of living, industry practices, and fashion. We plan to
-          expand our reach in music distribution, sustainable living, and
-          eco-conscious clothing, fostering a community that lives by our
-          tagline: Where Music Cultivates Sustainability.
+          Shine Dark aims to create a powerful narrative that combines personal health journey
+          with artistic expression. Through documentary storytelling, live performances, and
+          consistent content creation, we seek to inspire others facing similar challenges
+          while building a sustainable platform for artistic and personal growth. The project
+          will serve as both a personal documentation and a resource for others, showcasing
+          how art and health recovery can intertwine to create meaningful impact.
         </p>
       </div>
     </div>

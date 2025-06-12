@@ -278,8 +278,8 @@ function App() {
                 >
                   {activeRoute === 'projects' && <SDProject />}
                   {activeRoute === 'business-plan' && <BusinessPlan />}
-                  {activeRoute === 'timeline' && <Timeline />}
-                  {activeRoute === 'development' && <Development />}
+                  {/* {activeRoute === 'timeline' && <Timeline />} */}
+                  {/* {activeRoute === 'development' && <Development />} */}
                   {activeRoute === 'invest' && <Invest />}
                   {activeRoute === 'admin' && <AdminRoute />}
                 </RouteContainer>
