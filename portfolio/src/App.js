@@ -286,8 +286,8 @@ function App() {
                 <br />
                 {/* <Twitch />
                 <br /> */}
-                <Instagram />
-                <br />
+                {/* <Instagram />
+                <br /> */}
                 {/* <Subscribe />
                 <br /> */}
                 <Interest />
