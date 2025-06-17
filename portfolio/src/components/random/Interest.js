@@ -3,7 +3,7 @@ import './Interest.css'
 
 const Interest = () => {
   const paragraphs = [
-    'Learning: Cyfrin Updraft courses, Eigen Layer, and AI.',
+    'Learning:Code,Web3, Functional Health, and AI.',
     'Hobbies: Cooking, Golf, Music, and Futbol.',
     'The Vision is large, Attitude the steering wheel, and discipline the fuel.',
   ]

@@ -272,17 +272,17 @@ function App() {
               {/* <PrototypeShowcase /> */}
               {/* <Donate /> */}
               <div className="content-wrapper">
-                <RouteContainer
+                {/* <RouteContainer
                   activeRoute={activeRoute}
                   onRouteChange={setActiveRoute}
-                >
-                  {activeRoute === 'projects' && <SDProject />}
-                  {activeRoute === 'business-plan' && <BusinessPlan />}
+                > */}
+                  {/* {activeRoute === 'projects' && <SDProject />}
+                  {activeRoute === 'business-plan' && <BusinessPlan />} */}
                   {/* {activeRoute === 'timeline' && <Timeline />} */}
                   {/* {activeRoute === 'development' && <Development />} */}
-                  {activeRoute === 'invest' && <Invest />}
-                  {activeRoute === 'admin' && <AdminRoute />}
-                </RouteContainer>
+                  {/* {activeRoute === 'invest' && <Invest />}
+                  {activeRoute === 'admin' && <AdminRoute />} */}
+                {/* </RouteContainer> */}
                 <br />
                 {/* <Twitch />
                 <br /> */}
