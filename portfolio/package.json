@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && npm run max-aggression && node scripts/render-deploy.js",
     "postbuild": "node scripts/post-build-stripper.js",
     "enhanced": "node scripts/enhanced-post-build-stripper.js",
     "production": "node scripts/production-stripper.js",
@@ -43,7 +43,9 @@
     "enhanced-dev-server": "node scripts/enhanced-dev-server.js",
     "production-dev-server": "node scripts/production-dev-server.js",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:render": "npm run build && npm run max-aggression && npm run deploy-render",
+    "deploy-render": "node scripts/render-deploy.js"
   },
   "eslintConfig": {
     "extends": [
