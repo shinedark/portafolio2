@@ -1,230 +1,169 @@
 {
-    "rules": {
-      "project": {
-        "name": "portfolio",
-        "type": "react-web",
-        "framework": "create-react-app",
-        "language": "JavaScript",
-        "styling": "tailwindcss",
-        "description": "Rules for a React web project with Web3 integrations, Three.js, and post-build semantic stripping for bundle optimization."
+  "rules": {
+    "project": {
+      "name": "semantic-build-optimizer",
+      "type": "build-tools",
+      "framework": "agnostic",
+      "language": "JavaScript",
+      "styling": "none",
+      "description": "A suite of build tools for applying Semantic Stripping—AST-level identifier optimization—to React and React Native projects at the source level, before bundling. Comprises a core minifier, bundler plugins, and development tooling."
+    },
+    "codeStyle": {
+      "formatting": {
+        "indentation": "2 spaces",
+        "semicolons": true,
+        "quotes": "single",
+        "trailingComma": "es5",
+        "lineLength": 100
       },
-      "codeStyle": {
-        "formatting": {
-          "indentation": "2 spaces",
-          "semicolons": true,
-          "quotes": "single",
-          "trailingComma": "es5",
-          "lineLength": 100
-        },
-        "namingConventions": {
-          "components": "PascalCase",
-          "functions": "camelCase",
-          "variables": "camelCase",
-          "constants": "UPPER_SNAKE_CASE",
-          "files": "kebab-case"
-        },
-        "eslint": {
-          "extends": ["react-app", "react-app/jest"],
-          "rules": {
-            "no-unused-vars": "warn",
-            "react/prop-types": "off",
-            "react/jsx-uses-react": "off",
-            "react/react-in-jsx-scope": "off"
-          }
+      "namingConventions": {
+        "packages": "kebab-case",
+        "plugins": "kebab-case",
+        "functions": "camelCase",
+        "variables": "camelCase",
+        "constants": "UPPER_SNAKE_CASE",
+        "files": "kebab-case"
+      },
+      "eslint": {
+        "extends": ["eslint:recommended"],
+        "rules": {
+          "no-unused-vars": "warn",
+          "prefer-const": "error"
         }
-      },
-      "dependencies": {
-        "react": {
-          "version": "^18.3.1",
-          "usage": "Use functional components with Hooks. Avoid class components.",
-          "examples": [
-            "const MyComponent = () => <div>Hello</div>;"
-          ]
-        },
-        "react-router-dom": {
-          "version": "^7.1.1",
-          "usage": "Use BrowserRouter, Routes, and Route for navigation. Prefer useNavigate over useHistory.",
-          "examples": [
-            "import { BrowserRouter, Routes, Route } from 'react-router-dom';",
-            "<BrowserRouter><Routes><Route path='/' element={<Home />} /></Routes></BrowserRouter>"
-          ]
-        },
-        "@tanstack/react-query": {
-          "version": "^5.62.14",
-          "usage": "Use QueryClientProvider and hooks (useQuery, useMutation) for data fetching and state management.",
-          "examples": [
-            "import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';",
-            "const queryClient = new QueryClient();",
-            "<QueryClientProvider client={queryClient}><App /></QueryClientProvider>"
-          ]
-        },
-        "ethers": {
-          "version": "^6.13.5",
-          "usage": "Use for Ethereum blockchain interactions. Prefer ethers.BrowserProvider for Web3 connections.",
-          "examples": [
-            "import { ethers } from 'ethers';",
-            "const provider = new ethers.BrowserProvider(window.ethereum);"
-          ]
-        },
-        "@web3-react": {
-          "packages": ["core", "injected-connector", "metamask", "walletconnect-v2", "coinbase-wallet"],
-          "usage": "Use Web3ReactProvider and hooks for wallet connections. Support MetaMask, WalletConnect, and Coinbase Wallet.",
-          "examples": [
-            "import { Web3ReactProvider } from '@web3-react/core';",
-            "import { InjectedConnector } from '@web3-react/injected-connector';",
-            "const injected = new InjectedConnector({ supportedChainIds: [1, 5] });"
-          ]
-        },
-        "three": {
-          "version": "^0.167.1",
-          "usage": "Use for 3D rendering. Prefer functional components with useEffect for scene setup.",
-          "examples": [
-            "import * as THREE from 'three';",
-            "useEffect(() => { const scene = new THREE.Scene(); /* setup */ }, []);"
-          ]
-        },
-        "react-syntax-highlighter": {
-          "version": "^15.5.0",
-          "usage": "Use for code block rendering. Prefer Prism for lightweight syntax highlighting.",
-          "examples": [
-            "import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';",
-            "<SyntaxHighlighter language='javascript'>code</SyntaxHighlighter>"
-          ]
-        },
-        "ascii-art": {
-          "version": "^2.8.5",
-          "usage": "Use for generating ASCII art in the console or UI for visual effects.",
-          "examples": [
-            "import AsciiArt from 'ascii-art';",
-            "AsciiArt.font('Hello', 'Doom', (err, rendered) => console.log(rendered));"
-          ]
-        },
+      }
+    },
+    "dependencies": {
+      "core": {
         "@babel/parser": {
           "version": "^7.24.7",
-          "usage": "Use for parsing JavaScript/JSX in post-build stripper.",
+          "usage": "Parse source code into an AST for analysis.",
           "examples": [
-            "import parser from '@babel/parser';",
-            "const ast = parser.parse(code, { sourceType: 'module', plugins: ['jsx'] });"
+            "const ast = parser.parse(code, { sourceType: 'module', plugins: ['jsx', 'typescript'] });"
           ]
         },
         "@babel/traverse": {
           "version": "^7.24.7",
-          "usage": "Use for traversing AST in post-build stripper.",
+          "usage": "Traverse the AST to identify and categorize safe-to-rename identifiers.",
           "examples": [
-            "import traverse from '@babel/traverse';",
-            "traverse(ast, { Identifier(path) { /* modify */ } });"
+            "traverse(ast, { Identifier(path) { /* analysis logic */ } });"
           ]
         },
         "@babel/generator": {
           "version": "^7.24.7",
-          "usage": "Use for generating code from AST in post-build stripper.",
+          "usage": "Generate optimized code from the modified AST.",
           "examples": [
-            "import generate from '@babel/generator';",
-            "const output = generate(ast, { minified: true }).code;"
+            "const { code } = generate(ast, { minified: true, compact: true });"
           ]
         },
+        "@babel/types": {
+          "version": "^7.24.7",
+          "usage": "Build and modify AST nodes safely.",
+          "examples": [
+            "if (t.isIdentifier(path.node)) { /* ... */ }"
+          ]
+        }
+      },
+      "metroPlugin": {
+        "@expo/metro-config": {
+          "version": "^0.17.4",
+          "usage": "Base configuration for integrating with Expo's Metro bundler.",
+          "examples": [
+            "const { getDefaultConfig } = require('@expo/metro-config');"
+          ]
+        }
+      },
+      "devTool": {
         "express": {
           "version": "^4.19.2",
-          "usage": "Use for dev server to translate stripped stack traces.",
+          "usage": "Lightweight server for the error translation API.",
           "examples": [
-            "import express from 'express';",
-            "app.post('/translate-error', (req, res) => { /* translate */ });"
+            "app.post('/translate', (req, res) => { /* use manifest to map names */ });"
+          ]
+        },
+        "chalk": {
+          "version": "^4.1.2",
+          "usage": "Colorful terminal output for the CLI and dev server.",
+          "examples": [
+            "console.log(chalk.green('✅ Optimization successful!'));"
           ]
         }
-      },
-      "styling": {
-        "library": "tailwindcss",
-        "setup": {
-          "install": "npm install -D tailwindcss postcss autoprefixer",
-          "init": "npx tailwindcss init -p",
-          "config": {
-            "file": "tailwind.config.js",
-            "content": [
-              "./src/**/*.{js,jsx,ts,tsx}",
-              "./public/index.html"
-            ],
-            "theme": {
-              "extend": {}
+      }
+    },
+    "fileStructure": {
+      "root": {
+        "packages": {
+          "semantic-minifier-core": {
+            "src": {
+              "index.js": "Main entry point. Exports `minifySource(code, filePath)` function.",
+              "analyzer.js": "AST analysis logic: finds safe-to-rename identifiers.",
+              "optimizer.js": "AST transformation logic: performs the renaming.",
+              "utils.js": "Helper functions for AST manipulation and scope tracking."
             },
-            "plugins": []
+            "package.json": "Config for the core library."
           },
-          "css": {
-            "file": "src/styles/index.css",
-            "content": "@tailwind base; @tailwind components; @tailwind utilities;"
+          "metro-plugin-semantic-minification": {
+            "src": {
+              "index.js": "Main Metro plugin factory function."
+            },
+            "package.json": "Config for the Metro plugin."
+          },
+          "optimization-devtool": {
+            "src": {
+              "index.js": "Main entry point for the Express dev server.",
+              "manifest-loader.js": "Logic for loading and querying the optimization manifest."
+            },
+            "package.json": "Config for the dev server."
           }
         },
-        "usage": "Use Tailwind CSS classes for styling. Avoid inline styles unless necessary.",
-        "examples": [
-          "<div className='flex justify-center items-center h-screen bg-gray-100'>Content</div>"
-        ]
-      },
-      "fileStructure": {
-        "root": {
-          "src": {
-            "components": "Reusable React components (e.g., Button.jsx, Header.jsx)",
-            "pages": "Page components for routing (e.g., Home.jsx, Portfolio.jsx)",
-            "hooks": "Custom hooks (e.g., useWeb3.js, useThree.js)",
-            "utils": "Utility functions and helpers (e.g., web3Utils.js)",
-            "styles": "Global CSS and Tailwind config (e.g., index.css)",
-            "index.js": "Entry point for React app"
-          },
-          "scripts": {
-            "post-build-stripper.js": "Post-build script to strip verbose identifiers from dist/build.js",
-            "dev-server.js": "Express server for translating stripped stack traces",
-            "get_baseline.js": "Script to measure original and stripped bundle sizes"
-          },
-          "public": "Static files (e.g., index.html, favicon.ico)",
-          "dist": "Build output (e.g., build.js, build.stripped.js, bundle-manifest.json)"
+        "examples": {
+          "expo-demo": "A sample Expo app to test the plugin.",
+          "nextjs-demo": "A sample Next.js app to test the plugin."
         }
-      },
-      "bundleOptimization": {
-        "semanticStripping": {
-          "approach": "post-build",
-          "description": "Apply semantic stripping to dist/build.js to reduce size without affecting development.",
-          "script": "scripts/post-build-stripper.js",
-          "functionality": [
-            "Read dist/build.js",
-            "Parse AST with @babel/parser, supporting JSX",
-            "Replace verbose identifiers (e.g., ComponentName, useQuery) with minimal identifiers (e.g., a0)",
-            "Generate bundle-manifest.json for error translation",
-            "Output stripped bundle to dist/build.stripped.js"
-          ],
-          "dependencies": ["@babel/parser", "@babel/traverse", "@babel/generator"],
-          "warning": "Proof-of-concept. Manual review required before production use."
-        },
-        "errorTranslation": {
-          "script": "scripts/dev-server.js",
-          "functionality": [
-            "Run Express server to load bundle-manifest.json",
-            "Translate minimal identifiers in stack traces (e.g., a0 -> ComponentName)",
-            "Endpoint: POST /translate-error"
-          ],
-          "dependencies": ["express"]
-        }
-      },
-      "development": {
-        "scripts": {
-          "start": "react-scripts start",
-          "build": "react-scripts build",
-          "postbuild": "node scripts/post-build-stripper.js",
-          "measure": "node scripts/get_baseline.js",
-          "dev-server": "node scripts/dev-server.js",
-          "test": "react-scripts test"
-        },
-        "notes": [
-          "Use 'npm start' for development with unstripped code",
-          "Use 'npm run build && npm run postbuild' for production bundle with stripping",
-          "Run 'npm run measure' to compare bundle sizes",
-          "Run 'npm run dev-server' for error translation during debugging",
-          "Development uses unstripped code; stripping applies only to production bundle"
-        ]
-      },
-      "constraints": {
-        "noFormOnSubmit": "Avoid <form> onSubmit due to sandboxed frame restrictions.",
-        "jsxClassName": "Use className instead of class in JSX.",
-        "productionReady": "Semantic stripping is for PoC. Manual review required before production.",
-        "web3": "Ensure wallet connectors (MetaMask, WalletConnect, Coinbase) support mainnet and testnets (e.g., chainId 1, 5).",
-        "bundle": "CRA generates build.js; stripper creates build.stripped.js for deployment."
       }
+    },
+    "bundleOptimization": {
+      "semanticStripping": {
+        "approach": "pre-bundler",
+        "description": "Apply semantic stripping to source files during the bundler's transformation phase. This is semantically correct and safe.",
+        "corePrinciple": "AGGRESSIVELY rename local, non-exported identifiers. NEVER rename exported/imported identifiers or properties that are part of a public API.",
+        "outputs": [
+          "Optimized source code passed to the bundler.",
+          "A comprehensive `optimization-manifest.json` for development tooling."
+        ]
+      },
+      "integration": {
+        "metro": "The Metro plugin must hook into the `transformer` phase.",
+        "webpack": "The Webpack plugin must hook into the build process."
+      },
+      "errorTranslation": {
+        "purpose": "For development only. Uses the manifest to translate mangled stack traces back to original names.",
+        "script": "optimization-devtool",
+        "functionality": [
+          "Loads `optimization-manifest.json`.",
+          "Provides POST /translate endpoint.",
+          "Runs concurrently with `expo start` or `next dev`."
+        ]
+      }
+    },
+    "development": {
+      "scripts": {
+        "build:core": "npm run build --workspace=packages/semantic-minifier-core",
+        "build:metro": "npm run build --workspace=packages/metro-plugin-semantic-minification",
+        "test:expo": "npm start --workspace=examples/expo-demo",
+        "test:next": "npm run dev --workspace=examples/nextjs-demo",
+        "measure": "node scripts/measure-bundle.js"
+      },
+      "notes": [
+        "The system is designed for integration, not overwrite.",
+        "The manifest is for debugging and is not shipped to production.",
+        "Always compare bundle size and performance against standard Terser minification to prove value."
+      ]
+    },
+    "constraints": {
+      "semanticCorrectness": "MUST be maintained. Never break public APIs.",
+      "scopeAwareness": "Transformation must be aware of function and module scope.",
+      "noGlobalPollution": "Hoisting logic must not cause variable name conflicts.",
+      "productionReady": "The goal is to create a robust, testable system, not just a PoC."
     }
   }
+}

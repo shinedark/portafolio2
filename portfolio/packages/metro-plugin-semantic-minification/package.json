@@ -1,0 +1,33 @@
+{
+  "name": "metro-plugin-semantic-minification",
+  "version": "1.0.0",
+  "description": "Metro plugin for semantic minification of React Native/Expo projects",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "babel src -d dist",
+    "dev": "babel src -d dist --watch",
+    "test": "jest"
+  },
+  "keywords": [
+    "metro",
+    "react-native",
+    "expo",
+    "semantic",
+    "minification",
+    "optimization"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "semantic-minifier-core": "file:../semantic-minifier-core"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "jest": "^29.7.0"
+  },
+  "peerDependencies": {
+    "metro": ">=0.70.0"
+  }
+}

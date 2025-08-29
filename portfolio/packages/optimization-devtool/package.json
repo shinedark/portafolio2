@@ -1,0 +1,31 @@
+{
+  "name": "optimization-devtool",
+  "version": "1.0.0",
+  "description": "Development server for translating optimized identifiers back to original names",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "babel src -d dist",
+    "dev": "babel src -d dist --watch",
+    "start": "node dist/index.js",
+    "dev-server": "nodemon dist/index.js"
+  },
+  "keywords": [
+    "development",
+    "debugging",
+    "optimization",
+    "error-translation",
+    "semantic-minification"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "chalk": "^4.1.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "nodemon": "^3.0.3"
+  }
+}

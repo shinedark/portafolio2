@@ -24,7 +24,10 @@
     "react-scripts": "5.0.1",
     "react-syntax-highlighter": "^15.5.0",
     "three": "^0.167.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "semantic-minifier-core": "file:./packages/semantic-minifier-core",
+    "metro-plugin-semantic-minification": "file:./packages/metro-plugin-semantic-minification",
+    "optimization-devtool": "file:./packages/optimization-devtool"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -49,7 +52,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build:render": "npm run build && node scripts/render-post-build.js",
-    "deploy-render": "node scripts/render-deploy.js"
+    "deploy-render": "node scripts/render-deploy.js",
+    "build:semantic": "npm run build && node scripts/apply-semantic-minification.js",
+    "start:semantic": "concurrently \"npm start\" \"node packages/optimization-devtool/dist/index.js --manifestPath=./semantic-optimization-manifest.json\"",
+    "test:semantic": "node scripts/test-semantic-minification.js",
+    "demo:semantic": "node scripts/demo-semantic-minification.js"
   },
   "eslintConfig": {
     "extends": [
@@ -68,5 +75,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }
