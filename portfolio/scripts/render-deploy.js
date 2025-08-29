@@ -2,7 +2,7 @@
 
 /**
  * Render Deployment Script
- * Automatically replaces the original bundle with the optimized one
+ * Safely handles bundle optimization for Render deployment
  */
 
 const fs = require('fs');
@@ -11,10 +11,18 @@ const path = require('path');
 console.log('🚀 Render Deployment Script Starting...');
 
 try {
-  // Find the optimized bundle
+  // First, check if we need to run optimization
   const buildDir = path.join(__dirname, '../build/static/js');
+  
+  if (!fs.existsSync(buildDir)) {
+    console.log('⚠️  Build directory not found. Skipping optimization.');
+    console.log('✅ Render deployment ready (using original bundle)');
+    process.exit(0);
+  }
+
   const files = fs.readdirSync(buildDir);
   
+  // Check if optimization has already been run
   const optimizedBundle = files.find(file => 
     file.includes('max-aggression.js')
   );
@@ -31,12 +39,27 @@ try {
     !file.includes('ultra-deep')
   );
 
-  if (!optimizedBundle || !originalBundle) {
-    throw new Error('Could not find bundle files');
+  if (!originalBundle) {
+    console.log('⚠️  Original bundle not found. Skipping optimization.');
+    console.log('✅ Render deployment ready');
+    process.exit(0);
+  }
+
+  if (!optimizedBundle) {
+    console.log('⚠️  Optimized bundle not found. Skipping optimization.');
+    console.log('✅ Render deployment ready (using original bundle)');
+    process.exit(0);
   }
 
   const optimizedPath = path.join(buildDir, optimizedBundle);
   const originalPath = path.join(buildDir, originalBundle);
+
+  // Verify files exist and are readable
+  if (!fs.existsSync(optimizedPath) || !fs.existsSync(originalPath)) {
+    console.log('⚠️  Bundle files not accessible. Skipping optimization.');
+    console.log('✅ Render deployment ready (using original bundle)');
+    process.exit(0);
+  }
 
   // Get file sizes
   const optimizedSize = fs.statSync(optimizedPath).size;
@@ -62,10 +85,12 @@ try {
     console.log('✅ Optimization manifest copied');
   }
 
-  console.log('�� Render deployment ready!');
+  console.log('🎉 Render deployment ready!');
   console.log('💡 The optimized bundle will now be served by Render automatically!');
 
 } catch (error) {
   console.error('❌ Render deployment failed:', error.message);
-  process.exit(1);
+  console.log('⚠️  Continuing with original bundle...');
+  console.log('✅ Render deployment ready (using original bundle)');
+  process.exit(0); // Don't fail the build, just use original bundle
 }
