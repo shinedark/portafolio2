@@ -22,15 +22,16 @@ try {
 
   const files = fs.readdirSync(buildDir);
   
-  // Check if optimization has already been run
-  const optimizedBundle = files.find(file => 
-    file.includes('max-aggression.js')
+  // Find all ultra-aggressive optimized chunks
+  const optimizedChunks = files.filter(file => 
+    file.includes('ultra-aggressive.js')
   );
   
-  const originalBundle = files.find(file => 
-    file.startsWith('main.') && 
+  // Find all original chunks
+  const originalChunks = files.filter(file => 
     file.endsWith('.js') && 
     !file.includes('max-aggression') &&
+    !file.includes('ultra-aggressive') &&
     !file.includes('stripped') &&
     !file.includes('enhanced') &&
     !file.includes('production') &&
@@ -39,50 +40,76 @@ try {
     !file.includes('ultra-deep')
   );
 
-  if (!originalBundle) {
-    console.log('⚠️  Original bundle not found. Skipping optimization.');
+  if (originalChunks.length === 0) {
+    console.log('⚠️  Original chunks not found. Skipping optimization.');
     console.log('✅ Render deployment ready');
     process.exit(0);
   }
 
-  if (!optimizedBundle) {
-    console.log('⚠️  Optimized bundle not found. Skipping optimization.');
-    console.log('✅ Render deployment ready (using original bundle)');
+  if (optimizedChunks.length === 0) {
+    console.log('⚠️  Optimized chunks not found. Skipping optimization.');
+    console.log('✅ Render deployment ready (using original chunks)');
     process.exit(0);
   }
 
-  const optimizedPath = path.join(buildDir, optimizedBundle);
-  const originalPath = path.join(buildDir, originalBundle);
+  console.log(`📦 Found ${originalChunks.length} original chunks and ${optimizedChunks.length} optimized chunks`);
 
-  // Verify files exist and are readable
-  if (!fs.existsSync(optimizedPath) || !fs.existsSync(originalPath)) {
-    console.log('⚠️  Bundle files not accessible. Skipping optimization.');
-    console.log('✅ Render deployment ready (using original bundle)');
-    process.exit(0);
+  let totalOriginalSize = 0;
+  let totalOptimizedSize = 0;
+  let replacedChunks = 0;
+
+  // Replace each original chunk with its optimized version
+  for (const originalChunk of originalChunks) {
+    // Find corresponding optimized chunk
+    const optimizedChunk = optimizedChunks.find(opt => 
+      opt.includes(originalChunk.replace('.js', '.ultra-aggressive.js'))
+    );
+
+    if (!optimizedChunk) {
+      console.log(`⚠️  No optimized version found for ${originalChunk}`);
+      continue;
+    }
+
+    const originalPath = path.join(buildDir, originalChunk);
+    const optimizedPath = path.join(buildDir, optimizedChunk);
+
+    // Verify files exist
+    if (!fs.existsSync(originalPath) || !fs.existsSync(optimizedPath)) {
+      console.log(`⚠️  Files not accessible for ${originalChunk}`);
+      continue;
+    }
+
+    // Get file sizes
+    const originalSize = fs.statSync(originalPath).size;
+    const optimizedSize = fs.statSync(optimizedPath).size;
+    
+    totalOriginalSize += originalSize;
+    totalOptimizedSize += optimizedSize;
+
+    // Replace original with optimized
+    console.log(`🔄 Replacing ${originalChunk} with optimized version...`);
+    fs.copyFileSync(optimizedPath, originalPath);
+    replacedChunks++;
   }
 
-  // Get file sizes
-  const optimizedSize = fs.statSync(optimizedPath).size;
-  const originalSize = fs.statSync(originalPath).size;
-  const reduction = originalSize - optimizedSize;
-  const reductionPercent = ((reduction / originalSize) * 100).toFixed(2);
+  const totalReduction = totalOriginalSize - totalOptimizedSize;
+  const totalReductionPercent = ((totalReduction / totalOriginalSize) * 100).toFixed(2);
 
-  console.log(`📊 Bundle optimization results:`);
-  console.log(`   Original: ${(originalSize / 1024).toFixed(2)} KB`);
-  console.log(`   Optimized: ${(optimizedSize / 1024).toFixed(2)} KB`);
-  console.log(`   Reduction: ${(reduction / 1024).toFixed(2)} KB (${reductionPercent}%)`);
+  console.log(`📊 Ultra-Aggressive optimization results:`);
+  console.log(`   Chunks replaced: ${replacedChunks}`);
+  console.log(`   Total original: ${(totalOriginalSize / 1024).toFixed(2)} KB`);
+  console.log(`   Total optimized: ${(totalOptimizedSize / 1024).toFixed(2)} KB`);
+  console.log(`   Total reduction: ${(totalReduction / 1024).toFixed(2)} KB (${totalReductionPercent}%)`);
 
-  // Replace original bundle with optimized one
-  console.log('🔄 Replacing original bundle with optimized version...');
-  fs.copyFileSync(optimizedPath, originalPath);
+  console.log('✅ All chunks replaced with optimized versions');
 
-  // Copy manifest for error translation
-  const manifestPath = path.join(__dirname, '../build/max-aggression-manifest.json');
+  // Copy ultra-aggressive manifest for error translation
+  const manifestPath = path.join(__dirname, '../build/ultra-aggressive-manifest.json');
   const newManifestPath = path.join(__dirname, '../build/optimization-manifest.json');
   
   if (fs.existsSync(manifestPath)) {
     fs.copyFileSync(manifestPath, newManifestPath);
-    console.log('✅ Optimization manifest copied');
+    console.log('✅ Ultra-aggressive manifest copied');
   }
 
   console.log('🎉 Render deployment ready!');

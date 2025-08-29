@@ -21,9 +21,9 @@ try {
 
   console.log('✅ Build directory found, running optimization...');
 
-  // Run the maximum aggression stripper
-  console.log('🔄 Running maximum aggression stripper...');
-  execSync('npm run max-aggression', { 
+  // Run the ultra-aggressive stripper (optimizes ALL chunks including React libraries)
+  console.log('🔄 Running ultra-aggressive stripper...');
+  execSync('npm run ultra-aggressive', { 
     stdio: 'inherit',
     cwd: path.join(__dirname, '..')
   });
