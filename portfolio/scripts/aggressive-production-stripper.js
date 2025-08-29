@@ -157,7 +157,7 @@ function validateBundleAggressively(originalCode, optimizedCode, manifest) {
     issues.push(`Bundle reduction too aggressive: ${reduction.toFixed(2)}% (max: ${AGGRESSIVE_CONFIG.maxOptimizationPercentage}%)`);
   }
   
-  // Check manifest size (more lenient)
+  // Check manifest size (ultra-compact)
   const manifestSize = JSON.stringify(manifest).length;
   if (manifestSize > 400 * 1024) { // 400KB max
     issues.push(`Manifest too large: ${(manifestSize / 1024).toFixed(2)} KB (max: 400KB)`);
@@ -201,14 +201,10 @@ async function runAggressiveProductionStripper() {
       allowReturnOutsideFunction: true
     });
     
-    // Ultra-compact manifest - only essential data
+    // Ultra-compact manifest - only essential data with minimal validation
     const manifest = {
       o: {}, // optimizations.identifiers only
-      validation: {
-        passed: false,
-        issues: [],
-        reduction: 0
-      }
+      v: false // validation.passed
     };
     
     let identifierCounter = 0;
@@ -253,13 +249,10 @@ async function runAggressiveProductionStripper() {
         // Only optimize component names (PascalCase)
         if (AGGRESSIVE_CONFIG.safePatterns.components.test(name) && 
             !AGGRESSIVE_CONFIG.protectedIdentifiers.includes(name)) {
-          const key = `a${identifierCounter++}`;
-          manifest.optimizations.identifiers[key] = {
-            original: name,
-            context: 'jsx'
-          };
+          const key = identifierCounter++; // Just use numbers as keys
+          manifest.o[key] = name; // Compact storage
           
-          path.node.name = key;
+          path.node.name = `a${key}`; // Keep the 'a' prefix in the code
           totalOptimizations++;
         }
       },
@@ -294,21 +287,7 @@ async function runAggressiveProductionStripper() {
     }
     
     // Update manifest with validation results
-    manifest.validation = {
-      passed: true,
-      issues: [],
-      reduction: validation.reduction
-    };
-    
-    manifest.s = {
-      o: originalSize,
-      p: output.length,
-      r: originalSize - output.length,
-      pr: validation.reduction,
-      to: totalOptimizations,
-      ut: Object.keys(manifest.ut || {}).length,
-      bf: path.relative(process.cwd(), backupFile)
-    };
+    manifest.v = true; // validation passed
     
     // Write files
     fs.writeFileSync(outputBundle, output);

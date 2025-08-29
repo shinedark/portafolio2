@@ -8,7 +8,6 @@ import TechStack from './components/random/TechStack'
 import Interest from './components/random/Interest'
 import SmileyOverlay from './components/random/SmileyOverlay'
 import MatrixTerminal from './components/random/MatrixTerminal'
-import { AuthProvider } from './components/auth/AuthContext'
 import planetariaRadioImage from './pictures/pr.png'
 import sdm from './pictures/sdm.png'
 import mmt from './pictures/mmt.png'
@@ -242,85 +241,81 @@ function App() {
 
   return (
     <Web3ProviderWrapper>
-      {/* <BrowserRouter>
-        <AuthProvider> */}
-          <div className="app">
-            {showOverlay && (
-              <SmileyOverlay onClose={() => setShowOverlay(false)} />
-            )}
+      <div className="app">
+        {showOverlay && (
+          <SmileyOverlay onClose={() => setShowOverlay(false)} />
+        )}
 
-            <header ref={headerRef} className="header">
-              <div className="ascii-container">
-                <AsciiArtComponent />
-              </div>
-            </header>
-            <main className="main">
-              <MatrixTerminal animate={showOverlay} />
-              <div className="content-wrapper">
-                <Interest />
-                <br />
-                <>
-                  <div className="header-container">
-                    {isMobile ? (
-                      <div className="mobile-projects">
-                        {selectedProjects.map((project, index) => (
-                          <div className="project-container" key={index}>
-                            <ProjectCube
-                              project={project}
-                              onProjectClick={handleProjectClick}
-                            />
-                          </div>
-                        ))}
+        <header ref={headerRef} className="header">
+          <div className="ascii-container">
+            <AsciiArtComponent />
+          </div>
+        </header>
+        <main className="main">
+          <MatrixTerminal animate={showOverlay} />
+          <div className="content-wrapper">
+            <Interest />
+            <br />
+            <>
+              <div className="header-container">
+                {isMobile ? (
+                  <div className="mobile-projects">
+                    {selectedProjects.map((project, index) => (
+                      <div className="project-container" key={index}>
+                        <ProjectCube
+                          project={project}
+                          onProjectClick={handleProjectClick}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <>
+                    {selectedTech ? (
+                      <div className="project-cube-wrapper">
+                        <ProjectCube
+                          project={selectedProjects[currentProjectIndex]}
+                          onProjectClick={handleProjectClick}
+                        />
+                        <div className="navigation-buttons">
+                          <button
+                            onClick={handlePreviousProject}
+                          >{`<`}</button>
+                          <button onClick={handleNextProject}>{`>`}</button>
+                        </div>
                       </div>
                     ) : (
-                      <>
-                        {selectedTech ? (
-                          <div className="project-cube-wrapper">
-                            <ProjectCube
-                              project={selectedProjects[currentProjectIndex]}
-                              onProjectClick={handleProjectClick}
-                            />
-                            <div className="navigation-buttons">
-                              <button
-                                onClick={handlePreviousProject}
-                              >{`<`}</button>
-                              <button onClick={handleNextProject}>{`>`}</button>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="projects-h1">
-                            <h1 className="projects-h1">LegacyProjects</h1>
-                          </div>
-                        )}
-                        <TechStack
-                          isAnimating={isAnimating}
-                          selectedTech={selectedTech}
-                          onTechSelect={setSelectedTech}
-                        />
-                      </>
+                      <div className="projects-h1">
+                        <h1 className="projects-h1">LegacyProjects</h1>
+                      </div>
                     )}
-                  </div>
-                </>
-
+                    <TechStack
+                      isAnimating={isAnimating}
+                      selectedTech={selectedTech}
+                      onTechSelect={setSelectedTech}
+                    />
+                  </>
+                )}
               </div>
-            </main>
-            <footer className="footer">
-              <p>
-                © {new Date().getFullYear()} SHINE DARK. All rights reserved.
-              </p>
-              <p>
-                <a
-                  href="https://x.com/ShineDarkmusic"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Contact us on X (Twitter)
-                </a>
-              </p>
-            </footer>
+            </>
+
           </div>
-        {/* </AuthProvider>
-      </BrowserRouter> */}
+        </main>
+        <footer className="footer">
+          <p>
+            © {new Date().getFullYear()} SHINE DARK. All rights reserved.
+          </p>
+          <p>
+            <a
+              href="https://x.com/ShineDarkmusic"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Contact us on X (Twitter)
+            </a>
+          </p>
+        </footer>
+      </div>
     </Web3ProviderWrapper>
   )
 }
