@@ -1,0 +1,230 @@
+{
+    "rules": {
+      "project": {
+        "name": "portfolio",
+        "type": "react-web",
+        "framework": "create-react-app",
+        "language": "JavaScript",
+        "styling": "tailwindcss",
+        "description": "Rules for a React web project with Web3 integrations, Three.js, and post-build semantic stripping for bundle optimization."
+      },
+      "codeStyle": {
+        "formatting": {
+          "indentation": "2 spaces",
+          "semicolons": true,
+          "quotes": "single",
+          "trailingComma": "es5",
+          "lineLength": 100
+        },
+        "namingConventions": {
+          "components": "PascalCase",
+          "functions": "camelCase",
+          "variables": "camelCase",
+          "constants": "UPPER_SNAKE_CASE",
+          "files": "kebab-case"
+        },
+        "eslint": {
+          "extends": ["react-app", "react-app/jest"],
+          "rules": {
+            "no-unused-vars": "warn",
+            "react/prop-types": "off",
+            "react/jsx-uses-react": "off",
+            "react/react-in-jsx-scope": "off"
+          }
+        }
+      },
+      "dependencies": {
+        "react": {
+          "version": "^18.3.1",
+          "usage": "Use functional components with Hooks. Avoid class components.",
+          "examples": [
+            "const MyComponent = () => <div>Hello</div>;"
+          ]
+        },
+        "react-router-dom": {
+          "version": "^7.1.1",
+          "usage": "Use BrowserRouter, Routes, and Route for navigation. Prefer useNavigate over useHistory.",
+          "examples": [
+            "import { BrowserRouter, Routes, Route } from 'react-router-dom';",
+            "<BrowserRouter><Routes><Route path='/' element={<Home />} /></Routes></BrowserRouter>"
+          ]
+        },
+        "@tanstack/react-query": {
+          "version": "^5.62.14",
+          "usage": "Use QueryClientProvider and hooks (useQuery, useMutation) for data fetching and state management.",
+          "examples": [
+            "import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';",
+            "const queryClient = new QueryClient();",
+            "<QueryClientProvider client={queryClient}><App /></QueryClientProvider>"
+          ]
+        },
+        "ethers": {
+          "version": "^6.13.5",
+          "usage": "Use for Ethereum blockchain interactions. Prefer ethers.BrowserProvider for Web3 connections.",
+          "examples": [
+            "import { ethers } from 'ethers';",
+            "const provider = new ethers.BrowserProvider(window.ethereum);"
+          ]
+        },
+        "@web3-react": {
+          "packages": ["core", "injected-connector", "metamask", "walletconnect-v2", "coinbase-wallet"],
+          "usage": "Use Web3ReactProvider and hooks for wallet connections. Support MetaMask, WalletConnect, and Coinbase Wallet.",
+          "examples": [
+            "import { Web3ReactProvider } from '@web3-react/core';",
+            "import { InjectedConnector } from '@web3-react/injected-connector';",
+            "const injected = new InjectedConnector({ supportedChainIds: [1, 5] });"
+          ]
+        },
+        "three": {
+          "version": "^0.167.1",
+          "usage": "Use for 3D rendering. Prefer functional components with useEffect for scene setup.",
+          "examples": [
+            "import * as THREE from 'three';",
+            "useEffect(() => { const scene = new THREE.Scene(); /* setup */ }, []);"
+          ]
+        },
+        "react-syntax-highlighter": {
+          "version": "^15.5.0",
+          "usage": "Use for code block rendering. Prefer Prism for lightweight syntax highlighting.",
+          "examples": [
+            "import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';",
+            "<SyntaxHighlighter language='javascript'>code</SyntaxHighlighter>"
+          ]
+        },
+        "ascii-art": {
+          "version": "^2.8.5",
+          "usage": "Use for generating ASCII art in the console or UI for visual effects.",
+          "examples": [
+            "import AsciiArt from 'ascii-art';",
+            "AsciiArt.font('Hello', 'Doom', (err, rendered) => console.log(rendered));"
+          ]
+        },
+        "@babel/parser": {
+          "version": "^7.24.7",
+          "usage": "Use for parsing JavaScript/JSX in post-build stripper.",
+          "examples": [
+            "import parser from '@babel/parser';",
+            "const ast = parser.parse(code, { sourceType: 'module', plugins: ['jsx'] });"
+          ]
+        },
+        "@babel/traverse": {
+          "version": "^7.24.7",
+          "usage": "Use for traversing AST in post-build stripper.",
+          "examples": [
+            "import traverse from '@babel/traverse';",
+            "traverse(ast, { Identifier(path) { /* modify */ } });"
+          ]
+        },
+        "@babel/generator": {
+          "version": "^7.24.7",
+          "usage": "Use for generating code from AST in post-build stripper.",
+          "examples": [
+            "import generate from '@babel/generator';",
+            "const output = generate(ast, { minified: true }).code;"
+          ]
+        },
+        "express": {
+          "version": "^4.19.2",
+          "usage": "Use for dev server to translate stripped stack traces.",
+          "examples": [
+            "import express from 'express';",
+            "app.post('/translate-error', (req, res) => { /* translate */ });"
+          ]
+        }
+      },
+      "styling": {
+        "library": "tailwindcss",
+        "setup": {
+          "install": "npm install -D tailwindcss postcss autoprefixer",
+          "init": "npx tailwindcss init -p",
+          "config": {
+            "file": "tailwind.config.js",
+            "content": [
+              "./src/**/*.{js,jsx,ts,tsx}",
+              "./public/index.html"
+            ],
+            "theme": {
+              "extend": {}
+            },
+            "plugins": []
+          },
+          "css": {
+            "file": "src/styles/index.css",
+            "content": "@tailwind base; @tailwind components; @tailwind utilities;"
+          }
+        },
+        "usage": "Use Tailwind CSS classes for styling. Avoid inline styles unless necessary.",
+        "examples": [
+          "<div className='flex justify-center items-center h-screen bg-gray-100'>Content</div>"
+        ]
+      },
+      "fileStructure": {
+        "root": {
+          "src": {
+            "components": "Reusable React components (e.g., Button.jsx, Header.jsx)",
+            "pages": "Page components for routing (e.g., Home.jsx, Portfolio.jsx)",
+            "hooks": "Custom hooks (e.g., useWeb3.js, useThree.js)",
+            "utils": "Utility functions and helpers (e.g., web3Utils.js)",
+            "styles": "Global CSS and Tailwind config (e.g., index.css)",
+            "index.js": "Entry point for React app"
+          },
+          "scripts": {
+            "post-build-stripper.js": "Post-build script to strip verbose identifiers from dist/build.js",
+            "dev-server.js": "Express server for translating stripped stack traces",
+            "get_baseline.js": "Script to measure original and stripped bundle sizes"
+          },
+          "public": "Static files (e.g., index.html, favicon.ico)",
+          "dist": "Build output (e.g., build.js, build.stripped.js, bundle-manifest.json)"
+        }
+      },
+      "bundleOptimization": {
+        "semanticStripping": {
+          "approach": "post-build",
+          "description": "Apply semantic stripping to dist/build.js to reduce size without affecting development.",
+          "script": "scripts/post-build-stripper.js",
+          "functionality": [
+            "Read dist/build.js",
+            "Parse AST with @babel/parser, supporting JSX",
+            "Replace verbose identifiers (e.g., ComponentName, useQuery) with minimal identifiers (e.g., a0)",
+            "Generate bundle-manifest.json for error translation",
+            "Output stripped bundle to dist/build.stripped.js"
+          ],
+          "dependencies": ["@babel/parser", "@babel/traverse", "@babel/generator"],
+          "warning": "Proof-of-concept. Manual review required before production use."
+        },
+        "errorTranslation": {
+          "script": "scripts/dev-server.js",
+          "functionality": [
+            "Run Express server to load bundle-manifest.json",
+            "Translate minimal identifiers in stack traces (e.g., a0 -> ComponentName)",
+            "Endpoint: POST /translate-error"
+          ],
+          "dependencies": ["express"]
+        }
+      },
+      "development": {
+        "scripts": {
+          "start": "react-scripts start",
+          "build": "react-scripts build",
+          "postbuild": "node scripts/post-build-stripper.js",
+          "measure": "node scripts/get_baseline.js",
+          "dev-server": "node scripts/dev-server.js",
+          "test": "react-scripts test"
+        },
+        "notes": [
+          "Use 'npm start' for development with unstripped code",
+          "Use 'npm run build && npm run postbuild' for production bundle with stripping",
+          "Run 'npm run measure' to compare bundle sizes",
+          "Run 'npm run dev-server' for error translation during debugging",
+          "Development uses unstripped code; stripping applies only to production bundle"
+        ]
+      },
+      "constraints": {
+        "noFormOnSubmit": "Avoid <form> onSubmit due to sandboxed frame restrictions.",
+        "jsxClassName": "Use className instead of class in JSX.",
+        "productionReady": "Semantic stripping is for PoC. Manual review required before production.",
+        "web3": "Ensure wallet connectors (MetaMask, WalletConnect, Coinbase) support mainnet and testnets (e.g., chainId 1, 5).",
+        "bundle": "CRA generates build.js; stripper creates build.stripped.js for deployment."
+      }
+    }
+  }

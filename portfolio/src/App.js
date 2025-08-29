@@ -7,19 +7,8 @@ import ProjectCube from './components/random/ProjectCube'
 import TechStack from './components/random/TechStack'
 import Interest from './components/random/Interest'
 import SmileyOverlay from './components/random/SmileyOverlay'
-import PrototypeShowcase from './components/random/PrototypeShowcase'
-import RouteContainer from './components/Navigation/RouteContainer'
-import SDProject from './components/routes/SDProject'
-import BusinessPlan from './components/routes/BusinessPlan'
-import Timeline from './components/routes/Timeline'
-import Development from './components/routes/Development'
-import Invest from './components/routes/Invest'
-import AdminRoute from './components/routes/AdminRoute'
 import MatrixTerminal from './components/random/MatrixTerminal'
 import { AuthProvider } from './components/auth/AuthContext'
-import Subscribe from './components/common/Subscribe'
-import Instagram from './components/common/Instagram'
-import Twitch from './components/common/Twitch'
 import planetariaRadioImage from './pictures/pr.png'
 import sdm from './pictures/sdm.png'
 import mmt from './pictures/mmt.png'
@@ -28,10 +17,8 @@ import nms from './pictures/nms.png'
 import vid from './pictures/vid.png'
 import guide from './pictures/guide.png'
 import './App.css'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
 import Web3ProviderWrapper from './providers/Web3Provider'
-import Donate from './components/common/Donate'
-import { BrowserProvider } from 'ethers'
 
 // Sample project data
 const projects = [
@@ -125,9 +112,9 @@ Make Noise !!!`,
   },
 ]
 
-function getLibrary(provider) {
-  return new BrowserProvider(provider)
-}
+// function getLibrary(provider) {
+//   return new BrowserProvider(provider)
+// }
 
 function App() {
   const headerRef = useRef(null)
@@ -136,7 +123,7 @@ function App() {
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
-  const [activeRoute, setActiveRoute] = useState('projects')
+
   // const { isAdmin } = useAuth()
 
   const handleProjectClick = () => {
@@ -255,8 +242,8 @@ function App() {
 
   return (
     <Web3ProviderWrapper>
-      <BrowserRouter>
-        <AuthProvider>
+      {/* <BrowserRouter>
+        <AuthProvider> */}
           <div className="app">
             {showOverlay && (
               <SmileyOverlay onClose={() => setShowOverlay(false)} />
@@ -269,27 +256,7 @@ function App() {
             </header>
             <main className="main">
               <MatrixTerminal animate={showOverlay} />
-              {/* <PrototypeShowcase /> */}
-              {/* <Donate /> */}
               <div className="content-wrapper">
-                {/* <RouteContainer
-                  activeRoute={activeRoute}
-                  onRouteChange={setActiveRoute}
-                > */}
-                  {/* {activeRoute === 'projects' && <SDProject />}
-                  {activeRoute === 'business-plan' && <BusinessPlan />} */}
-                  {/* {activeRoute === 'timeline' && <Timeline />} */}
-                  {/* {activeRoute === 'development' && <Development />} */}
-                  {/* {activeRoute === 'invest' && <Invest />}
-                  {activeRoute === 'admin' && <AdminRoute />} */}
-                {/* </RouteContainer> */}
-                <br />
-                {/* <Twitch />
-                <br /> */}
-                {/* <Instagram />
-                <br /> */}
-                {/* <Subscribe />
-                <br /> */}
                 <Interest />
                 <br />
                 <>
@@ -334,13 +301,7 @@ function App() {
                     )}
                   </div>
                 </>
-                {isMobile && activeRoute === 'projects' && (
-                  <TechStack
-                    isAnimating={isAnimating}
-                    selectedTech={selectedTech}
-                    onTechSelect={setSelectedTech}
-                  />
-                )}
+
               </div>
             </main>
             <footer className="footer">
@@ -358,8 +319,8 @@ function App() {
               </p>
             </footer>
           </div>
-        </AuthProvider>
-      </BrowserRouter>
+        {/* </AuthProvider>
+      </BrowserRouter> */}
     </Web3ProviderWrapper>
   )
 }
