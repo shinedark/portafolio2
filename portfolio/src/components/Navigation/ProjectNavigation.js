@@ -5,6 +5,7 @@ const ProjectNavigation = ({ activeRoute, onRouteChange }) => {
   const routes = [
     { id: 'projects', label: 'Projects' },
     { id: 'business-plan', label: 'Business Plan' },
+    { id: 'code-optimizer', label: '🚀 Code Optimizer' },
     // { id: 'timeline', label: 'Timeline' },
     // { id: 'development', label: 'Development' },
     { id: 'invest', label: 'Invest & Support' },
