@@ -355,22 +355,51 @@ function ρ(){requestAnimationFrame(ρ);for(σ=0;σ<ο.length/2;σ++){ο[σ].rot
     video.preload = 'metadata'
     video.volume = 0.7 // Set reasonable volume level
     
-    // Add video source with error handling
-    const source = document.createElement('source')
-    source.src = '/videos/remastered.mp4'
-    source.type = 'video/mp4'
-    video.appendChild(source)
+    // Set video source - handle both dev and production URLs
+    const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    const videoUrl = isLocalDev ? '/videos/remastered.mp4' : '/videos/remastered.mp4'
     
-    // Add error handling for video loading
+    video.src = videoUrl
+    console.log('Loading video from:', videoUrl)
+    console.log('Current location:', window.location.href)
+    console.log('Is local dev:', isLocalDev)
+    
+    // Add comprehensive error handling for video loading
     video.onerror = (e) => {
       console.error('Video loading error:', e)
-      console.log('Trying alternative approach...')
-      setShowPlayButton(true)
+      console.log('Attempting fallback loading methods...')
+      
+      // Try different path approaches
+      const fallbackPaths = [
+        '/videos/remastered.mp4?t=' + Date.now(), // Cache bust
+        './videos/remastered.mp4', // Relative path
+        `${process.env.PUBLIC_URL || ''}/videos/remastered.mp4`, // With PUBLIC_URL
+        'videos/remastered.mp4' // Without leading slash
+      ]
+      
+      let attemptIndex = 0
+      const tryNextPath = () => {
+        if (attemptIndex < fallbackPaths.length) {
+          const path = fallbackPaths[attemptIndex]
+          console.log(`Trying fallback path ${attemptIndex + 1}:`, path)
+          video.src = path
+          video.load()
+          attemptIndex++
+        } else {
+          console.error('All video loading attempts failed')
+          setShowPlayButton(true)
+        }
+      }
+      
+      setTimeout(tryNextPath, 100)
     }
     
-    source.onerror = (e) => {
-      console.error('Video source error:', e)
-      setShowPlayButton(true)
+    video.onloadstart = () => {
+      console.log('Video loading started...')
+    }
+    
+    video.onloadedmetadata = () => {
+      console.log('Video metadata loaded, duration:', video.duration)
     }
     
     let texture = null
