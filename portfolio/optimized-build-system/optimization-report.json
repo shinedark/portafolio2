@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-09-03T01:24:34.553Z",
+  "strategy": "Maximum Aggression",
+  "results": {
+    "originalSize": 1364173,
+    "optimizedSize": 1279231,
+    "reduction": 6.226629613692691,
+    "processingTime": 717,
+    "savings": 84942
+  },
+  "files": [
+    {
+      "type": "optimized",
+      "path": "../build/static/js/main.abc09d11.max-aggression.js",
+      "size": 1279231
+    },
+    {
+      "type": "manifest",
+      "path": "../build/static/max-aggression-manifest.json",
+      "size": 198179
+    },
+    {
+      "type": "backup",
+      "path": "../build/static/js/main.abc09d11.js.max-aggression.backup",
+      "size": 1364173
+    }
+  ],
+  "errors": [],
+  "warnings": []
+}
