@@ -357,7 +357,26 @@ function ρ(){requestAnimationFrame(ρ);for(σ=0;σ<ο.length/2;σ++){ο[σ].rot
     
     // Set video source - handle both dev and production URLs
     const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    const videoUrl = isLocalDev ? '/videos/remastered.mp4' : '/videos/remastered.mp4'
+    const isProductionDomain = window.location.hostname.includes('shinedark.dev')
+    
+    let videoUrl = '/videos/remastered.mp4'
+    
+    // For production domains that don't have the video, show wireframe fallback
+    if (isProductionDomain && !isLocalDev) {
+      console.warn('Production domain detected without video assets. Will show wireframe fallback.')
+      setShowPlayButton(true)
+      // Create wireframe cube instead
+      const geometry = new THREE.BoxGeometry(2, 2, 2)
+      const material = new THREE.MeshBasicMaterial({ 
+        color: 0xffffff, 
+        wireframe: true 
+      })
+      cube = new THREE.Mesh(geometry, material)
+      cube.position.set(-3, 1, -2)
+      scene.add(cube)
+      setVideoLoaded(true)
+      return // Skip video loading for production without assets
+    }
     
     video.src = videoUrl
     console.log('Loading video from:', videoUrl)
@@ -365,33 +384,47 @@ function ρ(){requestAnimationFrame(ρ);for(σ=0;σ<ο.length/2;σ++){ο[σ].rot
     console.log('Is local dev:', isLocalDev)
     
     // Add comprehensive error handling for video loading
+    let errorCount = 0
+    const maxRetries = 3
+    
     video.onerror = (e) => {
-      console.error('Video loading error:', e)
+      errorCount++
+      console.error(`Video loading error (attempt ${errorCount}):`, e)
+      console.log('Current video src:', video.src)
+      
+      // Stop infinite retry loop
+      if (errorCount >= maxRetries) {
+        console.error('Maximum video loading retries reached. Showing play button.')
+        setShowPlayButton(true)
+        return
+      }
+      
       console.log('Attempting fallback loading methods...')
       
-      // Try different path approaches
+      // Try different path approaches based on current environment
       const fallbackPaths = [
         '/videos/remastered.mp4?t=' + Date.now(), // Cache bust
         './videos/remastered.mp4', // Relative path
-        `${process.env.PUBLIC_URL || ''}/videos/remastered.mp4`, // With PUBLIC_URL
+        `${window.location.origin}/videos/remastered.mp4`, // Full URL with current origin
         'videos/remastered.mp4' // Without leading slash
       ]
       
-      let attemptIndex = 0
-      const tryNextPath = () => {
-        if (attemptIndex < fallbackPaths.length) {
-          const path = fallbackPaths[attemptIndex]
-          console.log(`Trying fallback path ${attemptIndex + 1}:`, path)
+      if (errorCount <= fallbackPaths.length) {
+        const path = fallbackPaths[errorCount - 1]
+        console.log(`Trying fallback path ${errorCount}:`, path)
+        
+        // Clear previous error handler to prevent immediate re-trigger
+        video.onerror = null
+        
+        setTimeout(() => {
           video.src = path
+          video.onerror = arguments.callee // Re-attach error handler
           video.load()
-          attemptIndex++
-        } else {
-          console.error('All video loading attempts failed')
-          setShowPlayButton(true)
-        }
+        }, 200)
+      } else {
+        console.error('All video loading attempts failed')
+        setShowPlayButton(true)
       }
-      
-      setTimeout(tryNextPath, 100)
     }
     
     video.onloadstart = () => {
