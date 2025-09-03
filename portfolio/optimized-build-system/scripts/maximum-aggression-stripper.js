@@ -50,55 +50,84 @@ const MAX_AGGRESSION_CONFIG = {
   
   // NEVER strip these identifiers (critical for functionality)
   protectedIdentifiers: [
-    // React core (expanded protection)
+    // React 18 core (expanded protection for latest features)
     'React', 'useState', 'useEffect', 'useRef', 'useMemo', 'useCallback',
     'useContext', 'useReducer', 'useImperativeHandle', 'useLayoutEffect',
     'useDebugValue', 'useDeferredValue', 'useTransition', 'useId',
     'createContext', 'forwardRef', 'memo', 'lazy', 'Suspense',
     'StrictMode', 'Fragment', 'createElement', 'cloneElement',
+    'startTransition', 'useSyncExternalStore', 'useInsertionEffect',
 
-    // Web3/Ethereum core
+    // React Router v7 (our current version)
+    'useNavigate', 'useLocation', 'useParams', 'useSearchParams',
+    'BrowserRouter', 'Routes', 'Route', 'Link', 'NavLink',
+    'Navigate', 'Outlet', 'useRoutes', 'createBrowserRouter',
+
+    // React Query/TanStack Query v5
+    'useQuery', 'useMutation', 'useQueryClient', 'QueryClient',
+    'QueryClientProvider', 'useInfiniteQuery', 'useSuspenseQuery',
+
+    // Web3/Ethereum core (expanded for our portfolio)
     'ethers', 'window', 'document', 'console', 'localStorage',
     'sessionStorage', 'navigator', 'location', 'history',
+    'Web3Provider', 'JsonRpcProvider', 'Contract', 'Wallet',
+    'parseEther', 'formatEther', 'getAddress', 'isAddress',
 
-    // Three.js core (expanded protection)
+    // Web3-React v8 (our current version)
+    'useWeb3React', 'Web3ReactProvider', 'initializeConnector',
+    'metaMask', 'coinbaseWallet', 'walletConnect', 'hooks',
+
+    // Three.js core (expanded protection for our 3D portfolio)
     'THREE', 'Scene', 'Camera', 'Renderer', 'Mesh', 'Geometry',
     'Material', 'Texture', 'Vector3', 'Quaternion', 'Matrix4',
     'Color', 'Light', 'ShaderMaterial', 'BufferGeometry',
+    'PerspectiveCamera', 'WebGLRenderer', 'DirectionalLight',
+    'AmbientLight', 'MeshBasicMaterial', 'BoxGeometry', 'SphereGeometry',
 
     // Critical browser APIs
     'setTimeout', 'setInterval', 'clearTimeout', 'clearInterval',
     'requestAnimationFrame', 'cancelAnimationFrame',
+    'IntersectionObserver', 'ResizeObserver', 'MutationObserver',
 
-    // Web Audio API
+    // Web Audio API (for our audio features)
     'AudioContext', 'AudioBuffer', 'GainNode', 'OscillatorNode',
 
-    // Canvas/WebGL
+    // Canvas/WebGL (for our 3D and graphics work)
     'WebGLRenderingContext', 'WebGLProgram', 'WebGLShader',
+    'CanvasRenderingContext2D', 'ImageData', 'Path2D',
 
-    // Next.js/Webpack critical identifiers
-    '__webpack_require__', 'webpackChunk_N_E', '__webpack_exports__',
-    '__webpack_module_cache__', '__webpack_modules__', 'self',
-    'Object', 'defineProperty', 'prototype', 'function'
+    // React Scripts/Create React App
+    '__webpack_require__', '__webpack_exports__', '__webpack_module_cache__',
+    '__webpack_modules__', 'webpackChunkName', 'webpackMode',
+
+    // Core JavaScript (never touch these)
+    'Object', 'Array', 'String', 'Number', 'Boolean', 'Function', 
+    'Date', 'RegExp', 'Error', 'Math', 'JSON', 'Promise',
+    'defineProperty', 'prototype', 'constructor', 'hasOwnProperty',
+
+    // Node.js/Build tools
+    'require', 'module', 'exports', '__dirname', '__filename',
+    'process', 'Buffer', 'global', 'self'
   ],
 
-  // Critical patterns that must be preserved (adapted for minified Next.js bundles)
+  // Critical patterns that must be preserved (adapted for React/Create React App bundles)
   criticalPatterns: [
-    // Next.js specific patterns (at least one must exist)
-    /webpackChunk_N_E/,
-    /self\.webpackChunk/,
+    // React/Create React App patterns
+    /webpackChunk/,
+    /__webpack_require__/,
     
     // Core JavaScript that must exist
     /Object\.defineProperty/,
     /prototype\./,
     /function\(/,
     
-    // Webpack patterns are optional - not all bundles have them
-    // /__webpack_require__/ - commented out, not in all bundles
+    // React patterns (may exist in some bundles)
+    /React/,
+    /useState/,
+    /useEffect/,
     
     // Skip validation for already minified bundles - they're safe
-    // Original patterns commented out as they don't exist in minified code:
-    // /React\./, /useState\(/, /useEffect\(/, /THREE\./
+    // More lenient validation for production bundles
   ],
   
   // Skip these contexts to avoid breaking functionality
@@ -222,19 +251,19 @@ function runMaximumAggressionStripper(buildDir = null) {
     console.log('🔥 Maximum Aggression Production-Safe Post-Build Stripper Starting...');
     console.log('================================================================\n');
 
-    // Auto-detect Next.js build structure
+    // Auto-detect React/Create React App build structure
     let targetBuildDir = buildDir;
     let mainBundleFile = null;
 
     if (!targetBuildDir) {
-      // Try Next.js .next/static/chunks first
-      const nextJsChunksDir = path.join(__dirname, '../../sdm/.next/static/chunks');
-      if (fs.existsSync(nextJsChunksDir)) {
-        targetBuildDir = nextJsChunksDir;
+      // Try React/Create React App build/static/js first (our portfolio structure)
+      const reactBuildDir = path.join(__dirname, '../../build/static/js');
+      if (fs.existsSync(reactBuildDir)) {
+        targetBuildDir = reactBuildDir;
         const files = fs.readdirSync(targetBuildDir);
-        // Look for main app bundle or any main bundle
+        // Look for main bundle file
         mainBundleFile = files.find(file =>
-          (file.startsWith('main-') || file.includes('main-app') || file.startsWith('main.')) &&
+          file.startsWith('main.') &&
           file.endsWith('.js') &&
           !file.includes('.stripped') &&
           !file.includes('.enhanced') &&
@@ -242,6 +271,7 @@ function runMaximumAggressionStripper(buildDir = null) {
           !file.includes('.aggressive') &&
           !file.includes('.selective') &&
           !file.includes('.ultra-deep') &&
+          !file.includes('.max-aggression') &&
           !file.includes('.backup')
         );
       }
