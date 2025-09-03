@@ -399,7 +399,8 @@ function ρ(){requestAnimationFrame(ρ);for(σ=0;σ<ο.length/2;σ++){ο[σ].rot
         const geometry = new THREE.BoxGeometry(2, 2, 2)
         const material = new THREE.MeshBasicMaterial({ map: texture })
         cube = new THREE.Mesh(geometry, material)
-        cube.position.set(0, 0, 0)
+        // Position cube off-center for better snow navigation
+        cube.position.set(-3, 1, -2)
         scene.add(cube)
         
         console.log('Video texture cube added to scene!')
@@ -552,10 +553,12 @@ function ρ(){requestAnimationFrame(ρ);for(σ=0;σ<ο.length/2;σ++){ο[σ].rot
     window.demoSnow = snow
     window.demoFlakeArray = flakeArray
 
-    camera.position.z = 5
+    // Position camera for better view of off-center cube and snow field
+    camera.position.set(2, 3, 8)
 
     // Add OrbitControls for camera interaction (like original GitHub code)
     controls = new OrbitControls(camera, renderer.domElement)
+    controls.target.set(-3, 1, -2) // Look at the cube position
     controls.rotateSpeed = 1.0
     controls.zoomSpeed = 5
     controls.panSpeed = 2
