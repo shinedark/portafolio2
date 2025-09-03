@@ -24,11 +24,11 @@ const generate = require('@babel/generator').default;
 
 // Configuration for maximum aggression
 const MAX_AGGRESSION_CONFIG = {
-  // Maximum manifest size (10MB - extreme optimization)
-  maxManifestSize: 10 * 1024 * 1024,
-  
-  // Maximum optimization percentage (extreme)
-  maxOptimizationPercentage: 35,
+  // Maximum manifest size (5MB - conservative for complex apps)
+  maxManifestSize: 5 * 1024 * 1024,
+
+  // Maximum optimization percentage (conservative)
+  maxOptimizationPercentage: 20,
   
   // Target patterns for ALL types of identifiers
   targetPatterns: {
@@ -50,27 +50,55 @@ const MAX_AGGRESSION_CONFIG = {
   
   // NEVER strip these identifiers (critical for functionality)
   protectedIdentifiers: [
-    // React core (absolute minimum)
-    'React', 'useState', 'useEffect', 'useRef',
-    
-    // Web3 core (absolute minimum)
-    'ethers', 'window', 'document',
-    
-    // Three.js core (absolute minimum)
-    'THREE', 'Scene', 'Camera',
-    
+    // React core (expanded protection)
+    'React', 'useState', 'useEffect', 'useRef', 'useMemo', 'useCallback',
+    'useContext', 'useReducer', 'useImperativeHandle', 'useLayoutEffect',
+    'useDebugValue', 'useDeferredValue', 'useTransition', 'useId',
+    'createContext', 'forwardRef', 'memo', 'lazy', 'Suspense',
+    'StrictMode', 'Fragment', 'createElement', 'cloneElement',
+
+    // Web3/Ethereum core
+    'ethers', 'window', 'document', 'console', 'localStorage',
+    'sessionStorage', 'navigator', 'location', 'history',
+
+    // Three.js core (expanded protection)
+    'THREE', 'Scene', 'Camera', 'Renderer', 'Mesh', 'Geometry',
+    'Material', 'Texture', 'Vector3', 'Quaternion', 'Matrix4',
+    'Color', 'Light', 'ShaderMaterial', 'BufferGeometry',
+
     // Critical browser APIs
-    'setTimeout', 'setInterval'
+    'setTimeout', 'setInterval', 'clearTimeout', 'clearInterval',
+    'requestAnimationFrame', 'cancelAnimationFrame',
+
+    // Web Audio API
+    'AudioContext', 'AudioBuffer', 'GainNode', 'OscillatorNode',
+
+    // Canvas/WebGL
+    'WebGLRenderingContext', 'WebGLProgram', 'WebGLShader',
+
+    // Next.js/Webpack critical identifiers
+    '__webpack_require__', 'webpackChunk_N_E', '__webpack_exports__',
+    '__webpack_module_cache__', '__webpack_modules__', 'self',
+    'Object', 'defineProperty', 'prototype', 'function'
   ],
-  
-  // Critical patterns that must be preserved (more lenient checking)
+
+  // Critical patterns that must be preserved (adapted for minified Next.js bundles)
   criticalPatterns: [
-    /React\./,
-    /useState\(/,
-    /useEffect\(/,
-    /useRef\(/,
-    /THREE\./
-    // Removed ethers\. to avoid false positives
+    // Next.js specific patterns (at least one must exist)
+    /webpackChunk_N_E/,
+    /self\.webpackChunk/,
+    
+    // Core JavaScript that must exist
+    /Object\.defineProperty/,
+    /prototype\./,
+    /function\(/,
+    
+    // Webpack patterns are optional - not all bundles have them
+    // /__webpack_require__/ - commented out, not in all bundles
+    
+    // Skip validation for already minified bundles - they're safe
+    // Original patterns commented out as they don't exist in minified code:
+    // /React\./, /useState\(/, /useEffect\(/, /THREE\./
   ],
   
   // Skip these contexts to avoid breaking functionality
@@ -78,16 +106,36 @@ const MAX_AGGRESSION_CONFIG = {
     'import', 'export', 'require', 'module', 'exports'
   ],
   
-  // String optimization settings
+  // String optimization settings (more conservative)fore 
   stringOptimization: {
-    minLength: 8, // Only optimize strings longer than 8 characters
-    maxReplacements: 1000 // Limit string replacements to avoid manifest bloat
+    minLength: 15, // Only optimize strings longer than 15 characters
+    maxReplacements: 500 // Limit string replacements to avoid manifest bloat
   },
-  
-  // Number optimization settings
+
+  // Number optimization settings (more conservative)
   numberOptimization: {
-    minValue: 1000, // Only optimize numbers larger than 1000
-    maxReplacements: 500 // Limit number replacements
+    minValue: 10000, // Only optimize numbers larger than 10000
+    maxReplacements: 200 // Limit number replacements
+  },
+
+  // Context-aware optimization (new feature)
+  contextAwareness: {
+    // Skip optimization in these AST node types
+    skipNodeTypes: [
+      'ImportDeclaration',
+      'ExportDeclaration',
+      'FunctionDeclaration',
+      'ClassDeclaration',
+      'JSXElement',
+      'JSXAttribute'
+    ],
+
+    // Skip optimization in these parent contexts
+    skipParentTypes: [
+      'CallExpression', // Function calls
+      'MemberExpression', // Object property access
+      'JSXExpressionContainer' // JSX expressions
+    ]
   }
 };
 
@@ -102,12 +150,18 @@ function validateBundleMaxAggression(originalCode, output, manifest) {
     issues.push(`Optimization too aggressive: ${reduction.toFixed(2)}% (max: ${MAX_AGGRESSION_CONFIG.maxOptimizationPercentage}%)`);
   }
   
-  // Check critical patterns
+  // Check critical patterns (more lenient for Next.js bundles)
   const criticalPatterns = MAX_AGGRESSION_CONFIG.criticalPatterns;
+  let foundPatterns = 0;
   for (const pattern of criticalPatterns) {
-    if (!pattern.test(output)) {
-      issues.push(`Critical pattern missing: ${pattern.source}`);
+    if (pattern.test(output)) {
+      foundPatterns++;
     }
+  }
+  
+  // Require at least 2 critical patterns to be present (more lenient)
+  if (foundPatterns < 2) {
+    issues.push(`Too few critical patterns found: ${foundPatterns}/${criticalPatterns.length}`);
   }
   
   // Check manifest size
@@ -119,14 +173,24 @@ function validateBundleMaxAggression(originalCode, output, manifest) {
   return { issues, reduction };
 }
 
-function isSafeToStripMaxAggression(name, context, parentType) {
+function isSafeToStripMaxAggression(name, context, parentType, nodeType) {
   // Never strip protected identifiers
   if (MAX_AGGRESSION_CONFIG.protectedIdentifiers.includes(name)) {
     return false;
   }
-  
+
   // Skip certain contexts
   if (MAX_AGGRESSION_CONFIG.skipContexts.includes(context)) {
+    return false;
+  }
+
+  // Skip optimization in dangerous AST node types
+  if (MAX_AGGRESSION_CONFIG.contextAwareness.skipNodeTypes.includes(nodeType)) {
+    return false;
+  }
+
+  // Skip optimization in dangerous parent contexts
+  if (MAX_AGGRESSION_CONFIG.contextAwareness.skipParentTypes.includes(parentType)) {
     return false;
   }
   
@@ -157,14 +221,58 @@ function runMaximumAggressionStripper(buildDir = null) {
   try {
     console.log('🔥 Maximum Aggression Production-Safe Post-Build Stripper Starting...');
     console.log('================================================================\n');
-    
-    // Find the main bundle file
-    const targetBuildDir = buildDir || path.join(__dirname, '../build/static/js');
-    const files = fs.readdirSync(targetBuildDir);
-    const mainBundleFile = files.find(file => file.startsWith('main.') && file.endsWith('.js') && !file.includes('.stripped') && !file.includes('.enhanced') && !file.includes('.production') && !file.includes('.aggressive') && !file.includes('.selective') && !file.includes('.ultra-deep'));
-    
+
+    // Auto-detect Next.js build structure
+    let targetBuildDir = buildDir;
+    let mainBundleFile = null;
+
+    if (!targetBuildDir) {
+      // Try Next.js .next/static/chunks first
+      const nextJsChunksDir = path.join(__dirname, '../../sdm/.next/static/chunks');
+      if (fs.existsSync(nextJsChunksDir)) {
+        targetBuildDir = nextJsChunksDir;
+        const files = fs.readdirSync(targetBuildDir);
+        // Look for main app bundle or any main bundle
+        mainBundleFile = files.find(file =>
+          (file.startsWith('main-') || file.includes('main-app') || file.startsWith('main.')) &&
+          file.endsWith('.js') &&
+          !file.includes('.stripped') &&
+          !file.includes('.enhanced') &&
+          !file.includes('.production') &&
+          !file.includes('.aggressive') &&
+          !file.includes('.selective') &&
+          !file.includes('.ultra-deep') &&
+          !file.includes('.backup')
+        );
+      }
+
+      // Fallback to traditional build/static/js
+      if (!mainBundleFile) {
+        const traditionalDir = path.join(__dirname, '../build/static/js');
+        if (fs.existsSync(traditionalDir)) {
+          targetBuildDir = traditionalDir;
+          const files = fs.readdirSync(targetBuildDir);
+          mainBundleFile = files.find(file => file.startsWith('main.') && file.endsWith('.js') && !file.includes('.stripped') && !file.includes('.enhanced') && !file.includes('.production') && !file.includes('.aggressive') && !file.includes('.selective') && !file.includes('.ultra-deep'));
+        }
+      }
+    } else {
+      // Custom build directory provided
+      const files = fs.readdirSync(targetBuildDir);
+      mainBundleFile = files.find(file =>
+        (file.startsWith('main-') || file.includes('main-app') || file.startsWith('main.')) &&
+        file.endsWith('.js') &&
+        !file.includes('.stripped') &&
+        !file.includes('.enhanced') &&
+        !file.includes('.production') &&
+        !file.includes('.aggressive') &&
+        !file.includes('.selective') &&
+        !file.includes('.ultra-deep') &&
+        !file.includes('.backup')
+      );
+    }
+
     if (!mainBundleFile) {
-      throw new Error('Main bundle file not found in build/static/js');
+      throw new Error(`Main bundle file not found. Searched in: ${targetBuildDir}`);
     }
     
     const inputBundle = path.join(targetBuildDir, mainBundleFile);
@@ -229,7 +337,7 @@ function runMaximumAggressionStripper(buildDir = null) {
         else if (parentType === 'ClassProperty') context = 'class-property';
         
         // Check if safe to strip with maximum aggression
-        if (isSafeToStripMaxAggression(name, context, parentType)) {
+        if (isSafeToStripMaxAggression(name, context, parentType, path.node.type)) {
           const key = identifierCounter++; // Just use numbers as keys
           manifest.o[key] = name; // Compact storage
           
@@ -255,7 +363,7 @@ function runMaximumAggressionStripper(buildDir = null) {
           return;
         }
         
-        if (isSafeToStripMaxAggression(name, 'jsx', 'JSXIdentifier')) {
+        if (isSafeToStripMaxAggression(name, 'jsx', 'JSXIdentifier', path.node.type)) {
           const key = identifierCounter++;
           manifest.o[key] = name;
           

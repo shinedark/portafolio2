@@ -10,6 +10,8 @@
     "optimize": "node scripts/universal-optimizer.js",
     "optimize:max": "node scripts/universal-optimizer.js --strategy max-aggression",
     "optimize:enhanced": "node scripts/universal-optimizer.js --strategy enhanced",
+    "deploy": "node scripts/deploy-optimized.js deploy",
+    "rollback": "node scripts/deploy-optimized.js rollback",
     "build:core": "cd packages/semantic-minifier-core && npm run build",
     "install:core": "cd packages/semantic-minifier-core && npm install",
     "test": "node scripts/test-optimization.js",
