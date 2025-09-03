@@ -18,21 +18,21 @@
     "ascii-art": "^2.8.5",
     "ethers": "^6.13.5",
     "express": "^5.1.0",
+    "metro-plugin-semantic-minification": "file:./packages/metro-plugin-semantic-minification",
+    "optimization-devtool": "file:./packages/optimization-devtool",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
     "react-syntax-highlighter": "^15.5.0",
-    "three": "^0.167.1",
-    "web-vitals": "^2.1.4",
     "semantic-minifier-core": "file:./packages/semantic-minifier-core",
-    "metro-plugin-semantic-minification": "file:./packages/metro-plugin-semantic-minification",
-    "optimization-devtool": "file:./packages/optimization-devtool"
+    "three": "^0.167.1",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    
+    "build:optimized": "node scripts/build-with-optimization.js",
     "postbuild": "node scripts/post-build-stripper.js",
     "enhanced": "node scripts/enhanced-post-build-stripper.js",
     "production": "node scripts/production-stripper.js",
@@ -42,39 +42,31 @@
     "max-aggression": "node scripts/maximum-aggression-stripper.js",
     "enhanced-max-aggression": "node scripts/enhanced-max-aggression-stripper.js",
     "ultra-aggressive": "node scripts/ultra-aggressive-stripper.js",
-    
     "measure": "node scripts/get_baseline.js",
     "measure-enhanced": "node scripts/enhanced-baseline.js",
     "measure-production": "node scripts/enhanced-baseline.js",
     "measure-enhanced-max": "node scripts/enhanced-max-aggression-baseline.js",
     "measure-ultra": "node scripts/ultra-aggressive-baseline.js",
-    
     "dev-server": "node scripts/dev-server.js",
     "enhanced-dev-server": "node scripts/enhanced-dev-server.js",
     "production-dev-server": "node scripts/production-dev-server.js",
-    
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    
     "build:render": "npm run build && node scripts/render-post-build.js",
     "deploy-render": "node scripts/render-deploy-new.js",
     "deploy-render-old": "node scripts/render-deploy.js",
-    
     "build:semantic": "npm run build && node scripts/apply-semantic-minification.js",
     "start:semantic": "concurrently \"npm start\" \"node packages/optimization-devtool/dist/index.js --manifestPath=./semantic-optimization-manifest.json\"",
     "test:semantic": "node scripts/test-semantic-minification.js",
     "demo:semantic": "node scripts/demo-semantic-minification.js",
-    
     "build:optimized": "npm run build && node new-optimized-build-system/scripts/universal-optimizer.js --buildDir ./build",
     "build:computer": "npm run build && node new-optimized-build-system/computer-optimized/working-optimizer.js",
     "debug:computer": "node new-optimized-build-system/computer-optimized/debug-server.js",
     "translate:error": "node new-optimized-build-system/computer-optimized/error-translator.js translate",
     "test:computer": "node new-optimized-build-system/computer-optimized/test-translation.js",
-    
     "optimize:max": "node new-optimized-build-system/scripts/universal-optimizer.js --strategy max-aggression --buildDir ./build",
     "optimize:enhanced": "node new-optimized-build-system/scripts/universal-optimizer.js --strategy enhanced --buildDir ./build",
     "optimize:computer": "node new-optimized-build-system/computer-optimized/working-optimizer.js ./build/static/js",
-    
     "demo:new-optimizer": "node new-optimized-build-system/scripts/demo-optimization.js"
   },
   "eslintConfig": {
@@ -95,5 +87,7 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  }
 }

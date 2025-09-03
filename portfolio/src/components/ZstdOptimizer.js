@@ -4,6 +4,13 @@ import './ZstdOptimizer.css'
 
 const ZstdOptimizer = () => {
   const threeRef = useRef(null)
+  const [isVideoMuted, setIsVideoMuted] = useState(true)
+  
+  // Video configuration for cube textures
+  // Expected: cube-texture-video.mp4 (1024x1024, 10-15s loop, <5MB)
+  // Theme: Code optimization, binary rain, Greek letters, compression visualization
+  const CUBE_TEXTURE_VIDEO = '/videos/cube-texture-video.mp4'
+  const FALLBACK_VIDEO = '/videos/remastered.mp4'
   const [inputCode, setInputCode] = useState(`#include <zstd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -103,18 +110,59 @@ int ε() {
     renderer.setClearColor(0x000000, 0)
     threeRef.current.appendChild(renderer.domElement)
 
-    // Create video texture
-    const video = document.createElement('video')
-    video.src = '/videos/remastered.mp4'
-    video.crossOrigin = 'anonymous'
-    video.loop = true
-    video.muted = true
-    video.autoplay = true
-    video.play()
-
-    const videoTexture = new THREE.VideoTexture(video)
-    videoTexture.minFilter = THREE.LinearFilter
-    videoTexture.magFilter = THREE.LinearFilter
+    // Create video texture - wait for video to be ready
+    const video = document.getElementById('zstd-cube-video')
+    if (!video) {
+      console.error('Video element not found!')
+      return
+    }
+    
+    // Create texture but don't initialize until video is ready
+    let texture = null
+    let videoMaterial = null
+    
+    const initializeVideoTexture = () => {
+      if (video.readyState >= video.HAVE_ENOUGH_DATA && !texture) {
+        console.log('Initializing video texture - video is ready')
+        texture = new THREE.VideoTexture(video)
+        texture.needsUpdate = true
+        texture.minFilter = THREE.LinearFilter
+        texture.magFilter = THREE.LinearFilter
+        texture.format = THREE.RGBFormat
+        texture.wrapS = THREE.ClampToEdgeWrapping
+        texture.wrapT = THREE.ClampToEdgeWrapping
+        
+        // Update existing video material
+        if (videoMaterial) {
+          videoMaterial.map = texture
+          videoMaterial.needsUpdate = true
+        }
+      }
+    }
+    
+    // Wait for video to be ready
+    video.addEventListener('canplaythrough', initializeVideoTexture)
+    video.addEventListener('loadeddata', initializeVideoTexture)
+    
+    // Try to load and play video
+    const setupVideo = async () => {
+      try {
+        video.load()
+        video.currentTime = 0
+        await video.play()
+        console.log('Video playing successfully')
+      } catch (e) {
+        console.log('Video autoplay failed, trying muted:', e)
+        video.muted = true
+        try {
+          await video.play()
+          console.log('Video playing muted')
+        } catch (e2) {
+          console.log('Video play failed completely:', e2)
+        }
+      }
+    }
+    setupVideo()
 
     // Create floating cubes representing data compression
     const cubes = []
@@ -125,8 +173,8 @@ int ε() {
     const cubeCount = Math.floor(reductionPercentage)
 
     // Create materials - some with video, some wireframe
-    const videoMaterial = new THREE.MeshBasicMaterial({ 
-      map: videoTexture,
+    videoMaterial = new THREE.MeshBasicMaterial({ 
+      color: 0x444444, // Placeholder color until video loads
       transparent: true,
       opacity: 0.8
     })
@@ -160,6 +208,11 @@ int ε() {
     const animate = () => {
       animationId = requestAnimationFrame(animate)
       
+      // Update video texture if it exists and video is playing
+      if (texture && video && video.readyState >= video.HAVE_CURRENT_DATA && !video.paused) {
+        texture.needsUpdate = true
+      }
+      
       // Rotate cubes
       cubes.forEach((cube, index) => {
         cube.rotation.x += 0.01
@@ -188,11 +241,24 @@ int ε() {
 
     return () => {
       window.removeEventListener('resize', handleResize)
+      
+      // Clean up video event listeners
+      if (video) {
+        video.removeEventListener('canplaythrough', initializeVideoTexture)
+        video.removeEventListener('loadeddata', initializeVideoTexture)
+        video.pause()
+      }
+      
       if (animationId) {
         cancelAnimationFrame(animationId)
       }
       if (threeRef.current && renderer.domElement) {
         threeRef.current.removeChild(renderer.domElement)
+      }
+      
+      // Clean up Three.js resources
+      if (texture) {
+        texture.dispose()
       }
       renderer.dispose()
     }
@@ -200,6 +266,21 @@ int ε() {
 
   return (
     <div className="zstd-optimizer">
+      {/* Hidden video element for texture */}
+      <video 
+        id="zstd-cube-video"
+        style={{ display: 'none' }}
+        autoPlay
+        loop
+        muted={isVideoMuted}
+        playsInline
+        crossOrigin="anonymous"
+        controls={false}
+      >
+        <source src={CUBE_TEXTURE_VIDEO} type="video/mp4" />
+        <source src={FALLBACK_VIDEO} type="video/mp4" />
+      </video>
+      
       <div className="zstd-header">
         <div className="three-visualization" ref={threeRef}></div>
         <div className="header-content">
@@ -207,6 +288,18 @@ int ε() {
           <p className="zstd-subtitle">
             Extreme optimization system that removes human legibility for maximum compression
           </p>
+          <button 
+            className="audio-toggle-btn"
+            onClick={() => {
+              const video = document.getElementById('zstd-cube-video')
+              if (video) {
+                video.muted = !video.muted
+                setIsVideoMuted(!isVideoMuted)
+              }
+            }}
+          >
+            {isVideoMuted ? '🔇 Unmute Video' : '🔊 Mute Video'}
+          </button>
         </div>
       </div>
 

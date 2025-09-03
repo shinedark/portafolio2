@@ -9,6 +9,7 @@ import Interest from './components/random/Interest'
 import SmileyOverlay from './components/random/SmileyOverlay'
 import MatrixTerminal from './components/random/MatrixTerminal'
 import ZstdOptimizer from './components/ZstdOptimizer'
+import VanillaThreeDemo from './components/VanillaThreeDemo'
 import planetariaRadioImage from './pictures/pr.png'
 import sdm from './pictures/sdm.png'
 import mmt from './pictures/mmt.png'
@@ -255,7 +256,7 @@ function App() {
         <main className="main">
           <MatrixTerminal animate={showOverlay} />
           <div className="content-wrapper">
-            <ZstdOptimizer />
+            <VanillaThreeDemo />
             <Interest />
             <br />
             <>
