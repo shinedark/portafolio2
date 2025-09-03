@@ -22,14 +22,20 @@ try {
 
   const files = fs.readdirSync(buildDir);
   
-  // Find all ultra-aggressive optimized chunks
-  const optimizedChunks = files.filter(file => 
-    file.includes('ultra-aggressive.js')
+  // Find computer-optimized chunks (best performance)
+  const computerOptimizedChunks = files.filter(file => 
+    file.includes('computer-optimized.js')
+  );
+  
+  // Find max-aggression chunks (human-readable fallback)
+  const maxAggressionChunks = files.filter(file => 
+    file.includes('max-aggression.js')
   );
   
   // Find all original chunks
   const originalChunks = files.filter(file => 
     file.endsWith('.js') && 
+    !file.includes('computer-optimized') &&
     !file.includes('max-aggression') &&
     !file.includes('ultra-aggressive') &&
     !file.includes('stripped') &&
@@ -37,7 +43,8 @@ try {
     !file.includes('production') &&
     !file.includes('aggressive') &&
     !file.includes('selective') &&
-    !file.includes('ultra-deep')
+    !file.includes('ultra-deep') &&
+    !file.includes('backup')
   );
 
   if (originalChunks.length === 0) {

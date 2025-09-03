@@ -57,7 +57,8 @@
     "eject": "react-scripts eject",
     
     "build:render": "npm run build && node scripts/render-post-build.js",
-    "deploy-render": "node scripts/render-deploy.js",
+    "deploy-render": "node scripts/render-deploy-new.js",
+    "deploy-render-old": "node scripts/render-deploy.js",
     
     "build:semantic": "npm run build && node scripts/apply-semantic-minification.js",
     "start:semantic": "concurrently \"npm start\" \"node packages/optimization-devtool/dist/index.js --manifestPath=./semantic-optimization-manifest.json\"",
