@@ -310,11 +310,19 @@ function App() {
           </p>
           <p>
             <a
+              href="https://www.shinedarkmusic.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Visit SHINE DARK Music
+            </a>
+            {' | '}
+            <a
               href="https://x.com/ShineDarkmusic"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Contact us on X (Twitter)
+              Follow on X (Twitter)
             </a>
           </p>
         </footer>
