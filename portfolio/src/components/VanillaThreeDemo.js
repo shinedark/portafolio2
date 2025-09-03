@@ -359,7 +359,16 @@ function ρ(){requestAnimationFrame(ρ);for(σ=0;σ<ο.length/2;σ++){ο[σ].rot
     const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     const isProductionDomain = window.location.hostname.includes('shinedark.dev')
     
-    let videoUrl = '/videos/remastered.mp4'
+    // Handle potential CORS issues with external videos
+    if (!isLocalDev) {
+      video.crossOrigin = 'anonymous'
+      video.setAttribute('crossorigin', 'anonymous')
+    }
+    
+    // Use Vercel-hosted video for production, local for development
+    let videoUrl = isLocalDev 
+      ? '/videos/remastered.mp4'  // Local development
+      : 'https://naetb5ccw3lndeod.public.blob.vercel-storage.com/remastered.mp4'  // Vercel CDN for production
     
     // Declare variables first
     let texture = null
@@ -368,22 +377,7 @@ function ρ(){requestAnimationFrame(ρ);for(σ=0;σ<ο.length/2;σ++){ο[σ].rot
     let flakeArray = []
     let controls = null
 
-    // For production domains that don't have the video, show wireframe fallback
-    if (isProductionDomain && !isLocalDev) {
-      console.warn('Production domain detected without video assets. Will show wireframe fallback.')
-      setShowPlayButton(true)
-      // Create wireframe cube instead
-      const geometry = new THREE.BoxGeometry(2, 2, 2)
-      const material = new THREE.MeshBasicMaterial({ 
-        color: 0xffffff, 
-        wireframe: true 
-      })
-      cube = new THREE.Mesh(geometry, material)
-      cube.position.set(-3, 1, -2)
-      scene.add(cube)
-      setVideoLoaded(true)
-      return // Skip video loading for production without assets
-    }
+    // Production domain now has video via Vercel CDN - no wireframe fallback needed
     
     video.src = videoUrl
     console.log('Loading video from:', videoUrl)
