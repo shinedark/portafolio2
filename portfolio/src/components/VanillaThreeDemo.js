@@ -361,6 +361,13 @@ function ρ(){requestAnimationFrame(ρ);for(σ=0;σ<ο.length/2;σ++){ο[σ].rot
     
     let videoUrl = '/videos/remastered.mp4'
     
+    // Declare variables first
+    let texture = null
+    let cube = null
+    let snow = null
+    let flakeArray = []
+    let controls = null
+
     // For production domains that don't have the video, show wireframe fallback
     if (isProductionDomain && !isLocalDev) {
       console.warn('Production domain detected without video assets. Will show wireframe fallback.')
@@ -387,7 +394,7 @@ function ρ(){requestAnimationFrame(ρ);for(σ=0;σ<ο.length/2;σ++){ο[σ].rot
     let errorCount = 0
     const maxRetries = 3
     
-    video.onerror = (e) => {
+    const handleVideoError = (e) => {
       errorCount++
       console.error(`Video loading error (attempt ${errorCount}):`, e)
       console.log('Current video src:', video.src)
@@ -418,7 +425,7 @@ function ρ(){requestAnimationFrame(ρ);for(σ=0;σ<ο.length/2;σ++){ο[σ].rot
         
         setTimeout(() => {
           video.src = path
-          video.onerror = arguments.callee // Re-attach error handler
+          video.onerror = handleVideoError // Re-attach error handler
           video.load()
         }, 200)
       } else {
@@ -426,6 +433,8 @@ function ρ(){requestAnimationFrame(ρ);for(σ=0;σ<ο.length/2;σ++){ο[σ].rot
         setShowPlayButton(true)
       }
     }
+    
+    video.onerror = handleVideoError
     
     video.onloadstart = () => {
       console.log('Video loading started...')
@@ -435,13 +444,6 @@ function ρ(){requestAnimationFrame(ρ);for(σ=0;σ<ο.length/2;σ++){ο[σ].rot
       console.log('Video metadata loaded, duration:', video.duration)
     }
     
-    let texture = null
-    let cube = null
-    let snow = null
-    let flakeArray = []
-    let videoPlaying = false
-    let controls = null
-
     const initializeVideoTexture = () => {
       console.log('initializeVideoTexture called, readyState:', video.readyState, 'texture exists:', !!texture)
       if (video.readyState >= video.HAVE_CURRENT_DATA && !texture) {
